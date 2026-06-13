@@ -358,3 +358,25 @@ Each run prepares three variants:
 
 ### Output policy
 User-facing generated outputs should be PNG and Draw.io files only. Evaluation and JSON files are internal/debug artifacts and should not be returned as final outputs. In live rendering mode, the runner can clean internal JSON/report files after rendering unless debug mode is enabled.
+
+
+## v12 architecture enrichment and multi-view planning
+The skill now enriches each architecture request into a canonical architecture model before rendering. It captures business capabilities, technical services by domain, actors/personas, external systems, integrations/data flows, cross-cutting concerns, assumptions, constraints, and architectural decisions.
+
+New scripts:
+- `enrich_architecture_model.py`
+- `plan_architecture_views.py`
+- `generate_companion_artifacts.py`
+
+New metadata:
+- `data/canonical_architecture_model_schema.json`
+- `data/icon_registry.json`
+- `data/style_guide.json`
+
+New companion artifacts generated per run:
+- `executive_summary.md`
+- `architecture_decisions.md`
+- `component_inventory.json`
+- `capability_map.md`
+
+The renderer prompt is now more prescriptive and includes communication goal, view type, component catalog, icon guidance, relationship/flow instructions, visual style rules, guardrail checklist, and business-to-technical mapping.

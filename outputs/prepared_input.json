@@ -1,0 +1,138 @@
+{
+  "title": "Agentic Vendor Intelligence Platform \u2014 Solution Architecture",
+  "subtitle": "Unified ingestion, AI research orchestration, evidence store, and business delivery layer",
+  "template": "platform_value_chain",
+  "lanes": [
+    {
+      "side": "left",
+      "title": "Inputs",
+      "items": [
+        "Vendor websites",
+        "Analyst reports",
+        "RFP documents",
+        "CRM notes",
+        "Market news",
+        "APIs"
+      ]
+    },
+    {
+      "side": "right",
+      "title": "Outputs",
+      "items": [
+        "Vendor dashboards",
+        "Comparison matrices",
+        "Executive briefs",
+        "RFP responses",
+        "Alerts & tasks"
+      ]
+    }
+  ],
+  "zones": [
+    {
+      "id": "ingestion",
+      "title": "Data integration",
+      "subtitle": "Normalize and enrich",
+      "items": [
+        "Web/API connectors",
+        "Document parser",
+        "Metadata extraction",
+        "Source lineage"
+      ],
+      "columns": 1,
+      "expand": false
+    },
+    {
+      "id": "knowledge",
+      "title": "Knowledge fabric",
+      "subtitle": "Searchable evidence",
+      "items": [
+        "Vector index",
+        "Entity graph",
+        "Taxonomy mapping",
+        "Citation store"
+      ],
+      "columns": 1,
+      "expand": false
+    },
+    {
+      "id": "ai",
+      "title": "Predictive & generative AI",
+      "subtitle": "Multi-agent research",
+      "items": [
+        "Research agent",
+        "Comparator agent",
+        "Risk summarizer",
+        "Question generator"
+      ],
+      "columns": 1,
+      "expand": false
+    },
+    {
+      "id": "orchestration",
+      "title": "Decision orchestration",
+      "subtitle": "Human-in-loop workflows",
+      "items": [
+        "Rules engine",
+        "Review queues",
+        "Approval workflow",
+        "Audit trail"
+      ],
+      "columns": 1,
+      "expand": false
+    },
+    {
+      "id": "delivery",
+      "title": "Apps, APIs & analytics",
+      "subtitle": "Business consumption",
+      "items": [
+        "Dashboard builder",
+        "Insight API",
+        "Report generator",
+        "Notification service"
+      ],
+      "columns": 1,
+      "expand": false
+    }
+  ],
+  "flows": [
+    {
+      "from": "ingestion",
+      "to": "knowledge",
+      "label": "curated data"
+    },
+    {
+      "from": "knowledge",
+      "to": "ai",
+      "label": "retrieval"
+    },
+    {
+      "from": "ai",
+      "to": "orchestration",
+      "label": "recommendations"
+    },
+    {
+      "from": "orchestration",
+      "to": "delivery",
+      "label": "approved outputs"
+    }
+  ],
+  "operations": [
+    "User management & SSO",
+    "Workflow automation",
+    "ModelOps",
+    "DataOps",
+    "Audit & compliance"
+  ],
+  "footer": "Deployable on AWS, Azure, GCP, or private cloud",
+  "decomposition": {
+    "auto_expand": true,
+    "max_overview_zones": 6,
+    "max_items_per_zone_overview": 5,
+    "create_capability_children": true
+  },
+  "rendering_preferences": {
+    "backend": "drawio-skill",
+    "format": "png",
+    "embed_xml": true
+  }
+}

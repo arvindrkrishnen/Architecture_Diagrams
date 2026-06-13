@@ -1,0 +1,57 @@
+{
+  "title": "Architecture Control Plane \u2014 Level 2 Expansion",
+  "subtitle": "Detailed expansion of Architecture Control Plane",
+  "template": "platform_value_chain",
+  "lanes": [],
+  "zones": [
+    {
+      "id": "child_1",
+      "title": "Spec Repository",
+      "subtitle": "",
+      "items": [
+        "Versioning",
+        "Hashing",
+        "Promotion",
+        "Rollback"
+      ],
+      "expand": false,
+      "children": []
+    },
+    {
+      "id": "child_2",
+      "title": "Interfaces",
+      "subtitle": "",
+      "items": [
+        "GET /specs/resolve",
+        "Dashboard queries",
+        "MCP tools"
+      ],
+      "expand": false,
+      "children": []
+    }
+  ],
+  "flows": [
+    {
+      "from": "child_1",
+      "to": "child_2",
+      "label": "detail flow"
+    }
+  ],
+  "operations": [
+    "Audit Trail",
+    "Governance",
+    "Security Controls"
+  ],
+  "footer": "Level 2 expansion of Architecture Control Plane",
+  "decomposition": {
+    "auto_expand": false,
+    "max_overview_zones": 6,
+    "max_items_per_zone_overview": 5,
+    "create_capability_children": false
+  },
+  "rendering_preferences": {
+    "backend": "drawio-skill",
+    "format": "png",
+    "embed_xml": true
+  }
+}

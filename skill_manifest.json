@@ -1,8 +1,8 @@
 {
   "name": "solution-architecture-diagram-skill",
-  "version": "1.0.0-v10",
+  "version": "1.2.0",
   "author": "Arvind Radhakrishnen",
-  "description": "Generate three PNG and Draw.io solution architecture variants with ADA-readable text, orthogonal connector routing, CIO-ready outcome narrative, primary/secondary layout recommendations, and runtime/rendered guardrails.",
+  "description": "Generate executive-ready architecture diagrams using enriched architecture modeling, icon-aware prompts, multi-view planning, and companion architecture artifacts.",
   "entrypoints": {
     "instructions": "SKILL.md",
     "readme": "README.md",
@@ -19,7 +19,10 @@
     "layout_semantics": "docs/layout_semantics.md",
     "recommend_layouts": "python recommend_layouts.py --input outputs/prepared_input.json --output outputs/layout_recommendations.json --topn 2",
     "validate_technology_placement": "python validate_technology_placement.py --input outputs/prepared_input.json --output outputs/technology_placement_report.json",
-    "quality_guardrails": "docs/quality_guardrails.md"
+    "quality_guardrails": "docs/quality_guardrails.md",
+    "enrich_model": "python enrich_architecture_model.py --input outputs/prepared_input.json --output outputs/enriched_architecture_model.json",
+    "plan_views": "python plan_architecture_views.py --input outputs/enriched_architecture_model.json --output outputs/architecture_view_plan.json",
+    "generate_companions": "python generate_companion_artifacts.py --input outputs/enriched_architecture_model.json --view-plan outputs/architecture_view_plan.json --output-dir outputs/<run_name>"
   },
   "outputs": [
     "solution_architecture_variant_01.png",
@@ -27,7 +30,13 @@
     "solution_architecture_variant_02.png",
     "solution_architecture_variant_02.drawio",
     "solution_architecture_variant_03.png",
-    "solution_architecture_variant_03.drawio"
+    "solution_architecture_variant_03.drawio",
+    "executive_summary.md",
+    "architecture_decisions.md",
+    "component_inventory.json",
+    "capability_map.md",
+    "architecture_view_plan.json",
+    "enriched_architecture_model.json"
   ],
   "compatible_interfaces": [
     "VS Code",
@@ -69,7 +78,15 @@
     "data/ada_diagram_quality_rules.json",
     "validate_runtime_guardrails.py",
     "validate_rendered_guardrails.py",
-    "generate_variant_prompts.py"
+    "generate_variant_prompts.py",
+    "enrich_architecture_model.py",
+    "plan_architecture_views.py",
+    "generate_companion_artifacts.py",
+    "data/icon_registry.json",
+    "data/style_guide.json",
+    "data/canonical_architecture_model_schema.json",
+    "docs/architecture_model_enrichment.md",
+    "docs/prescriptive_renderer_prompting.md"
   ],
   "approvals_needed": [
     "Approve or install Agents365 drawio-skill in the target environment",

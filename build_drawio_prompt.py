@@ -2,6 +2,7 @@
 import argparse
 import json
 from pathlib import Path
+from typing import Any, Dict, List
 
 
 def load_json(path):
@@ -14,72 +15,124 @@ def bullets(items, indent=0):
     return "\n".join(f"{pad}- {item}" for item in items)
 
 
+def md_table(rows, headers):
+    out=['| ' + ' | '.join(headers) + ' |', '| ' + ' | '.join(['---']*len(headers)) + ' |']
+    for r in rows:
+        out.append('| ' + ' | '.join(str(x).replace('|','/') for x in r) + ' |')
+    return '\n'.join(out)
+
+
+def find_icon_hint(name: str, registry: Dict[str, Any]) -> Dict[str, str]:
+    t=name.lower()
+    for canonical, meta in registry.get('components', {}).items():
+        if any(k.lower() in t for k in meta.get('keywords', [])):
+            return {'canonical': canonical, 'library': meta.get('library',''), 'shape_hint': meta.get('shape_hint',''), 'domain': meta.get('domain','')}
+    return {'canonical': name, 'library': 'Generic draw.io', 'shape_hint': 'rounded rectangle with short descriptive symbol', 'domain': 'platform_control_plane'}
+
+
+def component_catalog(architecture: Dict[str, Any], registry: Dict[str, Any], style: Dict[str, Any]) -> str:
+    am = architecture.get('architecture_model', {})
+    rows=[]
+    for cap in am.get('business_capabilities', []):
+        rows.append([cap.get('name',''), 'business_capability', 'Business capability / value stream box', style.get('domains',{}).get('business_capability',{}).get('color',''), cap.get('owner','')])
+    for cat, svcs in am.get('technical_services', {}).items():
+        for svc in svcs:
+            hint = find_icon_hint(svc.get('name',''), registry)
+            rows.append([svc.get('name',''), cat, f"{hint['library']} / {hint['shape_hint']}", style.get('domains',{}).get(cat,{}).get('color',''), svc.get('purpose','')])
+    for actor in am.get('actors_users_personas', []):
+        rows.append([actor.get('name',''), 'actor_persona', 'Actor/person icon or muted persona card', '#F3F4F6', actor.get('interaction','')])
+    for ext in am.get('external_systems', []):
+        rows.append([ext.get('name',''), 'external_system', 'External system container / muted rectangle', style.get('domains',{}).get('external_system',{}).get('color','#F3F4F6'), ext.get('interaction','')])
+    return md_table(rows[:80], ['Component','Domain','Icon / shape instruction','Color family','Purpose']) if rows else '- Use the provided zones and lane labels as the component catalog.'
+
+
+def flows_md(architecture: Dict[str, Any]) -> str:
+    am=architecture.get('architecture_model', {})
+    flows=am.get('key_integrations_data_flows', [])
+    rows=[]
+    for f in flows:
+        rows.append([f.get('from',''), f.get('to',''), f.get('label',''), f.get('protocol_style',''), f.get('payload_type',''), f.get('direction','')])
+    for f in architecture.get('flows', []):
+        rows.append([f.get('from',''), f.get('to',''), f.get('label',''), 'logical', 'architecture payload', 'source_to_target'])
+    return md_table(rows[:60], ['From','To','Label','Protocol/style','Payload','Direction']) if rows else '- No explicit flows specified; infer simple orthogonal flows based on layout.'
+
+
+def mapping_md(architecture: Dict[str, Any]) -> str:
+    rows=[]
+    for m in architecture.get('architecture_model', {}).get('business_to_technical_mapping', []):
+        realized=', '.join(f"{x.get('technical_service')} ({x.get('category')})" for x in m.get('realized_by', [])[:6])
+        rows.append([m.get('business_capability',''), ', '.join(m.get('outcomes', [])), realized])
+    return md_table(rows, ['Business capability','Outcome','Realized by technical services']) if rows else '- Map each capability zone to the technical components shown within or adjacent to it.'
+
+
 def main():
-    ap = argparse.ArgumentParser(description='Build a drawio-skill prompt from normalized architecture JSON.')
-    ap.add_argument('--input', required=True, help='Path to normalized architecture input JSON')
-    ap.add_argument('--patterns', default='data/reference_architecture_patterns.json', help='Path to reference patterns JSON')
-    ap.add_argument('--output', required=True, help='Output markdown prompt path')
+    ap = argparse.ArgumentParser(description='Build a prescriptive drawio-skill prompt from enriched architecture JSON.')
+    ap.add_argument('--input', required=True)
+    ap.add_argument('--patterns', default='data/reference_architecture_patterns.json')
+    ap.add_argument('--output', required=True)
+    ap.add_argument('--view-plan', default='')
+    ap.add_argument('--view-id', default='')
+    ap.add_argument('--icon-registry', default='data/icon_registry.json')
+    ap.add_argument('--style-guide', default='data/style_guide.json')
     args = ap.parse_args()
 
     architecture = load_json(Path(args.input))
     patterns = load_json(Path(args.patterns))
-    assets_lib = load_json(Path(args.patterns).parent / 'reference_asset_library.json')
-    template_id = architecture['template']
-    template = next((t for t in patterns['templates'] if t['id'] == template_id), None)
-    if not template:
-        raise SystemExit(f'Template not found: {template_id}')
+    assets_lib = load_json(Path(args.patterns).parent / 'reference_asset_library.json') if (Path(args.patterns).parent / 'reference_asset_library.json').exists() else {'assets': []}
+    registry = load_json(Path(args.icon_registry)) if Path(args.icon_registry).exists() else {'components': {}}
+    style_guide = load_json(Path(args.style_guide)) if Path(args.style_guide).exists() else {'domains': {}}
+    view_plan = load_json(Path(args.view_plan)) if args.view_plan and Path(args.view_plan).exists() else {}
+    selected_view = None
+    if args.view_id:
+        selected_view = next((v for v in view_plan.get('recommended_views', []) if v.get('id') == args.view_id), None)
+    if selected_view and selected_view.get('recommended_template'):
+        template_id = selected_view['recommended_template']
+    else:
+        template_id = architecture.get('template', 'platform_value_chain')
+    template = next((t for t in patterns.get('templates', []) if t.get('id') == template_id), None) or next((t for t in patterns.get('templates', []) if t.get('id') == architecture.get('template')), {})
 
-    lanes_md = []
-    for lane in architecture.get('lanes', []):
-        lanes_md.append(f"### {lane['side'].title()} lane — {lane.get('title','Lane')}\n" + bullets(lane.get('items', [])))
-
-    zones_md = []
-    for zone in architecture.get('zones', []):
-        zone_lines = [f"### Zone: {zone['title']}"]
-        if zone.get('subtitle'):
-            zone_lines.append(f"Subtitle: {zone['subtitle']}")
-        zone_lines.append(bullets(zone.get('items', [])))
-        if zone.get('expand'):
-            zone_lines.append('Expansion hint: This zone may be expanded into a Level 2 diagram.')
-        zones_md.append("\n".join(zone_lines))
-
-    flows_md = bullets([
-        f"{flow.get('from')} -> {flow.get('to')}" + (f" ({flow.get('label')})" if flow.get('label') else '')
-        for flow in architecture.get('flows', [])
-    ]) if architecture.get('flows') else '- None specified'
-
-    ops_md = bullets(architecture.get('operations', [])) if architecture.get('operations') else '- None specified'
-    decomp = architecture.get('decomposition', {})
-    style_selection = architecture.get('style_selection', {})
     style_profiles = patterns.get('style_profiles', {})
     style_profile = style_profiles.get(template.get('style_profile', ''), {})
     asset_map = {a['id']: a for a in assets_lib.get('assets', [])}
-    asset_notes = []
+    asset_notes=[]
     for aid in template.get('reference_assets', []):
-        a = asset_map.get(aid)
+        a=asset_map.get(aid)
         if a:
-            asset_notes.append(f"- {a['title']} | family={a['layout_family']} | intent={a['architecture_communication_intent']} | placement={a['box_placement_model']} | palette={', '.join(a.get('palette', [])[:5])}")
+            asset_notes.append(f"- {a.get('title')} | family={a.get('layout_family')} | intent={a.get('architecture_communication_intent')} | placement={a.get('box_placement_model')} | palette={', '.join(a.get('palette', [])[:5])}")
 
-    md = f"""# Draw.io Skill Prompt
+    lanes_md=[]
+    for lane in architecture.get('lanes', []):
+        lanes_md.append(f"### {lane.get('side','').title()} lane — {lane.get('title','Lane')}\n" + bullets(lane.get('items', [])))
+    zones_md=[]
+    for zone in architecture.get('zones', []):
+        lines=[f"### Zone: {zone.get('title')}"]
+        if zone.get('subtitle'): lines.append(f"Subtitle: {zone.get('subtitle')}")
+        lines.append(bullets(zone.get('items', [])))
+        zones_md.append('\n'.join(lines))
+    ops_md=bullets(architecture.get('operations', [])) if architecture.get('operations') else '- Use cross-cutting concerns from the enriched model.'
+    am=architecture.get('architecture_model', {})
+    concerns=am.get('cross_cutting_concerns', {})
+    concerns_md='\n'.join(f"- **{k.title()}**: {', '.join(v)}" for k,v in concerns.items() if v) or '- None specified'
+    view_name=selected_view.get('name') if selected_view else 'Logical / Solution Architecture View'
+    view_strategy=selected_view.get('layout_strategy') if selected_view else 'Use the selected primary architecture layout family.'
 
-## Objective
-Create a polished **solution architecture diagram** and export it as **PNG**. Preserve the diagram as editable draw.io source if supported.
+    md=f"""# Draw.io Renderer Prompt
 
-## Output format
-- Primary export: PNG
-- Preserve source: .drawio
-- If supported, export as embedded PNG using a `.drawio.png` filename
+## Overall communication goal
+{am.get('communication_goal') or architecture.get('business_outcome_description') or 'Show how the architecture connects capabilities, services, integrations, and controls to deliver the business outcome.'}
 
-## Selected layout archetype
-- Template id: `{template['id']}`
-- Template name: {template['name']}
-- Markdown reference: `{template.get('markdown_reference','')}`
-- Draw.io preset: `{template.get('drawio',{}).get('preset','architecture')}`
+## View type and layout strategy
+- **View:** {view_name}
+- **View ID:** {selected_view.get('id','default_logical_view') if selected_view else 'default_logical_view'}
+- **Layout strategy:** {view_strategy}
+- **Primary layout template:** `{template.get('id', template_id)}`
+- **Template name:** {template.get('name','')}
+- **Draw.io preset:** architecture
 
-## Layout intent
-{template.get('prompt_scaffold','')}
+## Executive polish requirement
+Design this as an executive-ready architecture artifact: strong visual hierarchy, clear focal point, generous but not wasteful whitespace, minimal cognitive load on Level 1, and clean separation between business capabilities, technical services, integrations, and controls.
 
-## Style profile
+## Style profile and palette
 - Style profile: {template.get('style_profile','')}
 - Primary: {style_profile.get('primary','')}
 - Secondary: {style_profile.get('secondary','')}
@@ -88,44 +141,45 @@ Create a polished **solution architecture diagram** and export it as **PNG**. Pr
 - Border: {style_profile.get('border','')}
 - Guidance: {style_profile.get('note','')}
 
-## Selected recommendation
-- Primary layout: {style_selection.get('primary_layout_template', template.get('id'))}
-- Palette donor: {style_selection.get('secondary_palette_donor', {}).get('asset_title', 'template default')}
-- Selection rationale: {', '.join(style_selection.get('why_this_layout', [])) if style_selection else 'template default'}
-
 ## Internal reference assets to learn from
-{chr(10).join(asset_notes) if asset_notes else '- No specific reference assets listed'}
+{chr(10).join(asset_notes) if asset_notes else '- Use the selected template metadata and style guide.'}
 
-### Layout grammar
-{bullets(template.get('layout',{}).get('information_grammar', []))}
+## Component catalog with icon and shape instructions
+{component_catalog(architecture, registry, style_guide)}
 
-### Shape hints
-{bullets(template.get('drawio',{}).get('shape_hints', []))}
+Icon priority rule: For every technical component, use the most semantically accurate official icon from available draw.io libraries such as AWS Architecture Icons, Azure, GCP, Kubernetes, database, security, networking, DevOps, and analytics shapes. Prefer official shapes over generic rectangles. For custom or abstract services, use rounded rectangles with consistent internal styling and a short descriptive icon or symbol.
 
-### Connector style
-- {template.get('drawio',{}).get('connector_style','orthogonal')}
+## Business-to-technical mapping
+{mapping_md(architecture)}
 
-## Diagram title
+Explicitly show how major business capabilities are realized by technical services. Do not leave capabilities disconnected from the platform services that enable them.
+
+## Relationship and flow instructions
+{flows_md(architecture)}
+
+Connector rules:
+- use meaningful labels such as “events (Kafka)”, “policy evaluation”, “state sync”, “API request”, “audit evidence”, or “data sync” where appropriate
+- use orthogonal horizontal/vertical connectors only
+- avoid diagonal lines
+- route connectors around boxes and avoid crossing container interiors
+- separate connector labels from box labels
+
+## Structural content from normalized input
+
+### Diagram title
 - {architecture.get('title','')}
 
-## Diagram subtitle
+### Diagram subtitle
 - {architecture.get('subtitle','')}
 
-## CIO-ready business outcome description
-- {architecture.get('business_outcome_description', '') or 'Create a brief CIO-ready statement explaining how the capabilities and sub-capabilities connect through governed flows to deliver the stated business outcome.'}
-
-Instruction: include this as a short, readable callout near the title or in a clearly labeled executive outcome panel. Keep it to 1-2 sentences and 20-45 words.
-
-## Structural content
-
 ### Lanes
-{"\n\n".join(lanes_md) if lanes_md else '- No lanes provided'}
+{chr(10).join(lanes_md) if lanes_md else '- No lanes provided'}
 
 ### Capability zones
-{"\n\n".join(zones_md)}
+{chr(10).join(zones_md)}
 
-### Flows
-{flows_md}
+### Cross-cutting concerns
+{concerns_md}
 
 ### Operations / cross-cutting layer
 {ops_md}
@@ -133,65 +187,35 @@ Instruction: include this as a short, readable callout near the title or in a cl
 ### Footer
 - {architecture.get('footer', '')}
 
-## Mandatory semantic placement rules
-- Place technology components in semantically correct areas.
-- Data stores and databases belong in storage, data platform, persistence, or metadata zones.
-- APIs, REST, GraphQL, and MCP belong in interface, control plane, access, or delivery zones.
-- Cloud runtimes such as EKS, AKS, GCP, EC2, Lambda, and Kubernetes belong in cloud target, compute, platform, or landing-zone areas.
-- Analytics tools belong in access, delivery, reporting, analytics, or consumption areas.
-- Governance, audit, waiver, evidence, and policy components belong in governance, control, operations, or assurance bands.
+## Visual style guide
+- Use rounded containers with subtle grouping.
+- Use major section header bars.
+- Use dashed or dotted borders for VPCs, clusters, trust zones, environments, or external boundaries.
+- Include a legend when more than four domains, multiple connector types, trust zones, or overlays are shown.
+- Maintain 8–12 px internal padding so text never touches box borders.
+- Body text minimum 14 pt, section headers minimum 16 pt, title minimum 26 pt.
+- Keep labels concise and wrapped inside boxes.
+- Use domain color families from the style guide.
 
-## Mandatory spelling and label rules
-- Preserve canonical capitalization for technology names such as GraphQL, Kubernetes, AWS, Azure, GCP, EKS, AKS, REST API, MCP, YAML, JSON, CI/CD, IaC, MLOps, OPA, and Terraform.
-- Use the technology terms allowlist when checking labels.
-- Avoid invented misspellings or compressed labels.
-- Use short labels and wrap text rather than reducing font size excessively.
-
-## Mandatory ADA/readability layout quality rules
-- Wrap all text inside boxes and containers.
-- Do not allow text to overflow box boundaries.
-- Do not let text touch box borders. Maintain at least 8-12 px internal padding.
-- Body text must be at least 14 pt. Section headers must be at least 16 pt. Main title must be at least 26 pt.
-- Use high-contrast colors that approximate WCAG AA readability.
-- Do not overlap text with adjacent boxes, connectors, icons, or arrows.
-- Increase box size or spacing when wrapping is needed.
-- Prefer shorter labels over tiny unreadable fonts.
-- Keep the overview diagram clean and presentation-ready.
-
-## Mandatory connector rules
-- Use only orthogonal connectors with horizontal and vertical segments.
-- Do not use diagonal connectors.
-- Route connectors around boxes, not through boxes.
-- Do not let connectors overlap text or pass over box interiors.
-- Use waypoints or elbow connectors to avoid crossing major containers.
-- Keep connector labels short and clearly separated from box labels.
-
-## Multi-level decomposition rules
-- This diagram should be treated as the Level 1 overview unless otherwise specified.
-- If content is dense, reduce detail in the overview and create additional Level 2 expansion diagrams.
-- Use consistent naming between the overview and expansion diagrams.
-- Respect decomposition preferences: auto_expand={decomp.get('auto_expand', True)}, max_overview_zones={decomp.get('max_overview_zones', 6)}, max_items_per_zone_overview={decomp.get('max_items_per_zone_overview', 5)}, create_capability_children={decomp.get('create_capability_children', True)}.
-
-## Styling guidance
-- Make the diagram presentation-ready and business-readable.
-- Use clean grouping containers and consistent spacing.
-- Keep labels short.
-- Use orthogonal connectors and avoid line crossings where possible.
-- Use the template style profile and internal reference asset palette mood for macro segmentation.
-- Borrow color schemes similarly to the internal references, but keep the diagram original.
-- Use header bars, panels, and cross-cutting bands when the reference family indicates them.
-- Keep the work original. Do not copy the proprietary reference diagrams literally.
+## Completeness and guardrail checklist
+Before finalizing the diagram, ensure:
+- business capabilities are visible and mapped to enabling services
+- technical services are in the correct domain groups
+- actors/personas and external systems are positioned outside or at the edges of the solution boundary
+- integrations are labeled with direction and protocol/style
+- security, compliance, observability, cost, and sustainability concerns appear as overlays or cross-cutting bands when relevant
+- all technology names preserve canonical spelling and capitalization
+- all text is readable, wrapped, padded, and non-overlapping
+- connectors are orthogonal and avoid overlapping boxes
+- the diagram has a clear focal point and executive-ready finish
 
 ## Final rendering instructions
-- Use drawio-skill to generate the diagram.
-- Export PNG.
-- Preserve editable .drawio source if supported.
-- Produce user-facing artifacts only as PNG and Draw.io files. Do not produce user-facing eval files or JSON files.
+- Generate the final PNG and editable `.drawio` XML.
+- Use this prompt as a precise specification, not as loose inspiration.
+- Keep the final artifact original; do not copy internal reference diagrams literally.
 """
-
     Path(args.output).write_text(md, encoding='utf-8')
     print(f'Wrote {args.output}')
-
 
 if __name__ == '__main__':
     main()

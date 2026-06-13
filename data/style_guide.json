@@ -1,0 +1,91 @@
+{
+  "version": "1.0.0",
+  "purpose": "Standard color, typography, spacing, boundary, and legend rules for architecture diagrams.",
+  "domains": {
+    "business_capability": {
+      "color": "#EAF4FF",
+      "border": "#2F73D8",
+      "header": "#1F5EAD",
+      "role": "Business capabilities, value streams, outcomes"
+    },
+    "compute": {
+      "color": "#EAF7EA",
+      "border": "#3C9A4B",
+      "header": "#2E7D32",
+      "role": "Compute and runtime services"
+    },
+    "data_storage": {
+      "color": "#FFF4E5",
+      "border": "#E99B00",
+      "header": "#B86E00",
+      "role": "Databases, lakehouse, storage, catalog"
+    },
+    "integration_apis": {
+      "color": "#F1ECFF",
+      "border": "#7C3AED",
+      "header": "#5B21B6",
+      "role": "APIs, events, messaging, integrations"
+    },
+    "security_identity": {
+      "color": "#FFF1F2",
+      "border": "#E11D48",
+      "header": "#BE123C",
+      "role": "Identity, access, security, policy"
+    },
+    "observability_governance": {
+      "color": "#F0FDFA",
+      "border": "#0F766E",
+      "header": "#115E59",
+      "role": "Monitoring, logs, audit, governance"
+    },
+    "platform_control_plane": {
+      "color": "#EEF2FF",
+      "border": "#4F46E5",
+      "header": "#3730A3",
+      "role": "Control plane, orchestration, platform services"
+    },
+    "networking": {
+      "color": "#F8FAFC",
+      "border": "#64748B",
+      "header": "#334155",
+      "role": "Network, routing, ingress, load balancing"
+    },
+    "cicd_devex": {
+      "color": "#ECFEFF",
+      "border": "#0891B2",
+      "header": "#0E7490",
+      "role": "CI/CD, DevEx, automation"
+    },
+    "resilience_dr": {
+      "color": "#FDF2F8",
+      "border": "#DB2777",
+      "header": "#BE185D",
+      "role": "Resilience, DR, BCP, failover"
+    },
+    "external_system": {
+      "color": "#F3F4F6",
+      "border": "#6B7280",
+      "header": "#4B5563",
+      "role": "External actors, systems, vendors"
+    }
+  },
+  "visual_rules": {
+    "container_style": "rounded containers with subtle fills and stronger header bars for major sections",
+    "boundary_style": "dashed borders for trust zones, VPCs, clusters, environments, and organizational boundaries",
+    "icon_label_style": "official icon above or left of short label; no more than 2 lines when possible",
+    "legend_required_when": [
+      "more than 4 domains",
+      "multiple connector styles",
+      "security overlays",
+      "multi-cloud views"
+    ],
+    "font_rules": {
+      "body_min_pt": 14,
+      "header_min_pt": 16,
+      "title_min_pt": 26,
+      "internal_padding_px": 12
+    },
+    "connector_rules": "orthogonal connectors only; no diagonal lines; route around boxes and avoid crossing major containers",
+    "level1_style": "executive polish with strong visual hierarchy, clear focal point, generous but not wasteful whitespace"
+  }
+}

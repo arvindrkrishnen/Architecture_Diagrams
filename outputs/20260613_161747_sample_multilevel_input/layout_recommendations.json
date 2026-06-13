@@ -1,0 +1,144 @@
+{
+  "input_title": "Policy-as-Spec Architecture Control Platform",
+  "recommendations": [
+    {
+      "rank": 1,
+      "score": 45,
+      "primary_layout_template": "identity_multicloud_control_plane",
+      "primary_layout_name": "Identity-centric multi-cloud control plane and landing zones",
+      "style_profile": "identity_green_blue",
+      "secondary_palette_donor": {
+        "asset_id": "identity_centric_multicloud_landing_zone",
+        "asset_title": "Identity-centric multi-cloud landing zone architecture",
+        "layout_family": "identity_multicloud_control_plane",
+        "palette": [
+          "#F0F0F0",
+          "#E0E0E0",
+          "#E0E0F0",
+          "#C0C0C0",
+          "#F0F0E0",
+          "#F0E0E0",
+          "#C0C0E0"
+        ],
+        "style_cues": {
+          "header_bars": true,
+          "rounded_containers": true,
+          "thin_connectors": true,
+          "minimal_arrows": false
+        },
+        "why": "best palette donor for selected primary layout"
+      },
+      "why_this_layout": [
+        "best-for match: identity architecture",
+        "best-for match: multi-cloud security",
+        "best-for match: governance and monitoring",
+        "selection signal: central control plane",
+        "selection signal: multi-cloud panels"
+      ],
+      "communication_intent": [
+        "Central control plane is primary governance anchor",
+        "Bands below communicate lifecycle and support services",
+        "Right panels communicate governed targets"
+      ],
+      "guardrails": [
+        "wrap text inside boxes",
+        "do not overlap text or connectors",
+        "place technology components in semantically correct zones",
+        "run spelling and label quality checks after rendering"
+      ]
+    },
+    {
+      "rank": 2,
+      "score": 43,
+      "primary_layout_template": "cloud_data_platform",
+      "primary_layout_name": "Cloud data platform with ingestion, governance, processing, and access layers",
+      "style_profile": "aws_red_orange",
+      "secondary_palette_donor": {
+        "asset_id": "cloud_data_platform_large_user",
+        "asset_title": "Large cloud data platform reference",
+        "layout_family": "cloud_data_platform",
+        "palette": [
+          "#F0F0F0",
+          "#E0E0E0",
+          "#C0C0C0",
+          "#E0C0C0",
+          "#A0A0A0",
+          "#F0E0E0",
+          "#808080"
+        ],
+        "style_cues": {
+          "header_bars": true,
+          "rounded_containers": false,
+          "thin_connectors": true,
+          "minimal_arrows": false
+        },
+        "why": "best palette donor for selected primary layout"
+      },
+      "why_this_layout": [
+        "best-for match: data governance",
+        "best-for match: ESG data platform",
+        "best-for match: analytics and ML delivery",
+        "best-for match: AWS data architecture",
+        "selection signal: high density data platform"
+      ],
+      "communication_intent": [
+        "Columns convey lifecycle stages",
+        "Core platform should be largest area",
+        "Bottom bands communicate shared services and governance"
+      ],
+      "guardrails": [
+        "wrap text inside boxes",
+        "do not overlap text or connectors",
+        "place technology components in semantically correct zones",
+        "run spelling and label quality checks after rendering"
+      ]
+    }
+  ],
+  "default_selected_recommendation": {
+    "rank": 1,
+    "score": 45,
+    "primary_layout_template": "identity_multicloud_control_plane",
+    "primary_layout_name": "Identity-centric multi-cloud control plane and landing zones",
+    "style_profile": "identity_green_blue",
+    "secondary_palette_donor": {
+      "asset_id": "identity_centric_multicloud_landing_zone",
+      "asset_title": "Identity-centric multi-cloud landing zone architecture",
+      "layout_family": "identity_multicloud_control_plane",
+      "palette": [
+        "#F0F0F0",
+        "#E0E0E0",
+        "#E0E0F0",
+        "#C0C0C0",
+        "#F0F0E0",
+        "#F0E0E0",
+        "#C0C0E0"
+      ],
+      "style_cues": {
+        "header_bars": true,
+        "rounded_containers": true,
+        "thin_connectors": true,
+        "minimal_arrows": false
+      },
+      "why": "best palette donor for selected primary layout"
+    },
+    "why_this_layout": [
+      "best-for match: identity architecture",
+      "best-for match: multi-cloud security",
+      "best-for match: governance and monitoring",
+      "selection signal: central control plane",
+      "selection signal: multi-cloud panels"
+    ],
+    "communication_intent": [
+      "Central control plane is primary governance anchor",
+      "Bands below communicate lifecycle and support services",
+      "Right panels communicate governed targets"
+    ],
+    "guardrails": [
+      "wrap text inside boxes",
+      "do not overlap text or connectors",
+      "place technology components in semantically correct zones",
+      "run spelling and label quality checks after rendering"
+    ]
+  },
+  "user_selection_guidance": "Offer recommendation 1 and 2 to the user when interactive selection is possible; otherwise use recommendation 1 as the default."
+}

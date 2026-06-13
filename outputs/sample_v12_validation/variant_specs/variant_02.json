@@ -1,0 +1,1335 @@
+{
+  "title": "Policy-as-Spec Architecture Control Platform",
+  "subtitle": "Overview plus capability expansion diagrams",
+  "template": "cloud_data_platform",
+  "lanes": [
+    {
+      "side": "left",
+      "title": "Lifecycle",
+      "items": [
+        "Author",
+        "Resolve",
+        "Enforce",
+        "Deploy",
+        "Assure"
+      ]
+    },
+    {
+      "side": "right",
+      "title": "Interfaces",
+      "items": [
+        "REST API",
+        "GraphQL",
+        "MCP Server"
+      ]
+    }
+  ],
+  "zones": [
+    {
+      "id": "authoring",
+      "title": "Authorship Layer",
+      "subtitle": "Architect-owned specs",
+      "items": [
+        "Enterprise Architects",
+        "LOB Architects",
+        "YAML / JSON Specs"
+      ],
+      "columns": 1,
+      "expand": false
+    },
+    {
+      "id": "control_plane",
+      "title": "Architecture Control Plane",
+      "subtitle": "Single source of truth",
+      "items": [
+        "Spec Repository",
+        "REST API",
+        "GraphQL",
+        "MCP Server",
+        "Spec Resolution"
+      ],
+      "columns": 1,
+      "expand": true,
+      "children": [
+        {
+          "title": "Spec Repository",
+          "subtitle": "",
+          "items": [
+            "Versioning",
+            "Hashing",
+            "Promotion",
+            "Rollback"
+          ]
+        },
+        {
+          "title": "Interfaces",
+          "subtitle": "",
+          "items": [
+            "GET /specs/resolve",
+            "Dashboard queries",
+            "MCP tools"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "assurance",
+      "title": "Architecture Assurance Fabric",
+      "subtitle": "Pipeline enforcement",
+      "items": [
+        "arch-ctl CLI",
+        "Build Stage",
+        "Deploy Stage",
+        "OPA Checks",
+        "Topology Verification"
+      ],
+      "columns": 1,
+      "expand": true,
+      "children": [
+        {
+          "title": "Build Stage",
+          "subtitle": "",
+          "items": [
+            "Dependency Scan",
+            "IaC Plan",
+            "Container Image Check"
+          ]
+        },
+        {
+          "title": "Deploy Stage",
+          "subtitle": "",
+          "items": [
+            "BCP / DR Gates",
+            "LB Spec",
+            "Topology Verification"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "targets",
+      "title": "Multi-Cloud Targets",
+      "subtitle": "Deployment endpoints",
+      "items": [
+        "AWS EKS",
+        "AKS",
+        "GCP",
+        "Harness Delegates"
+      ],
+      "columns": 1,
+      "expand": true,
+      "children": [
+        {
+          "title": "AWS EKS",
+          "subtitle": "",
+          "items": [
+            "Primary Cluster",
+            "Delegate",
+            "Policy Results"
+          ]
+        },
+        {
+          "title": "AKS / GCP",
+          "subtitle": "",
+          "items": [
+            "Secondary Cluster",
+            "Optional Cluster",
+            "Delegate Routing"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "controls",
+      "title": "Cross-Cutting Components",
+      "subtitle": "Governance and evidence",
+      "items": [
+        "Evidence Ledger",
+        "Drift Detector",
+        "Waiver Governance"
+      ],
+      "columns": 1,
+      "expand": true,
+      "children": [
+        {
+          "title": "Evidence & Drift",
+          "subtitle": "",
+          "items": [
+            "Immutable Log",
+            "Expiry Signals",
+            "CVE Alerts"
+          ]
+        },
+        {
+          "title": "Waivers",
+          "subtitle": "",
+          "items": [
+            "PR-based Workflow",
+            "Expiry Limit",
+            "Approval History"
+          ]
+        }
+      ]
+    }
+  ],
+  "flows": [
+    {
+      "from": "authoring",
+      "to": "control_plane",
+      "label": "publish specs"
+    },
+    {
+      "from": "control_plane",
+      "to": "assurance",
+      "label": "resolved controls"
+    },
+    {
+      "from": "assurance",
+      "to": "targets",
+      "label": "policy enforcement"
+    },
+    {
+      "from": "targets",
+      "to": "controls",
+      "label": "evidence and drift"
+    }
+  ],
+  "operations": [
+    "Audit Trail",
+    "Governance",
+    "Security Controls"
+  ],
+  "footer": "Generate overview and Level 2 expansion diagrams where useful",
+  "decomposition": {
+    "auto_expand": true,
+    "max_overview_zones": 6,
+    "max_items_per_zone_overview": 5,
+    "create_capability_children": true
+  },
+  "rendering_preferences": {
+    "backend": "drawio-skill",
+    "format": "png",
+    "embed_xml": true
+  },
+  "style_selection": {
+    "rank": 2,
+    "score": 43,
+    "primary_layout_template": "cloud_data_platform",
+    "primary_layout_name": "Cloud data platform with ingestion, governance, processing, and access layers",
+    "style_profile": "aws_red_orange",
+    "secondary_palette_donor": {
+      "asset_id": "cloud_data_platform_large_user",
+      "asset_title": "Large cloud data platform reference",
+      "layout_family": "cloud_data_platform",
+      "palette": [
+        "#F0F0F0",
+        "#E0E0E0",
+        "#C0C0C0",
+        "#E0C0C0",
+        "#A0A0A0",
+        "#F0E0E0",
+        "#808080"
+      ],
+      "style_cues": {
+        "header_bars": true,
+        "rounded_containers": false,
+        "thin_connectors": true,
+        "minimal_arrows": false
+      },
+      "why": "best palette donor for selected primary layout"
+    },
+    "why_this_layout": [
+      "best-for match: data governance",
+      "best-for match: ESG data platform",
+      "best-for match: analytics and ML delivery",
+      "best-for match: AWS data architecture",
+      "selection signal: high density data platform"
+    ],
+    "communication_intent": [
+      "Columns convey lifecycle stages",
+      "Core platform should be largest area",
+      "Bottom bands communicate shared services and governance"
+    ],
+    "guardrails": [
+      "wrap text inside boxes",
+      "do not overlap text or connectors",
+      "place technology components in semantically correct zones",
+      "run spelling and label quality checks after rendering"
+    ]
+  },
+  "architecture_model": {
+    "business_capabilities": [
+      {
+        "id": "bc_1",
+        "name": "Authorship Layer",
+        "owner": "Business / Platform Owner",
+        "outcomes": [
+          "REST API"
+        ],
+        "value_streams": [
+          "Policy-as-Spec Architecture Control Platform"
+        ],
+        "realized_by_zone_id": "authoring"
+      },
+      {
+        "id": "bc_2",
+        "name": "Architecture Control Plane",
+        "owner": "Business / Platform Owner",
+        "outcomes": [
+          "GraphQL"
+        ],
+        "value_streams": [
+          "Policy-as-Spec Architecture Control Platform"
+        ],
+        "realized_by_zone_id": "control_plane"
+      },
+      {
+        "id": "bc_3",
+        "name": "Architecture Assurance Fabric",
+        "owner": "Business / Platform Owner",
+        "outcomes": [
+          "MCP Server"
+        ],
+        "value_streams": [
+          "Policy-as-Spec Architecture Control Platform"
+        ],
+        "realized_by_zone_id": "assurance"
+      },
+      {
+        "id": "bc_4",
+        "name": "Multi-Cloud Targets",
+        "owner": "Business / Platform Owner",
+        "outcomes": [
+          "MCP Server"
+        ],
+        "value_streams": [
+          "Policy-as-Spec Architecture Control Platform"
+        ],
+        "realized_by_zone_id": "targets"
+      },
+      {
+        "id": "bc_5",
+        "name": "Cross-Cutting Components",
+        "owner": "Business / Platform Owner",
+        "outcomes": [
+          "MCP Server"
+        ],
+        "value_streams": [
+          "Policy-as-Spec Architecture Control Platform"
+        ],
+        "realized_by_zone_id": "controls"
+      }
+    ],
+    "technical_services": {
+      "compute": [
+        {
+          "name": "YAML / JSON Specs",
+          "source_zone_id": "authoring",
+          "source_zone_title": "Authorship Layer",
+          "purpose": "Supports Authorship Layer"
+        },
+        {
+          "name": "AWS EKS",
+          "source_zone_id": "targets",
+          "source_zone_title": "Multi-Cloud Targets",
+          "purpose": "Supports Multi-Cloud Targets"
+        },
+        {
+          "name": "AKS",
+          "source_zone_id": "targets",
+          "source_zone_title": "Multi-Cloud Targets",
+          "purpose": "Supports Multi-Cloud Targets"
+        },
+        {
+          "name": "Amazon EKS or ECS",
+          "source_zone_id": "",
+          "source_zone_title": "Recommended best-practice service",
+          "purpose": "Architecture enrichment"
+        },
+        {
+          "name": "Containerized services",
+          "source_zone_id": "",
+          "source_zone_title": "Recommended best-practice service",
+          "purpose": "Architecture enrichment"
+        },
+        {
+          "name": "Serverless workers",
+          "source_zone_id": "",
+          "source_zone_title": "Recommended best-practice service",
+          "purpose": "Architecture enrichment"
+        }
+      ],
+      "data_storage": [],
+      "integration_apis": [
+        {
+          "name": "REST API",
+          "source_zone_id": "control_plane",
+          "source_zone_title": "Architecture Control Plane",
+          "purpose": "Supports Architecture Control Plane"
+        },
+        {
+          "name": "GraphQL",
+          "source_zone_id": "control_plane",
+          "source_zone_title": "Architecture Control Plane",
+          "purpose": "Supports Architecture Control Plane"
+        },
+        {
+          "name": "MCP Server",
+          "source_zone_id": "control_plane",
+          "source_zone_title": "Architecture Control Plane",
+          "purpose": "Supports Architecture Control Plane"
+        },
+        {
+          "name": "Amazon API Gateway",
+          "source_zone_id": "",
+          "source_zone_title": "Recommended best-practice service",
+          "purpose": "Architecture enrichment"
+        },
+        {
+          "name": "EventBridge or Kafka",
+          "source_zone_id": "",
+          "source_zone_title": "Recommended best-practice service",
+          "purpose": "Architecture enrichment"
+        },
+        {
+          "name": "Service-to-service APIs",
+          "source_zone_id": "",
+          "source_zone_title": "Recommended best-practice service",
+          "purpose": "Architecture enrichment"
+        }
+      ],
+      "security_identity": [
+        {
+          "name": "AWS IAM",
+          "source_zone_id": "",
+          "source_zone_title": "Recommended best-practice service",
+          "purpose": "Architecture enrichment"
+        },
+        {
+          "name": "AWS Secrets Manager",
+          "source_zone_id": "",
+          "source_zone_title": "Recommended best-practice service",
+          "purpose": "Architecture enrichment"
+        },
+        {
+          "name": "WAF / ingress controls",
+          "source_zone_id": "",
+          "source_zone_title": "Recommended best-practice service",
+          "purpose": "Architecture enrichment"
+        },
+        {
+          "name": "Identity provider",
+          "source_zone_id": "",
+          "source_zone_title": "Recommended best-practice service",
+          "purpose": "Architecture enrichment"
+        },
+        {
+          "name": "Conditional access",
+          "source_zone_id": "",
+          "source_zone_title": "Recommended best-practice service",
+          "purpose": "Architecture enrichment"
+        },
+        {
+          "name": "Privileged access management",
+          "source_zone_id": "",
+          "source_zone_title": "Recommended best-practice service",
+          "purpose": "Architecture enrichment"
+        }
+      ],
+      "observability_governance": [
+        {
+          "name": "Topology Verification",
+          "source_zone_id": "assurance",
+          "source_zone_title": "Architecture Assurance Fabric",
+          "purpose": "Supports Architecture Assurance Fabric"
+        },
+        {
+          "name": "Evidence Ledger",
+          "source_zone_id": "controls",
+          "source_zone_title": "Cross-Cutting Components",
+          "purpose": "Supports Cross-Cutting Components"
+        },
+        {
+          "name": "Drift Detector",
+          "source_zone_id": "controls",
+          "source_zone_title": "Cross-Cutting Components",
+          "purpose": "Supports Cross-Cutting Components"
+        },
+        {
+          "name": "Waiver Governance",
+          "source_zone_id": "controls",
+          "source_zone_title": "Cross-Cutting Components",
+          "purpose": "Supports Cross-Cutting Components"
+        },
+        {
+          "name": "CloudWatch metrics",
+          "source_zone_id": "",
+          "source_zone_title": "Recommended best-practice service",
+          "purpose": "Architecture enrichment"
+        },
+        {
+          "name": "Centralized logs",
+          "source_zone_id": "",
+          "source_zone_title": "Recommended best-practice service",
+          "purpose": "Architecture enrichment"
+        },
+        {
+          "name": "Distributed tracing",
+          "source_zone_id": "",
+          "source_zone_title": "Recommended best-practice service",
+          "purpose": "Architecture enrichment"
+        },
+        {
+          "name": "Access audit logs",
+          "source_zone_id": "",
+          "source_zone_title": "Recommended best-practice service",
+          "purpose": "Architecture enrichment"
+        },
+        {
+          "name": "Compliance dashboard",
+          "source_zone_id": "",
+          "source_zone_title": "Recommended best-practice service",
+          "purpose": "Architecture enrichment"
+        },
+        {
+          "name": "Continuous trust evaluation",
+          "source_zone_id": "",
+          "source_zone_title": "Recommended best-practice service",
+          "purpose": "Architecture enrichment"
+        }
+      ],
+      "platform_control_plane": [
+        {
+          "name": "Enterprise Architects",
+          "source_zone_id": "authoring",
+          "source_zone_title": "Authorship Layer",
+          "purpose": "Supports Authorship Layer"
+        },
+        {
+          "name": "LOB Architects",
+          "source_zone_id": "authoring",
+          "source_zone_title": "Authorship Layer",
+          "purpose": "Supports Authorship Layer"
+        },
+        {
+          "name": "Spec Repository",
+          "source_zone_id": "control_plane",
+          "source_zone_title": "Architecture Control Plane",
+          "purpose": "Supports Architecture Control Plane"
+        },
+        {
+          "name": "Spec Resolution",
+          "source_zone_id": "control_plane",
+          "source_zone_title": "Architecture Control Plane",
+          "purpose": "Supports Architecture Control Plane"
+        },
+        {
+          "name": "arch-ctl CLI",
+          "source_zone_id": "assurance",
+          "source_zone_title": "Architecture Assurance Fabric",
+          "purpose": "Supports Architecture Assurance Fabric"
+        },
+        {
+          "name": "Deploy Stage",
+          "source_zone_id": "assurance",
+          "source_zone_title": "Architecture Assurance Fabric",
+          "purpose": "Supports Architecture Assurance Fabric"
+        },
+        {
+          "name": "OPA Checks",
+          "source_zone_id": "assurance",
+          "source_zone_title": "Architecture Assurance Fabric",
+          "purpose": "Supports Architecture Assurance Fabric"
+        },
+        {
+          "name": "GCP",
+          "source_zone_id": "targets",
+          "source_zone_title": "Multi-Cloud Targets",
+          "purpose": "Supports Multi-Cloud Targets"
+        },
+        {
+          "name": "Harness Delegates",
+          "source_zone_id": "targets",
+          "source_zone_title": "Multi-Cloud Targets",
+          "purpose": "Supports Multi-Cloud Targets"
+        },
+        {
+          "name": "Central identity control plane",
+          "source_zone_id": "",
+          "source_zone_title": "Recommended best-practice service",
+          "purpose": "Architecture enrichment"
+        },
+        {
+          "name": "Policy guardrails",
+          "source_zone_id": "",
+          "source_zone_title": "Recommended best-practice service",
+          "purpose": "Architecture enrichment"
+        },
+        {
+          "name": "Landing zone standards",
+          "source_zone_id": "",
+          "source_zone_title": "Recommended best-practice service",
+          "purpose": "Architecture enrichment"
+        }
+      ],
+      "networking": [
+        {
+          "name": "Load balancer",
+          "source_zone_id": "",
+          "source_zone_title": "Recommended best-practice service",
+          "purpose": "Architecture enrichment"
+        },
+        {
+          "name": "Private subnets",
+          "source_zone_id": "",
+          "source_zone_title": "Recommended best-practice service",
+          "purpose": "Architecture enrichment"
+        },
+        {
+          "name": "Service mesh considerations",
+          "source_zone_id": "",
+          "source_zone_title": "Recommended best-practice service",
+          "purpose": "Architecture enrichment"
+        },
+        {
+          "name": "Secure access path",
+          "source_zone_id": "",
+          "source_zone_title": "Recommended best-practice service",
+          "purpose": "Architecture enrichment"
+        },
+        {
+          "name": "Private connectivity",
+          "source_zone_id": "",
+          "source_zone_title": "Recommended best-practice service",
+          "purpose": "Architecture enrichment"
+        },
+        {
+          "name": "Segmentation boundaries",
+          "source_zone_id": "",
+          "source_zone_title": "Recommended best-practice service",
+          "purpose": "Architecture enrichment"
+        }
+      ],
+      "cicd_devex": [
+        {
+          "name": "Build Stage",
+          "source_zone_id": "assurance",
+          "source_zone_title": "Architecture Assurance Fabric",
+          "purpose": "Supports Architecture Assurance Fabric"
+        },
+        {
+          "name": "CI/CD pipeline",
+          "source_zone_id": "",
+          "source_zone_title": "Recommended best-practice service",
+          "purpose": "Architecture enrichment"
+        },
+        {
+          "name": "Policy-as-code checks",
+          "source_zone_id": "",
+          "source_zone_title": "Recommended best-practice service",
+          "purpose": "Architecture enrichment"
+        },
+        {
+          "name": "Infrastructure as Code",
+          "source_zone_id": "",
+          "source_zone_title": "Recommended best-practice service",
+          "purpose": "Architecture enrichment"
+        }
+      ],
+      "resilience_dr": [
+        {
+          "name": "Multi-AZ deployment",
+          "source_zone_id": "",
+          "source_zone_title": "Recommended best-practice service",
+          "purpose": "Architecture enrichment"
+        },
+        {
+          "name": "Automated rollback",
+          "source_zone_id": "",
+          "source_zone_title": "Recommended best-practice service",
+          "purpose": "Architecture enrichment"
+        },
+        {
+          "name": "Backup / recovery plan",
+          "source_zone_id": "",
+          "source_zone_title": "Recommended best-practice service",
+          "purpose": "Architecture enrichment"
+        },
+        {
+          "name": "Break-glass access",
+          "source_zone_id": "",
+          "source_zone_title": "Recommended best-practice service",
+          "purpose": "Architecture enrichment"
+        },
+        {
+          "name": "Regional failover controls",
+          "source_zone_id": "",
+          "source_zone_title": "Recommended best-practice service",
+          "purpose": "Architecture enrichment"
+        }
+      ]
+    },
+    "actors_users_personas": [
+      {
+        "name": "Business users",
+        "role": "Consumer",
+        "interaction": "Use delivered insights and workflows"
+      }
+    ],
+    "external_systems": [
+      {
+        "name": "Author",
+        "type": "External source/system",
+        "interaction": "Provides input or event data"
+      },
+      {
+        "name": "Resolve",
+        "type": "External source/system",
+        "interaction": "Provides input or event data"
+      },
+      {
+        "name": "Enforce",
+        "type": "External source/system",
+        "interaction": "Provides input or event data"
+      },
+      {
+        "name": "Deploy",
+        "type": "External source/system",
+        "interaction": "Provides input or event data"
+      },
+      {
+        "name": "Assure",
+        "type": "External source/system",
+        "interaction": "Provides input or event data"
+      },
+      {
+        "name": "REST API",
+        "type": "Downstream consumer/system",
+        "interaction": "Receives outcomes or insights"
+      },
+      {
+        "name": "GraphQL",
+        "type": "Downstream consumer/system",
+        "interaction": "Receives outcomes or insights"
+      },
+      {
+        "name": "MCP Server",
+        "type": "Downstream consumer/system",
+        "interaction": "Receives outcomes or insights"
+      }
+    ],
+    "key_integrations_data_flows": [
+      {
+        "from": "authoring",
+        "to": "control_plane",
+        "label": "publish specs",
+        "direction": "source_to_target",
+        "protocol_style": "logical",
+        "payload_type": "business / technical payload"
+      },
+      {
+        "from": "control_plane",
+        "to": "assurance",
+        "label": "resolved controls",
+        "direction": "source_to_target",
+        "protocol_style": "logical",
+        "payload_type": "business / technical payload"
+      },
+      {
+        "from": "assurance",
+        "to": "targets",
+        "label": "policy enforcement",
+        "direction": "source_to_target",
+        "protocol_style": "logical",
+        "payload_type": "business / technical payload"
+      },
+      {
+        "from": "targets",
+        "to": "controls",
+        "label": "evidence and drift",
+        "direction": "source_to_target",
+        "protocol_style": "logical",
+        "payload_type": "business / technical payload"
+      },
+      {
+        "from": "external_systems",
+        "to": "integration_apis",
+        "label": "API requests",
+        "direction": "inbound",
+        "protocol_style": "sync",
+        "payload_type": "JSON / HTTP"
+      },
+      {
+        "from": "core_services",
+        "to": "event_processing",
+        "label": "events",
+        "direction": "publish_subscribe",
+        "protocol_style": "event",
+        "payload_type": "event envelope"
+      }
+    ],
+    "cross_cutting_concerns": {
+      "security": [
+        "Security Controls",
+        "AWS IAM",
+        "AWS Secrets Manager",
+        "WAF / ingress controls",
+        "Identity provider"
+      ],
+      "compliance": [
+        "Audit Trail",
+        "Governance"
+      ],
+      "observability": [
+        "Topology Verification",
+        "Evidence Ledger",
+        "Drift Detector",
+        "Waiver Governance"
+      ],
+      "cost": [
+        "Cost allocation and usage visibility"
+      ],
+      "sustainability": [
+        "Efficient managed services and right-sized capacity"
+      ]
+    },
+    "assumptions": [
+      "The target environment has access to standard cloud, integration, and observability services.",
+      "Security, audit, and operational controls are required for production readiness."
+    ],
+    "constraints": [
+      "Keep executive overview diagrams readable and decompose detailed services into companion views.",
+      "Use official draw.io icons where available and fallback to styled rounded rectangles for abstract capabilities."
+    ],
+    "architectural_decisions": [
+      "Use managed cloud services where they reduce operational burden.",
+      "Apply policy-as-code in CI/CD to enforce architectural controls before deployment.",
+      "Centralize identity and policy governance while allowing cloud-local execution.",
+      "Use separate landing zones to enforce blast-radius control."
+    ],
+    "business_to_technical_mapping": [
+      {
+        "business_capability": "Authorship Layer",
+        "business_owner": "Business / Platform Owner",
+        "outcomes": [
+          "REST API"
+        ],
+        "realized_by": [
+          {
+            "technical_service": "YAML / JSON Specs",
+            "category": "compute"
+          },
+          {
+            "technical_service": "Enterprise Architects",
+            "category": "platform_control_plane"
+          },
+          {
+            "technical_service": "LOB Architects",
+            "category": "platform_control_plane"
+          }
+        ]
+      },
+      {
+        "business_capability": "Architecture Control Plane",
+        "business_owner": "Business / Platform Owner",
+        "outcomes": [
+          "GraphQL"
+        ],
+        "realized_by": [
+          {
+            "technical_service": "REST API",
+            "category": "integration_apis"
+          },
+          {
+            "technical_service": "GraphQL",
+            "category": "integration_apis"
+          },
+          {
+            "technical_service": "MCP Server",
+            "category": "integration_apis"
+          },
+          {
+            "technical_service": "Spec Repository",
+            "category": "platform_control_plane"
+          },
+          {
+            "technical_service": "Spec Resolution",
+            "category": "platform_control_plane"
+          }
+        ]
+      },
+      {
+        "business_capability": "Architecture Assurance Fabric",
+        "business_owner": "Business / Platform Owner",
+        "outcomes": [
+          "MCP Server"
+        ],
+        "realized_by": [
+          {
+            "technical_service": "Topology Verification",
+            "category": "observability_governance"
+          },
+          {
+            "technical_service": "arch-ctl CLI",
+            "category": "platform_control_plane"
+          },
+          {
+            "technical_service": "Deploy Stage",
+            "category": "platform_control_plane"
+          },
+          {
+            "technical_service": "OPA Checks",
+            "category": "platform_control_plane"
+          },
+          {
+            "technical_service": "Build Stage",
+            "category": "cicd_devex"
+          }
+        ]
+      },
+      {
+        "business_capability": "Multi-Cloud Targets",
+        "business_owner": "Business / Platform Owner",
+        "outcomes": [
+          "MCP Server"
+        ],
+        "realized_by": [
+          {
+            "technical_service": "AWS EKS",
+            "category": "compute"
+          },
+          {
+            "technical_service": "AKS",
+            "category": "compute"
+          },
+          {
+            "technical_service": "GCP",
+            "category": "platform_control_plane"
+          },
+          {
+            "technical_service": "Harness Delegates",
+            "category": "platform_control_plane"
+          }
+        ]
+      },
+      {
+        "business_capability": "Cross-Cutting Components",
+        "business_owner": "Business / Platform Owner",
+        "outcomes": [
+          "MCP Server"
+        ],
+        "realized_by": [
+          {
+            "technical_service": "Evidence Ledger",
+            "category": "observability_governance"
+          },
+          {
+            "technical_service": "Drift Detector",
+            "category": "observability_governance"
+          },
+          {
+            "technical_service": "Waiver Governance",
+            "category": "observability_governance"
+          }
+        ]
+      }
+    ],
+    "component_inventory": [
+      {
+        "name": "YAML / JSON Specs",
+        "category": "compute",
+        "category_label": "Compute",
+        "group": "Authorship Layer",
+        "purpose": "Supports Authorship Layer"
+      },
+      {
+        "name": "AWS EKS",
+        "category": "compute",
+        "category_label": "Compute",
+        "group": "Multi-Cloud Targets",
+        "purpose": "Supports Multi-Cloud Targets"
+      },
+      {
+        "name": "AKS",
+        "category": "compute",
+        "category_label": "Compute",
+        "group": "Multi-Cloud Targets",
+        "purpose": "Supports Multi-Cloud Targets"
+      },
+      {
+        "name": "Amazon EKS or ECS",
+        "category": "compute",
+        "category_label": "Compute",
+        "group": "Recommended best-practice service",
+        "purpose": "Architecture enrichment"
+      },
+      {
+        "name": "Containerized services",
+        "category": "compute",
+        "category_label": "Compute",
+        "group": "Recommended best-practice service",
+        "purpose": "Architecture enrichment"
+      },
+      {
+        "name": "Serverless workers",
+        "category": "compute",
+        "category_label": "Compute",
+        "group": "Recommended best-practice service",
+        "purpose": "Architecture enrichment"
+      },
+      {
+        "name": "REST API",
+        "category": "integration_apis",
+        "category_label": "Integration & APIs",
+        "group": "Architecture Control Plane",
+        "purpose": "Supports Architecture Control Plane"
+      },
+      {
+        "name": "GraphQL",
+        "category": "integration_apis",
+        "category_label": "Integration & APIs",
+        "group": "Architecture Control Plane",
+        "purpose": "Supports Architecture Control Plane"
+      },
+      {
+        "name": "MCP Server",
+        "category": "integration_apis",
+        "category_label": "Integration & APIs",
+        "group": "Architecture Control Plane",
+        "purpose": "Supports Architecture Control Plane"
+      },
+      {
+        "name": "Amazon API Gateway",
+        "category": "integration_apis",
+        "category_label": "Integration & APIs",
+        "group": "Recommended best-practice service",
+        "purpose": "Architecture enrichment"
+      },
+      {
+        "name": "EventBridge or Kafka",
+        "category": "integration_apis",
+        "category_label": "Integration & APIs",
+        "group": "Recommended best-practice service",
+        "purpose": "Architecture enrichment"
+      },
+      {
+        "name": "Service-to-service APIs",
+        "category": "integration_apis",
+        "category_label": "Integration & APIs",
+        "group": "Recommended best-practice service",
+        "purpose": "Architecture enrichment"
+      },
+      {
+        "name": "AWS IAM",
+        "category": "security_identity",
+        "category_label": "Security & Identity",
+        "group": "Recommended best-practice service",
+        "purpose": "Architecture enrichment"
+      },
+      {
+        "name": "AWS Secrets Manager",
+        "category": "security_identity",
+        "category_label": "Security & Identity",
+        "group": "Recommended best-practice service",
+        "purpose": "Architecture enrichment"
+      },
+      {
+        "name": "WAF / ingress controls",
+        "category": "security_identity",
+        "category_label": "Security & Identity",
+        "group": "Recommended best-practice service",
+        "purpose": "Architecture enrichment"
+      },
+      {
+        "name": "Identity provider",
+        "category": "security_identity",
+        "category_label": "Security & Identity",
+        "group": "Recommended best-practice service",
+        "purpose": "Architecture enrichment"
+      },
+      {
+        "name": "Conditional access",
+        "category": "security_identity",
+        "category_label": "Security & Identity",
+        "group": "Recommended best-practice service",
+        "purpose": "Architecture enrichment"
+      },
+      {
+        "name": "Privileged access management",
+        "category": "security_identity",
+        "category_label": "Security & Identity",
+        "group": "Recommended best-practice service",
+        "purpose": "Architecture enrichment"
+      },
+      {
+        "name": "Topology Verification",
+        "category": "observability_governance",
+        "category_label": "Observability & Governance",
+        "group": "Architecture Assurance Fabric",
+        "purpose": "Supports Architecture Assurance Fabric"
+      },
+      {
+        "name": "Evidence Ledger",
+        "category": "observability_governance",
+        "category_label": "Observability & Governance",
+        "group": "Cross-Cutting Components",
+        "purpose": "Supports Cross-Cutting Components"
+      },
+      {
+        "name": "Drift Detector",
+        "category": "observability_governance",
+        "category_label": "Observability & Governance",
+        "group": "Cross-Cutting Components",
+        "purpose": "Supports Cross-Cutting Components"
+      },
+      {
+        "name": "Waiver Governance",
+        "category": "observability_governance",
+        "category_label": "Observability & Governance",
+        "group": "Cross-Cutting Components",
+        "purpose": "Supports Cross-Cutting Components"
+      },
+      {
+        "name": "CloudWatch metrics",
+        "category": "observability_governance",
+        "category_label": "Observability & Governance",
+        "group": "Recommended best-practice service",
+        "purpose": "Architecture enrichment"
+      },
+      {
+        "name": "Centralized logs",
+        "category": "observability_governance",
+        "category_label": "Observability & Governance",
+        "group": "Recommended best-practice service",
+        "purpose": "Architecture enrichment"
+      },
+      {
+        "name": "Distributed tracing",
+        "category": "observability_governance",
+        "category_label": "Observability & Governance",
+        "group": "Recommended best-practice service",
+        "purpose": "Architecture enrichment"
+      },
+      {
+        "name": "Access audit logs",
+        "category": "observability_governance",
+        "category_label": "Observability & Governance",
+        "group": "Recommended best-practice service",
+        "purpose": "Architecture enrichment"
+      },
+      {
+        "name": "Compliance dashboard",
+        "category": "observability_governance",
+        "category_label": "Observability & Governance",
+        "group": "Recommended best-practice service",
+        "purpose": "Architecture enrichment"
+      },
+      {
+        "name": "Continuous trust evaluation",
+        "category": "observability_governance",
+        "category_label": "Observability & Governance",
+        "group": "Recommended best-practice service",
+        "purpose": "Architecture enrichment"
+      },
+      {
+        "name": "Enterprise Architects",
+        "category": "platform_control_plane",
+        "category_label": "Platform / Control Plane",
+        "group": "Authorship Layer",
+        "purpose": "Supports Authorship Layer"
+      },
+      {
+        "name": "LOB Architects",
+        "category": "platform_control_plane",
+        "category_label": "Platform / Control Plane",
+        "group": "Authorship Layer",
+        "purpose": "Supports Authorship Layer"
+      },
+      {
+        "name": "Spec Repository",
+        "category": "platform_control_plane",
+        "category_label": "Platform / Control Plane",
+        "group": "Architecture Control Plane",
+        "purpose": "Supports Architecture Control Plane"
+      },
+      {
+        "name": "Spec Resolution",
+        "category": "platform_control_plane",
+        "category_label": "Platform / Control Plane",
+        "group": "Architecture Control Plane",
+        "purpose": "Supports Architecture Control Plane"
+      },
+      {
+        "name": "arch-ctl CLI",
+        "category": "platform_control_plane",
+        "category_label": "Platform / Control Plane",
+        "group": "Architecture Assurance Fabric",
+        "purpose": "Supports Architecture Assurance Fabric"
+      },
+      {
+        "name": "Deploy Stage",
+        "category": "platform_control_plane",
+        "category_label": "Platform / Control Plane",
+        "group": "Architecture Assurance Fabric",
+        "purpose": "Supports Architecture Assurance Fabric"
+      },
+      {
+        "name": "OPA Checks",
+        "category": "platform_control_plane",
+        "category_label": "Platform / Control Plane",
+        "group": "Architecture Assurance Fabric",
+        "purpose": "Supports Architecture Assurance Fabric"
+      },
+      {
+        "name": "GCP",
+        "category": "platform_control_plane",
+        "category_label": "Platform / Control Plane",
+        "group": "Multi-Cloud Targets",
+        "purpose": "Supports Multi-Cloud Targets"
+      },
+      {
+        "name": "Harness Delegates",
+        "category": "platform_control_plane",
+        "category_label": "Platform / Control Plane",
+        "group": "Multi-Cloud Targets",
+        "purpose": "Supports Multi-Cloud Targets"
+      },
+      {
+        "name": "Central identity control plane",
+        "category": "platform_control_plane",
+        "category_label": "Platform / Control Plane",
+        "group": "Recommended best-practice service",
+        "purpose": "Architecture enrichment"
+      },
+      {
+        "name": "Policy guardrails",
+        "category": "platform_control_plane",
+        "category_label": "Platform / Control Plane",
+        "group": "Recommended best-practice service",
+        "purpose": "Architecture enrichment"
+      },
+      {
+        "name": "Landing zone standards",
+        "category": "platform_control_plane",
+        "category_label": "Platform / Control Plane",
+        "group": "Recommended best-practice service",
+        "purpose": "Architecture enrichment"
+      },
+      {
+        "name": "Load balancer",
+        "category": "networking",
+        "category_label": "Networking",
+        "group": "Recommended best-practice service",
+        "purpose": "Architecture enrichment"
+      },
+      {
+        "name": "Private subnets",
+        "category": "networking",
+        "category_label": "Networking",
+        "group": "Recommended best-practice service",
+        "purpose": "Architecture enrichment"
+      },
+      {
+        "name": "Service mesh considerations",
+        "category": "networking",
+        "category_label": "Networking",
+        "group": "Recommended best-practice service",
+        "purpose": "Architecture enrichment"
+      },
+      {
+        "name": "Secure access path",
+        "category": "networking",
+        "category_label": "Networking",
+        "group": "Recommended best-practice service",
+        "purpose": "Architecture enrichment"
+      },
+      {
+        "name": "Private connectivity",
+        "category": "networking",
+        "category_label": "Networking",
+        "group": "Recommended best-practice service",
+        "purpose": "Architecture enrichment"
+      },
+      {
+        "name": "Segmentation boundaries",
+        "category": "networking",
+        "category_label": "Networking",
+        "group": "Recommended best-practice service",
+        "purpose": "Architecture enrichment"
+      },
+      {
+        "name": "Build Stage",
+        "category": "cicd_devex",
+        "category_label": "CI/CD & DevEx",
+        "group": "Architecture Assurance Fabric",
+        "purpose": "Supports Architecture Assurance Fabric"
+      },
+      {
+        "name": "CI/CD pipeline",
+        "category": "cicd_devex",
+        "category_label": "CI/CD & DevEx",
+        "group": "Recommended best-practice service",
+        "purpose": "Architecture enrichment"
+      },
+      {
+        "name": "Policy-as-code checks",
+        "category": "cicd_devex",
+        "category_label": "CI/CD & DevEx",
+        "group": "Recommended best-practice service",
+        "purpose": "Architecture enrichment"
+      },
+      {
+        "name": "Infrastructure as Code",
+        "category": "cicd_devex",
+        "category_label": "CI/CD & DevEx",
+        "group": "Recommended best-practice service",
+        "purpose": "Architecture enrichment"
+      },
+      {
+        "name": "Multi-AZ deployment",
+        "category": "resilience_dr",
+        "category_label": "Resilience & DR",
+        "group": "Recommended best-practice service",
+        "purpose": "Architecture enrichment"
+      },
+      {
+        "name": "Automated rollback",
+        "category": "resilience_dr",
+        "category_label": "Resilience & DR",
+        "group": "Recommended best-practice service",
+        "purpose": "Architecture enrichment"
+      },
+      {
+        "name": "Backup / recovery plan",
+        "category": "resilience_dr",
+        "category_label": "Resilience & DR",
+        "group": "Recommended best-practice service",
+        "purpose": "Architecture enrichment"
+      },
+      {
+        "name": "Break-glass access",
+        "category": "resilience_dr",
+        "category_label": "Resilience & DR",
+        "group": "Recommended best-practice service",
+        "purpose": "Architecture enrichment"
+      },
+      {
+        "name": "Regional failover controls",
+        "category": "resilience_dr",
+        "category_label": "Resilience & DR",
+        "group": "Recommended best-practice service",
+        "purpose": "Architecture enrichment"
+      }
+    ],
+    "communication_goal": "Policy-as-Spec Architecture Control Platform connects business capabilities, platform services, integrations, and cross-cutting controls to deliver governed, resilient, and measurable outcomes for CIO stakeholders."
+  },
+  "business_outcome_description": "Policy-as-Spec Architecture Control Platform connects business capabilities, platform services, integrations, and cross-cutting controls to deliver governed, resilient, and measurable outcomes for CIO stakeholders.",
+  "variant_profile": {
+    "id": "variant_02",
+    "name": "Alternate style view",
+    "intent": "Alternative palette or second recommended layout for visual preference selection.",
+    "density": "medium",
+    "font_bias": "standard ADA-readable",
+    "detail_guidance": "Preserve the same architecture content but vary layout/palette treatment."
+  }
+}

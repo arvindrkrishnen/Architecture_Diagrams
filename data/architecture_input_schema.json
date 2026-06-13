@@ -205,6 +205,14 @@
           "type": "boolean"
         }
       }
+    },
+    "architecture_model": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "business_outcome_description": {
+      "type": "string",
+      "maxLength": 500
     }
   }
 }

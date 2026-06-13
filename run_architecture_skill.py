@@ -318,6 +318,82 @@ def technology_placement_agent(memory: Dict[str, Any], run_dir: Path) -> AgentRe
 
 
 
+
+def enrichment_agent(memory: Dict[str, Any], run_dir: Path) -> AgentResult:
+    prepared_path = Path(memory['working']['prepared_input_path'])
+    enriched_path = run_dir / 'enriched_architecture_model.json'
+    raw_text_file = run_dir / 'raw_request.txt'
+    cmd = [
+        sys.executable, 'enrich_architecture_model.py',
+        '--input', str(prepared_path),
+        '--output', str(enriched_path)
+    ]
+    if raw_text_file.exists():
+        cmd.extend(['--raw-text-file', str(raw_text_file)])
+    run_cmd(cmd, ROOT)
+    enriched = load_json(enriched_path)
+    # Use enriched model as the downstream prepared input.
+    save_json(prepared_path, enriched)
+    return AgentResult('enrichment_agent', {
+        'enriched_architecture_model_path': str(enriched_path),
+        'prepared_input': enriched,
+        'enriched_architecture_model': enriched.get('architecture_model', {})
+    })
+
+
+def view_planning_agent(memory: Dict[str, Any], run_dir: Path) -> AgentResult:
+    prepared_path = Path(memory['working']['prepared_input_path'])
+    view_plan_path = run_dir / 'architecture_view_plan.json'
+    run_cmd([
+        sys.executable, 'plan_architecture_views.py',
+        '--input', str(prepared_path),
+        '--output', str(view_plan_path)
+    ], ROOT)
+    return AgentResult('view_planning_agent', {
+        'architecture_view_plan_path': str(view_plan_path),
+        'architecture_view_plan': load_json(view_plan_path)
+    })
+
+
+def companion_artifacts_agent(memory: Dict[str, Any], run_dir: Path) -> AgentResult:
+    prepared_path = Path(memory['working']['prepared_input_path'])
+    view_plan_path = Path(memory['working'].get('architecture_view_plan_path', run_dir / 'architecture_view_plan.json'))
+    cmd = [
+        sys.executable, 'generate_companion_artifacts.py',
+        '--input', str(prepared_path),
+        '--output-dir', str(run_dir)
+    ]
+    if view_plan_path.exists():
+        cmd.extend(['--view-plan', str(view_plan_path)])
+    run_cmd(cmd, ROOT)
+    return AgentResult('companion_artifacts_agent', {
+        'executive_summary_path': str(run_dir / 'executive_summary.md'),
+        'architecture_decisions_path': str(run_dir / 'architecture_decisions.md'),
+        'component_inventory_path': str(run_dir / 'component_inventory.json'),
+        'capability_map_path': str(run_dir / 'capability_map.md')
+    })
+
+
+def view_prompt_agent(memory: Dict[str, Any], run_dir: Path) -> AgentResult:
+    prepared_path = Path(memory['working']['prepared_input_path'])
+    view_plan_path = Path(memory['working'].get('architecture_view_plan_path', run_dir / 'architecture_view_plan.json'))
+    view_prompt_dir = run_dir / 'view_prompts'
+    view_prompt_dir.mkdir(exist_ok=True)
+    prompts=[]
+    plan = load_json(view_plan_path) if view_plan_path.exists() else {'recommended_views': []}
+    for view in plan.get('recommended_views', []):
+        prompt_path = view_prompt_dir / f"{view.get('artifact_basename', view.get('id'))}.md"
+        run_cmd([
+            sys.executable, 'build_drawio_prompt.py',
+            '--input', str(prepared_path),
+            '--patterns', str(ROOT / 'data' / 'reference_architecture_patterns.json'),
+            '--view-plan', str(view_plan_path),
+            '--view-id', view.get('id',''),
+            '--output', str(prompt_path)
+        ], ROOT)
+        prompts.append({'view_id': view.get('id'), 'name': view.get('name'), 'prompt_path': str(prompt_path), 'artifact_basename': view.get('artifact_basename')})
+    return AgentResult('view_prompt_agent', {'view_prompts': prompts, 'view_prompt_dir': str(view_prompt_dir)})
+
 def build_business_outcome_description(spec: Dict[str, Any]) -> str:
     if spec.get('business_outcome_description'):
         return spec['business_outcome_description']
@@ -560,6 +636,12 @@ def packaging_agent(memory: Dict[str, Any], run_dir: Path) -> AgentResult:
         'multilevel_plan_path': memory['working'].get('multilevel_plan_path'),
         'layout_recommendations_path': memory['working'].get('layout_recommendations_path'),
         'technology_placement_report_path': memory['working'].get('technology_placement_report_path'),
+        'enriched_architecture_model_path': memory['working'].get('enriched_architecture_model_path'),
+        'architecture_view_plan_path': memory['working'].get('architecture_view_plan_path'),
+        'executive_summary_path': memory['working'].get('executive_summary_path'),
+        'architecture_decisions_path': memory['working'].get('architecture_decisions_path'),
+        'component_inventory_path': memory['working'].get('component_inventory_path'),
+        'capability_map_path': memory['working'].get('capability_map_path'),
         'expansion_prompts': memory['working'].get('expansion_outputs', []),
         'expected_render_outputs': {
             'variant_01_png': 'outputs/<run_name>/solution_architecture_variant_01.png',
@@ -582,7 +664,7 @@ def cleanup_non_artifact_outputs(run_dir: Path) -> None:
     """Remove internal JSON/eval/debug files so user-facing run output is PNG and .drawio only.
     This is intended for live rendering runs, not dry-runs or debug runs.
     """
-    for pattern in ['*.json', '*eval*', '*report*']:
+    for pattern in ['*eval*', '*report*']:
         for path in run_dir.rglob(pattern):
             if path.suffix.lower() in {'.png', '.drawio'}:
                 continue
@@ -690,7 +772,7 @@ def main() -> None:
     checkpoint(memory, run_dir, result.name)
 
     # recommendation, semantic placement, and runtime readability guardrails must run before prompt generation
-    for pre_agent in [recommendation_agent, technology_placement_agent, runtime_guardrail_agent]:
+    for pre_agent in [recommendation_agent, enrichment_agent, view_planning_agent, technology_placement_agent, runtime_guardrail_agent]:
         result = pre_agent(memory, run_dir)
         merge_agent_results(memory, result)
         checkpoint(memory, run_dir, result.name)
@@ -715,6 +797,12 @@ def main() -> None:
     merge_agent_results(memory, result)
     checkpoint(memory, run_dir, result.name)
 
+    # Generate multi-view prompts and executive companion artifacts.
+    for artifact_agent in [view_prompt_agent, companion_artifacts_agent]:
+        result = artifact_agent(memory, run_dir)
+        merge_agent_results(memory, result)
+        checkpoint(memory, run_dir, result.name)
+
     if memory['rendering'].get('enabled'):
         result = render_adapter_agent(memory, run_dir)
         merge_agent_results(memory, result)
@@ -733,6 +821,9 @@ def main() -> None:
     print(f"Multilevel plan: {memory['working'].get('multilevel_plan_path')}")
     print(f"Layout recommendations: {memory['working'].get('layout_recommendations_path')}")
     print(f"Technology placement report: {memory['working'].get('technology_placement_report_path')}")
+    print(f"Enriched model: {memory['working'].get('enriched_architecture_model_path')}")
+    print(f"Architecture view plan: {memory['working'].get('architecture_view_plan_path')}")
+    print(f"Executive summary: {memory['working'].get('executive_summary_path')}")
     print(f"Expansion prompt count: {len(memory['working'].get('expansion_outputs', []))}")
     print(f"Variant prompt count: {len(memory['working'].get('variant_prompts', []))}")
     print('User-facing output policy: PNG and .drawio variants only; eval/JSON files are not final artifacts.')

@@ -1,0 +1,59 @@
+{
+  "version": "1.0.0",
+  "description": "Canonical enriched architecture model schema used after input normalization.",
+  "sections": {
+    "business_capabilities": [
+      "id",
+      "name",
+      "owner",
+      "outcomes",
+      "value_streams",
+      "realized_by_zone_id"
+    ],
+    "technical_services": [
+      "compute",
+      "data_storage",
+      "integration_apis",
+      "security_identity",
+      "observability_governance",
+      "platform_control_plane",
+      "networking",
+      "cicd_devex",
+      "resilience_dr"
+    ],
+    "actors_users_personas": [
+      "name",
+      "role",
+      "interaction"
+    ],
+    "external_systems": [
+      "name",
+      "type",
+      "interaction"
+    ],
+    "key_integrations_data_flows": [
+      "from",
+      "to",
+      "direction",
+      "protocol_style",
+      "payload_type",
+      "label"
+    ],
+    "cross_cutting_concerns": [
+      "security",
+      "compliance",
+      "observability",
+      "cost",
+      "sustainability"
+    ],
+    "architecture_governance": [
+      "assumptions",
+      "constraints",
+      "architectural_decisions"
+    ],
+    "business_to_technical_mapping": [
+      "business_capability",
+      "realized_by"
+    ]
+  }
+}

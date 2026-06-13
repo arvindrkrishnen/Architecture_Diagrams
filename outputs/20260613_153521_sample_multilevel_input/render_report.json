@@ -1,0 +1,64 @@
+{
+  "timestamp": "2026-06-13T15:35:32.560881Z",
+  "run_dir": "/mnt/data/architecture_diagram_skill_v7/outputs/20260613_153521_sample_multilevel_input",
+  "execution": {
+    "mode": "sequential",
+    "parallel_supported": true,
+    "parallel_requested": true,
+    "probe_message": "parallel execution probe passed",
+    "fallback_reason": ""
+  },
+  "job_count": 5,
+  "results": [
+    {
+      "job": {
+        "name": "01_architecture_control_plane",
+        "prompt": "/mnt/data/architecture_diagram_skill_v7/outputs/20260613_153521_sample_multilevel_input/drawio_prompts/01_architecture_control_plane.md",
+        "png": "/mnt/data/architecture_diagram_skill_v7/outputs/20260613_153521_sample_multilevel_input/solution_architecture_capability_01.png",
+        "drawio": "/mnt/data/architecture_diagram_skill_v7/outputs/20260613_153521_sample_multilevel_input/solution_architecture_capability_01.drawio"
+      },
+      "command": "YOUR_RENDER_COMMAND --prompt-file \"/mnt/data/architecture_diagram_skill_v7/outputs/20260613_153521_sample_multilevel_input/drawio_prompts/01_architecture_control_plane.md\" --output-png \"/mnt/data/architecture_diagram_skill_v7/outputs/20260613_153521_sample_multilevel_input/solution_architecture_capability_01.png\" --output-drawio \"/mnt/data/architecture_diagram_skill_v7/outputs/20260613_153521_sample_multilevel_input/solution_architecture_capability_01.drawio\"",
+      "status": "dry_run"
+    },
+    {
+      "job": {
+        "name": "02_architecture_assurance_fabric",
+        "prompt": "/mnt/data/architecture_diagram_skill_v7/outputs/20260613_153521_sample_multilevel_input/drawio_prompts/02_architecture_assurance_fabric.md",
+        "png": "/mnt/data/architecture_diagram_skill_v7/outputs/20260613_153521_sample_multilevel_input/solution_architecture_capability_02.png",
+        "drawio": "/mnt/data/architecture_diagram_skill_v7/outputs/20260613_153521_sample_multilevel_input/solution_architecture_capability_02.drawio"
+      },
+      "command": "YOUR_RENDER_COMMAND --prompt-file \"/mnt/data/architecture_diagram_skill_v7/outputs/20260613_153521_sample_multilevel_input/drawio_prompts/02_architecture_assurance_fabric.md\" --output-png \"/mnt/data/architecture_diagram_skill_v7/outputs/20260613_153521_sample_multilevel_input/solution_architecture_capability_02.png\" --output-drawio \"/mnt/data/architecture_diagram_skill_v7/outputs/20260613_153521_sample_multilevel_input/solution_architecture_capability_02.drawio\"",
+      "status": "dry_run"
+    },
+    {
+      "job": {
+        "name": "03_multi_cloud_targets",
+        "prompt": "/mnt/data/architecture_diagram_skill_v7/outputs/20260613_153521_sample_multilevel_input/drawio_prompts/03_multi_cloud_targets.md",
+        "png": "/mnt/data/architecture_diagram_skill_v7/outputs/20260613_153521_sample_multilevel_input/solution_architecture_capability_03.png",
+        "drawio": "/mnt/data/architecture_diagram_skill_v7/outputs/20260613_153521_sample_multilevel_input/solution_architecture_capability_03.drawio"
+      },
+      "command": "YOUR_RENDER_COMMAND --prompt-file \"/mnt/data/architecture_diagram_skill_v7/outputs/20260613_153521_sample_multilevel_input/drawio_prompts/03_multi_cloud_targets.md\" --output-png \"/mnt/data/architecture_diagram_skill_v7/outputs/20260613_153521_sample_multilevel_input/solution_architecture_capability_03.png\" --output-drawio \"/mnt/data/architecture_diagram_skill_v7/outputs/20260613_153521_sample_multilevel_input/solution_architecture_capability_03.drawio\"",
+      "status": "dry_run"
+    },
+    {
+      "job": {
+        "name": "04_cross_cutting_components",
+        "prompt": "/mnt/data/architecture_diagram_skill_v7/outputs/20260613_153521_sample_multilevel_input/drawio_prompts/04_cross_cutting_components.md",
+        "png": "/mnt/data/architecture_diagram_skill_v7/outputs/20260613_153521_sample_multilevel_input/solution_architecture_capability_04.png",
+        "drawio": "/mnt/data/architecture_diagram_skill_v7/outputs/20260613_153521_sample_multilevel_input/solution_architecture_capability_04.drawio"
+      },
+      "command": "YOUR_RENDER_COMMAND --prompt-file \"/mnt/data/architecture_diagram_skill_v7/outputs/20260613_153521_sample_multilevel_input/drawio_prompts/04_cross_cutting_components.md\" --output-png \"/mnt/data/architecture_diagram_skill_v7/outputs/20260613_153521_sample_multilevel_input/solution_architecture_capability_04.png\" --output-drawio \"/mnt/data/architecture_diagram_skill_v7/outputs/20260613_153521_sample_multilevel_input/solution_architecture_capability_04.drawio\"",
+      "status": "dry_run"
+    },
+    {
+      "job": {
+        "name": "overview",
+        "prompt": "/mnt/data/architecture_diagram_skill_v7/outputs/20260613_153521_sample_multilevel_input/drawio_prompt_overview.md",
+        "png": "/mnt/data/architecture_diagram_skill_v7/outputs/20260613_153521_sample_multilevel_input/solution_architecture_overview.png",
+        "drawio": "/mnt/data/architecture_diagram_skill_v7/outputs/20260613_153521_sample_multilevel_input/solution_architecture_overview.drawio"
+      },
+      "command": "YOUR_RENDER_COMMAND --prompt-file \"/mnt/data/architecture_diagram_skill_v7/outputs/20260613_153521_sample_multilevel_input/drawio_prompt_overview.md\" --output-png \"/mnt/data/architecture_diagram_skill_v7/outputs/20260613_153521_sample_multilevel_input/solution_architecture_overview.png\" --output-drawio \"/mnt/data/architecture_diagram_skill_v7/outputs/20260613_153521_sample_multilevel_input/solution_architecture_overview.drawio\"",
+      "status": "dry_run"
+    }
+  ]
+}

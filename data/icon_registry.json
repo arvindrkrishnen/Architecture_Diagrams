@@ -1,0 +1,252 @@
+{
+  "version": "1.0.0",
+  "purpose": "Map common architecture components to preferred draw.io icon libraries and fallback shapes.",
+  "selection_priority": [
+    "official_cloud_or_vendor_icon",
+    "platform_icon_family",
+    "domain_shape",
+    "styled_rounded_rectangle"
+  ],
+  "default_fallback": {
+    "shape": "rounded rectangle",
+    "icon_hint": "short descriptive symbol",
+    "style": "domain color header + white body"
+  },
+  "components": {
+    "AWS API Gateway": {
+      "keywords": [
+        "api gateway",
+        "amazon api gateway"
+      ],
+      "library": "AWS Architecture Icons",
+      "shape_hint": "Amazon API Gateway",
+      "domain": "integration_apis"
+    },
+    "AWS Lambda": {
+      "keywords": [
+        "lambda",
+        "serverless function"
+      ],
+      "library": "AWS Architecture Icons",
+      "shape_hint": "AWS Lambda",
+      "domain": "compute"
+    },
+    "Amazon EKS": {
+      "keywords": [
+        "eks",
+        "amazon eks"
+      ],
+      "library": "AWS Architecture Icons",
+      "shape_hint": "Amazon EKS",
+      "domain": "compute"
+    },
+    "Amazon S3": {
+      "keywords": [
+        "s3",
+        "amazon s3",
+        "object storage"
+      ],
+      "library": "AWS Architecture Icons",
+      "shape_hint": "Amazon S3 bucket",
+      "domain": "data_storage"
+    },
+    "Amazon RDS": {
+      "keywords": [
+        "rds",
+        "relational database"
+      ],
+      "library": "AWS Architecture Icons",
+      "shape_hint": "Amazon RDS",
+      "domain": "data_storage"
+    },
+    "Amazon DynamoDB": {
+      "keywords": [
+        "dynamodb",
+        "no sql",
+        "nosql"
+      ],
+      "library": "AWS Architecture Icons",
+      "shape_hint": "Amazon DynamoDB",
+      "domain": "data_storage"
+    },
+    "Amazon CloudWatch": {
+      "keywords": [
+        "cloudwatch",
+        "metrics",
+        "logs",
+        "traces",
+        "observability"
+      ],
+      "library": "AWS Architecture Icons",
+      "shape_hint": "Amazon CloudWatch",
+      "domain": "observability_governance"
+    },
+    "AWS Secrets Manager": {
+      "keywords": [
+        "secrets manager",
+        "secrets"
+      ],
+      "library": "AWS Architecture Icons",
+      "shape_hint": "AWS Secrets Manager",
+      "domain": "security_identity"
+    },
+    "AWS IAM": {
+      "keywords": [
+        "iam",
+        "identity and access"
+      ],
+      "library": "AWS Architecture Icons",
+      "shape_hint": "AWS IAM",
+      "domain": "security_identity"
+    },
+    "Azure AKS": {
+      "keywords": [
+        "aks",
+        "azure kubernetes"
+      ],
+      "library": "Azure Icons",
+      "shape_hint": "Azure Kubernetes Service",
+      "domain": "compute"
+    },
+    "Azure Entra ID": {
+      "keywords": [
+        "entra",
+        "azure ad",
+        "azure active directory"
+      ],
+      "library": "Azure Icons",
+      "shape_hint": "Microsoft Entra ID",
+      "domain": "security_identity"
+    },
+    "GKE": {
+      "keywords": [
+        "gke",
+        "google kubernetes"
+      ],
+      "library": "GCP Icons",
+      "shape_hint": "Google Kubernetes Engine",
+      "domain": "compute"
+    },
+    "Kubernetes": {
+      "keywords": [
+        "kubernetes",
+        "k8s",
+        "cluster"
+      ],
+      "library": "Kubernetes Icons",
+      "shape_hint": "Kubernetes cluster",
+      "domain": "platform_control_plane"
+    },
+    "Kafka": {
+      "keywords": [
+        "kafka",
+        "event stream",
+        "events"
+      ],
+      "library": "Kafka / generic streaming",
+      "shape_hint": "event streaming topic",
+      "domain": "integration_apis"
+    },
+    "REST API": {
+      "keywords": [
+        "rest api",
+        "rest",
+        "api"
+      ],
+      "library": "Generic Networking / API",
+      "shape_hint": "API endpoint",
+      "domain": "integration_apis"
+    },
+    "GraphQL": {
+      "keywords": [
+        "graphql"
+      ],
+      "library": "Generic API",
+      "shape_hint": "GraphQL endpoint",
+      "domain": "integration_apis"
+    },
+    "MCP Server": {
+      "keywords": [
+        "mcp",
+        "mcp server"
+      ],
+      "library": "Generic AI / server",
+      "shape_hint": "MCP server",
+      "domain": "platform_control_plane"
+    },
+    "CI/CD Pipeline": {
+      "keywords": [
+        "ci/cd",
+        "pipeline",
+        "devex"
+      ],
+      "library": "DevOps / CI-CD",
+      "shape_hint": "pipeline",
+      "domain": "cicd_devex"
+    },
+    "Service Mesh": {
+      "keywords": [
+        "service mesh",
+        "istio",
+        "linkerd"
+      ],
+      "library": "Kubernetes / Networking",
+      "shape_hint": "service mesh",
+      "domain": "networking"
+    },
+    "WAF": {
+      "keywords": [
+        "waf",
+        "web application firewall"
+      ],
+      "library": "Security",
+      "shape_hint": "firewall",
+      "domain": "security_identity"
+    },
+    "Load Balancer": {
+      "keywords": [
+        "load balancer",
+        "lb",
+        "alb",
+        "nlb"
+      ],
+      "library": "Networking",
+      "shape_hint": "load balancer",
+      "domain": "networking"
+    },
+    "Database": {
+      "keywords": [
+        "database",
+        "db",
+        "postgres",
+        "mysql",
+        "sql"
+      ],
+      "library": "Database shapes",
+      "shape_hint": "database cylinder",
+      "domain": "data_storage"
+    },
+    "Dashboard": {
+      "keywords": [
+        "dashboard",
+        "reporting",
+        "analytics"
+      ],
+      "library": "Analytics / BI",
+      "shape_hint": "dashboard chart",
+      "domain": "business_capability"
+    },
+    "Policy Engine": {
+      "keywords": [
+        "policy",
+        "opa",
+        "rego",
+        "policy-as-code",
+        "policy as code"
+      ],
+      "library": "Security / governance",
+      "shape_hint": "policy shield",
+      "domain": "observability_governance"
+    }
+  }
+}
