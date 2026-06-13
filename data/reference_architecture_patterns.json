@@ -1,0 +1,135 @@
+{
+  "version": "0.1.0",
+  "purpose": "Reference slide patterns for generating solution architecture diagrams as PNG files from user input.",
+  "canvas_defaults": {
+    "width": 1600,
+    "height": 900,
+    "background": "#FFFFFF",
+    "font_family": "DejaVu Sans",
+    "title_color": "#2B66B1",
+    "body_color": "#222222",
+    "line_color": "#6B7280"
+  },
+  "input_contract": {
+    "title": "string",
+    "subtitle": "string optional",
+    "template": "one of: platform_value_chain, composite_ai_platform, cloud_tenant_microservices, enterprise_endpoint_management, cloud_data_platform",
+    "lanes": "array of source/target side lanes with label, items, side",
+    "zones": "array of main architecture zones with title, subtitle, items, columns, color",
+    "flows": "array of arrows between item ids or zone ids with label and direction",
+    "footer": "string optional",
+    "style": "optional palette and layout overrides"
+  },
+  "templates": [
+    {
+      "id": "platform_value_chain",
+      "name": "Connected intelligence / low-code AI platform overview",
+      "reference": "Uploaded MasterCraft-style product overview image",
+      "best_for": ["AI platform overview", "business capability map", "end-to-end product architecture"],
+      "layout": {
+        "type": "left_to_right_value_chain",
+        "main_container": {"x": 170, "y": 210, "w": 1200, "h": 520, "radius": 22},
+        "left_inputs": {"x": 30, "y": 270, "w": 135, "h": 360},
+        "right_outputs": {"x": 1400, "y": 250, "w": 160, "h": 430},
+        "top_ribbons": ["Low-code", "Collaborative user experience", "Open, flexible, and extensible"],
+        "operations_band": true,
+        "cloud_footer": true
+      },
+      "visual_rules": [
+        "Use 4 to 6 large rounded capability blocks in the center.",
+        "Place data sources on the left and business outputs on the right.",
+        "Use bold black ribbon labels above major capability groups.",
+        "Reserve a bottom band for operations, audit, workflow automation, and SSO."
+      ],
+      "default_palette": {"primary":"#5B8BD7", "box":"#DCE8F7", "accent":"#111111", "muted":"#F2F4F7"}
+    },
+    {
+      "id": "composite_ai_platform",
+      "name": "Composite AI capability platform map",
+      "reference": "Uploaded TCS CAP.ai-style overview image",
+      "best_for": ["agentic ecosystem", "AI for business and IT", "portfolio of reusable solutions"],
+      "layout": {
+        "type": "center_capability_matrix_with_side_industries",
+        "main_container": {"x": 230, "y": 110, "w": 1120, "h": 720, "radius": 24},
+        "left_industries": {"x": 20, "y": 130, "w": 180, "h": 620},
+        "right_service_lines": {"x": 1390, "y": 130, "w": 180, "h": 620},
+        "bottom_core_solutions": true
+      },
+      "visual_rules": [
+        "Use a central grouped platform boundary.",
+        "Create vertical groups such as Channel Hub, AI for Business, AI for IT, and Agentic Ecosystem.",
+        "Show transforming businesses on the left and transforming service lines on the right.",
+        "Use small tiles for reusable core solutions at the bottom."
+      ],
+      "default_palette": {"primary":"#2F73D8", "secondary":"#F37021", "box":"#FFFFFF", "muted":"#F8FAFC"}
+    },
+    {
+      "id": "cloud_tenant_microservices",
+      "name": "Cloud microservices with tenant system and peripheral integration",
+      "reference": "Uploaded AWS cloud microservices architecture image",
+      "best_for": ["cloud migration", "SaaS platform", "tenant onboarding", "microservices", "AWS architecture"],
+      "layout": {
+        "type": "left_tenant_to_right_cloud",
+        "left_peripherals": {"x": 20, "y": 70, "w": 330, "h": 760},
+        "tenant_system": {"x": 360, "y": 70, "w": 330, "h": 760},
+        "cloud_platform": {"x": 720, "y": 40, "w": 830, "h": 800},
+        "microservices_box": {"x": 910, "y": 250, "w": 520, "h": 310},
+        "portal_box": {"x": 790, "y": 610, "w": 690, "h": 200}
+      },
+      "visual_rules": [
+        "Use left-to-right flow from operator/peripherals to tenant system to cloud services.",
+        "Show security services on the left edge of cloud platform and storage/messaging at the top.",
+        "Place REST microservices in a central EC2 or container platform box.",
+        "Place back-office portal and tenant onboarding capabilities at the bottom."
+      ],
+      "default_palette": {"primary":"#5AA243", "secondary":"#2F62B3", "box":"#F8FAFC", "muted":"#EEF6E8"}
+    },
+    {
+      "id": "enterprise_endpoint_management",
+      "name": "Enterprise endpoint, app, policy, identity, and security management",
+      "reference": "Uploaded Microsoft Intune-style product family image",
+      "best_for": ["endpoint management", "device compliance", "conditional access", "mobile threat defense", "identity integration"],
+      "layout": {
+        "type": "large_service_boundary_with_connected_external_systems",
+        "service_boundary": {"x": 100, "y": 70, "w": 1180, "h": 610},
+        "external_left": {"x": 20, "y": 155, "w": 180, "h": 410},
+        "external_right": {"x": 1280, "y": 140, "w": 280, "h": 620},
+        "device_groups_bottom": true
+      },
+      "visual_rules": [
+        "Use a large tinted service canvas with internal policy/configuration blocks.",
+        "Represent identity, app stores, SaaS apps, and on-premises systems around the boundary.",
+        "Group managed devices by enrollment model at the bottom.",
+        "Use arrows for compliance, targeting, authentication, and data/reporting flows."
+      ],
+      "default_palette": {"primary":"#5DADE2", "secondary":"#4F83CC", "box":"#EEF4F8", "muted":"#D9EEF9"}
+    },
+    {
+      "id": "cloud_data_platform",
+      "name": "Cloud data platform with ingestion, governance, processing, and access layers",
+      "reference": "Public AWS/PwC Unified Sustainability Hub architecture image",
+      "source_url": "https://d2908q01vomqb2.cloudfront.net/77de68daecd823babbb58edb1c8e14d7106e83bb/2024/04/26/PwC-Unified-Sustainability-Hub-2.1.png",
+      "best_for": ["lakehouse", "data governance", "ESG data platform", "analytics and ML delivery", "AWS data architecture"],
+      "layout": {
+        "type": "data_sources_ingestion_core_delivery",
+        "left_data_sources": {"x": 10, "y": 50, "w": 200, "h": 790},
+        "ingestion": {"x": 225, "y": 50, "w": 190, "h": 790},
+        "core_platform": {"x": 430, "y": 50, "w": 840, "h": 790},
+        "delivery": {"x": 1290, "y": 50, "w": 280, "h": 790}
+      },
+      "visual_rules": [
+        "Use four vertical macro areas: data sources, ingestion, compute/storage/catalog/governance, and access/delivery.",
+        "Put the lakehouse/data tiers across the top of the core platform.",
+        "Place stream processing, metadata, control, and common platform services in bottom bands.",
+        "Use right-side cards for analytics users, downstream apps, orchestration, and AI/ML."
+      ],
+      "default_palette": {"primary":"#E22D22", "secondary":"#F59E0B", "box":"#F4F4F5", "muted":"#FAFAFA"}
+    }
+  ],
+  "generation_guidelines": {
+    "diagram_density": "Prefer 20-45 labeled boxes. Keep labels short. Use multi-line wrapping.",
+    "icon_policy": "Use simple geometric icons or labeled chips unless a licensed icon library is provided by the user.",
+    "style_policy": "The output should be original and reference the layout patterns, not copy exact proprietary artwork.",
+    "output": "PNG at 1600x900 by default."
+  }
+}

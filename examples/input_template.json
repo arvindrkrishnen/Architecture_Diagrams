@@ -1,0 +1,39 @@
+{
+  "title": "",
+  "subtitle": "",
+  "template": "platform_value_chain",
+  "lanes": [
+    {
+      "side": "left",
+      "title": "Inputs",
+      "items": []
+    },
+    {
+      "side": "right",
+      "title": "Outputs",
+      "items": []
+    }
+  ],
+  "zones": [
+    {
+      "id": "zone_1",
+      "title": "",
+      "subtitle": "",
+      "items": []
+    },
+    {
+      "id": "zone_2",
+      "title": "",
+      "subtitle": "",
+      "items": []
+    }
+  ],
+  "flows": [],
+  "operations": [],
+  "footer": "",
+  "rendering_preferences": {
+    "backend": "drawio-skill",
+    "format": "png",
+    "embed_xml": true
+  }
+}

@@ -1,0 +1,67 @@
+{
+  "status": "ok",
+  "evaluation": {
+    "summary": {
+      "title_present_exact": true,
+      "expected_keyword_count": 99,
+      "missing_keyword_count": 11,
+      "suspicious_match_count": 10
+    },
+    "missing_keywords": [
+      "CRM",
+      "Market",
+      "Comparison",
+      "matrices",
+      "Web/API",
+      "extraction",
+      "Predictive",
+      "trail",
+      "curated",
+      "retrieval",
+      "recommendations"
+    ],
+    "suspicious_matches": [
+      {
+        "expected": "Analyst",
+        "ocr_near_match": "analytics"
+      },
+      {
+        "expected": "reports",
+        "ocr_near_match": "report"
+      },
+      {
+        "expected": "dashboards",
+        "ocr_near_match": "dschboard"
+      },
+      {
+        "expected": "Metadata",
+        "ocr_near_match": "metadats"
+      },
+      {
+        "expected": "index",
+        "ocr_near_match": "inde"
+      },
+      {
+        "expected": "Citation",
+        "ocr_near_match": "cation"
+      },
+      {
+        "expected": "Dashboard",
+        "ocr_near_match": "dschboard"
+      },
+      {
+        "expected": "API",
+        "ocr_near_match": "apis"
+      },
+      {
+        "expected": "Notification",
+        "ocr_near_match": "notation"
+      },
+      {
+        "expected": "approved",
+        "ocr_near_match": "approval"
+      }
+    ],
+    "ocr_excerpt": "Inputs\n\n@ vendor websites\n\u00a9@ Praysereports\n\n@ vP documents lL.\n\n@ com notes\n@ worker news\n@ om\n\nAgentic Vendor Intelligence Platform \u2014 Solution Architecture\n\nUnified ingestion, Al research orchestration, evidence store, and business delivery layer\n\nLow-code\n\n\u00a9)\n\nData integration\n\nNormalize and enrich\n\nWiebiaPl connectors Document parser\n\nMetadats\n\nSource lineage\n\nCollabor:\n\n\u00a9\n\nDecision orchestration\n\nKnowledge fabric generative Al\n\nSearchable evidence Multi-agent research Human-in-loop workflows\n\nvector inde Entity graph Research agent | Comparator agent Rules engine Review queues\n\n\u2018Taxonomy mapping Cation tore Risk summarizer Question generator Approval workflow Audra\n\nOperations\n\nUser management & SSO | Workflow automation | ModelOps | DataOps | Audit & compliance\n\nDeployable on AWS, Azure, GCP, or private cloud\n\nlexible, and exte\n\n\u00a9)\n\nApps, APIs & analytics\n\nBusiness consumption\n\nDschboard builder\n\nReport generator\n\nInsight APL\n\nNotation\n\nOutputs\n> @ Executive briefs\n\n@ RFP responses\n@ Alerts & tasks\n"
+  }
+}

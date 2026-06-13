@@ -1,0 +1,30 @@
+{
+  "name": "solution-architecture-diagram-skill",
+  "version": "0.3.0",
+  "author": "Arvind Radhakrishnen",
+  "description": "Generate PNG and editable Draw.io solution architecture diagrams from natural language or structured JSON.",
+  "entrypoints": {
+    "instructions": "SKILL.md",
+    "readme": "README.md",
+    "usage": "docs/USAGE.md",
+    "input_template": "examples/input_template.json",
+    "normalize": "python prepare_architecture_input.py --input examples/my_architecture.json --output outputs/prepared_input.json",
+    "build_prompt": "python build_drawio_prompt.py --input outputs/prepared_input.json --output outputs/drawio_prompt.md",
+    "evaluate_png": "python evaluate_architecture_png.py --png outputs/solution_architecture.png --expected-json outputs/prepared_input.json --report outputs/diagram_eval_report.json"
+  },
+  "outputs": [
+    "outputs/solution_architecture.png",
+    "outputs/solution_architecture.drawio",
+    "outputs/prepared_input.json",
+    "outputs/diagram_eval_report.json"
+  ],
+  "compatible_interfaces": [
+    "VS Code",
+    "ChatGPT",
+    "Google Gemini",
+    "Claude",
+    "Cursor",
+    "agentic IDEs"
+  ],
+  "renderer": "Agents365 drawio-skill"
+}

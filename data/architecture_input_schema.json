@@ -1,0 +1,173 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Architecture Diagram Input Schema",
+  "type": "object",
+  "required": [
+    "title",
+    "template",
+    "zones"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "title": {
+      "type": "string",
+      "minLength": 3,
+      "maxLength": 120
+    },
+    "subtitle": {
+      "type": "string",
+      "maxLength": 220
+    },
+    "template": {
+      "type": "string",
+      "enum": [
+        "platform_value_chain",
+        "composite_ai_platform",
+        "cloud_tenant_microservices",
+        "enterprise_endpoint_management",
+        "cloud_data_platform"
+      ]
+    },
+    "lanes": {
+      "type": "array",
+      "maxItems": 8,
+      "items": {
+        "type": "object",
+        "required": [
+          "side",
+          "title",
+          "items"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "side": {
+            "type": "string",
+            "enum": [
+              "left",
+              "right",
+              "top",
+              "bottom"
+            ]
+          },
+          "title": {
+            "type": "string",
+            "maxLength": 60
+          },
+          "items": {
+            "type": "array",
+            "maxItems": 12,
+            "items": {
+              "type": "string",
+              "maxLength": 50
+            }
+          }
+        }
+      }
+    },
+    "zones": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 10,
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "title",
+          "items"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z0-9_-]{2,40}$"
+          },
+          "title": {
+            "type": "string",
+            "maxLength": 80
+          },
+          "subtitle": {
+            "type": "string",
+            "maxLength": 120
+          },
+          "items": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 12,
+            "items": {
+              "type": "string",
+              "maxLength": 60
+            }
+          },
+          "columns": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 4
+          },
+          "color": {
+            "type": "string",
+            "pattern": "^#?[A-Fa-f0-9]{6}$"
+          }
+        }
+      }
+    },
+    "flows": {
+      "type": "array",
+      "maxItems": 30,
+      "items": {
+        "type": "object",
+        "required": [
+          "from",
+          "to"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "from": {
+            "type": "string",
+            "maxLength": 40
+          },
+          "to": {
+            "type": "string",
+            "maxLength": 40
+          },
+          "label": {
+            "type": "string",
+            "maxLength": 60
+          }
+        }
+      }
+    },
+    "operations": {
+      "type": "array",
+      "maxItems": 12,
+      "items": {
+        "type": "string",
+        "maxLength": 60
+      }
+    },
+    "footer": {
+      "type": "string",
+      "maxLength": 180
+    },
+    "rendering_preferences": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "backend": {
+          "type": "string"
+        },
+        "format": {
+          "type": "string",
+          "enum": [
+            "png",
+            "svg",
+            "pdf",
+            "jpg"
+          ]
+        },
+        "embed_xml": {
+          "type": "boolean"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,21 @@
+Use the Solution Architecture Diagram Skill.
+
+I want to build the following solution architecture diagram:
+
+[Paste the solution description here]
+
+Please produce:
+1. A normalized architecture JSON file
+2. A drawio-skill prompt
+3. A PNG architecture diagram
+4. An editable Draw.io XML / .drawio file if rendering is available
+5. A PNG evaluation report checking spelling, label quality, missing labels, and truncated text
+
+Use the best layout from:
+- platform_value_chain
+- composite_ai_platform
+- cloud_tenant_microservices
+- enterprise_endpoint_management
+- cloud_data_platform
+
+Keep labels short, professional, and presentation-ready.
