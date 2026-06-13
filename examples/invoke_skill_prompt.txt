@@ -4,18 +4,16 @@ I want to build the following solution architecture diagram:
 
 [Paste the solution description here]
 
-Please produce:
-1. A normalized architecture JSON file
-2. A drawio-skill prompt
-3. A PNG architecture diagram
-4. An editable Draw.io XML / .drawio file if rendering is available
-5. A PNG evaluation report checking spelling, label quality, missing labels, and truncated text
+I may also attach images as optional supporting context.
+Please use the internal reference layouts automatically.
+Do not ask me for evaluation data or extra internal metadata.
+Ensure text is wrapped inside boxes and does not overlap with other boxes.
+If the overview is too dense, generate one or more additional Level 2 diagrams expanding the major capabilities.
 
-Use the best layout from:
-- platform_value_chain
-- composite_ai_platform
-- cloud_tenant_microservices
-- enterprise_endpoint_management
-- cloud_data_platform
+Please produce:
+1. A PNG overview architecture diagram
+2. An editable Draw.io XML / .drawio overview file if rendering is available
+3. Additional PNG and Draw.io files for deeper capability expansion when needed
+4. A normalized architecture JSON file when appropriate
 
 Keep labels short, professional, and presentation-ready.

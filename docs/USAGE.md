@@ -8,29 +8,20 @@
 Use the Solution Architecture Diagram Skill to create a PNG and editable Draw.io architecture diagram for the solution I describe.
 ```
 
-## From VS Code
+## Accepted input
+- text description of the solution
+- optional supporting images such as sketches, screenshots, or architecture samples
 
-1. Open the skill folder in VS Code.
-2. Copy `examples/input_template.json` to `examples/my_architecture.json`.
-3. Fill in the title, template, lanes, zones, flows, and operations.
-4. Run:
+## Important behavior
+- text is the main input
+- images are optional
+- internal reference architecture diagrams are used automatically by the skill
+- the skill should not ask for evaluation instructions or other internal metadata
+- text must be wrapped inside boxes
+- text must not overlap adjacent boxes
+- if the overview is too dense, the skill should generate additional Level 2 expansion diagrams
 
-```bash
-python prepare_architecture_input.py --input examples/my_architecture.json --output outputs/prepared_input.json
-python build_drawio_prompt.py --input outputs/prepared_input.json --output outputs/drawio_prompt.md
-```
-
-5. Send `outputs/drawio_prompt.md` to drawio-skill.
-6. Export:
-   - `outputs/solution_architecture.png`
-   - `outputs/solution_architecture.drawio`
-7. Evaluate:
-
-```bash
-python evaluate_architecture_png.py --png outputs/solution_architecture.png --expected-json outputs/prepared_input.json --report outputs/diagram_eval_report.json
-```
-
-## From ChatGPT
+## From ChatGPT or Gemini
 
 Paste:
 
@@ -40,25 +31,63 @@ Use the Solution Architecture Diagram Skill.
 Build a solution architecture diagram for:
 [describe your solution]
 
-Return PNG, Draw.io XML, normalized JSON, and PNG evaluation report.
+If I attach images, use them as optional supporting context.
+Use internal reference architecture layouts automatically.
+Ensure text is wrapped inside boxes and does not overlap with other boxes.
+If needed, generate one or more Level 2 expansion diagrams.
+Return PNG and Draw.io XML / .drawio files if available.
 ```
 
-## From Google Gemini
+## From VS Code
 
-Paste:
+1. Open the folder.
+2. Provide a text request through your AI assistant, or use `examples/input_template.json`.
+3. If using JSON, run:
 
-```text
-Read SKILL.md from the Solution Architecture Diagram Skill folder.
-
-Create a PNG and editable Draw.io architecture diagram for:
-[describe your solution]
-
-Follow the workflow: normalize input, select layout, build drawio prompt, render PNG/.drawio, evaluate spelling and label quality.
+```bash
+python prepare_architecture_input.py --input examples/my_architecture.json --output outputs/prepared_input.json
+python build_drawio_prompt.py --input outputs/prepared_input.json --output outputs/drawio_prompt.md
+python plan_multilevel_architecture.py --input outputs/prepared_input.json --output outputs/multilevel_plan.json
 ```
+
+4. Send `outputs/drawio_prompt.md` to drawio-skill.
+5. Save:
+   - `outputs/solution_architecture_overview.png`
+   - `outputs/solution_architecture_overview.drawio`
+   - `outputs/solution_architecture_capability_*.png`
+   - `outputs/solution_architecture_capability_*.drawio`
 
 ## Expected outputs
+- PNG overview file
+- Draw.io XML / `.drawio` overview file
+- optional Level 2 PNG expansion files
+- optional Level 2 Draw.io XML expansion files
+- normalized JSON input when appropriate
 
-- PNG file
-- Draw.io XML / `.drawio` source file
-- Normalized JSON input
-- Evaluation report JSON
+## Single runner
+
+Use the orchestration runner for a one-command workflow:
+
+```bash
+python run_architecture_skill.py --text "Build a solution architecture diagram for an article summary platform." --allow-parallel
+```
+
+Or force sequential mode:
+
+```bash
+python run_architecture_skill.py --json-input examples/sample_multilevel_input.json --force-sequential
+```
+
+
+## Renderer adapter
+Use the renderer adapter after orchestration:
+
+```bash
+python render_with_drawio_adapter.py --run-dir outputs/<run_name> --config examples/renderer_config.json --dry-run
+```
+
+Or call it through the single runner:
+
+```bash
+python run_architecture_skill.py --text-file examples/request.txt --allow-parallel --render --renderer-config examples/renderer_config.json
+```

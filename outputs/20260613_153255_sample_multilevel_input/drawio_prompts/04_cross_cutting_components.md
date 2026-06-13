@@ -27,80 +27,37 @@ Create a polished **solution architecture diagram** and export it as **PNG**. Pr
 - orthogonal
 
 ## Diagram title
-- Agentic Vendor Intelligence Platform — Solution Architecture
+- Cross-Cutting Components — Level 2 Expansion
 
 ## Diagram subtitle
-- Unified ingestion, AI research orchestration, evidence store, and business delivery layer
+- Detailed expansion of Cross-Cutting Components
 
 ## Structural content
 
 ### Lanes
-### Left lane — Inputs
-- Vendor websites
-- Analyst reports
-- RFP documents
-- CRM notes
-- Market news
-- APIs
-
-### Right lane — Outputs
-- Vendor dashboards
-- Comparison matrices
-- Executive briefs
-- RFP responses
-- Alerts & tasks
+- No lanes provided
 
 ### Capability zones
-### Zone: Data integration
-Subtitle: Normalize and enrich
-- Web/API connectors
-- Document parser
-- Metadata extraction
-- Source lineage
+### Zone: Evidence & Drift
+- Immutable Log
+- Expiry Signals
+- CVE Alerts
 
-### Zone: Knowledge fabric
-Subtitle: Searchable evidence
-- Vector index
-- Entity graph
-- Taxonomy mapping
-- Citation store
-
-### Zone: Predictive & generative AI
-Subtitle: Multi-agent research
-- Research agent
-- Comparator agent
-- Risk summarizer
-- Question generator
-
-### Zone: Decision orchestration
-Subtitle: Human-in-loop workflows
-- Rules engine
-- Review queues
-- Approval workflow
-- Audit trail
-
-### Zone: Apps, APIs & analytics
-Subtitle: Business consumption
-- Dashboard builder
-- Insight API
-- Report generator
-- Notification service
+### Zone: Waivers
+- PR-based Workflow
+- Expiry Limit
+- Approval History
 
 ### Flows
-- ingestion -> knowledge (curated data)
-- knowledge -> ai (retrieval)
-- ai -> orchestration (recommendations)
-- orchestration -> delivery (approved outputs)
+- child_1 -> child_2 (detail flow)
 
 ### Operations / cross-cutting layer
-- User management & SSO
-- Workflow automation
-- ModelOps
-- DataOps
-- Audit & compliance
+- Audit Trail
+- Governance
+- Security Controls
 
 ### Footer
-- Deployable on AWS, Azure, GCP, or private cloud
+- Level 2 expansion of Cross-Cutting Components
 
 ## Mandatory layout quality rules
 - Wrap all text inside boxes and containers.
@@ -114,7 +71,7 @@ Subtitle: Business consumption
 - This diagram should be treated as the Level 1 overview unless otherwise specified.
 - If content is dense, reduce detail in the overview and create additional Level 2 expansion diagrams.
 - Use consistent naming between the overview and expansion diagrams.
-- Respect decomposition preferences: auto_expand=True, max_overview_zones=6, max_items_per_zone_overview=5, create_capability_children=True.
+- Respect decomposition preferences: auto_expand=False, max_overview_zones=6, max_items_per_zone_overview=5, create_capability_children=False.
 
 ## Styling guidance
 - Make the diagram presentation-ready and business-readable.

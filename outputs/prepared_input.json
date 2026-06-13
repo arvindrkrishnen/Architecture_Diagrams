@@ -38,7 +38,8 @@
         "Metadata extraction",
         "Source lineage"
       ],
-      "columns": 1
+      "columns": 1,
+      "expand": false
     },
     {
       "id": "knowledge",
@@ -50,7 +51,8 @@
         "Taxonomy mapping",
         "Citation store"
       ],
-      "columns": 1
+      "columns": 1,
+      "expand": false
     },
     {
       "id": "ai",
@@ -62,7 +64,8 @@
         "Risk summarizer",
         "Question generator"
       ],
-      "columns": 1
+      "columns": 1,
+      "expand": false
     },
     {
       "id": "orchestration",
@@ -74,7 +77,8 @@
         "Approval workflow",
         "Audit trail"
       ],
-      "columns": 1
+      "columns": 1,
+      "expand": false
     },
     {
       "id": "delivery",
@@ -86,7 +90,8 @@
         "Report generator",
         "Notification service"
       ],
-      "columns": 1
+      "columns": 1,
+      "expand": false
     }
   ],
   "flows": [
@@ -119,6 +124,12 @@
     "Audit & compliance"
   ],
   "footer": "Deployable on AWS, Azure, GCP, or private cloud",
+  "decomposition": {
+    "auto_expand": true,
+    "max_overview_zones": 6,
+    "max_items_per_zone_overview": 5,
+    "create_capability_children": true
+  },
   "rendering_preferences": {
     "backend": "drawio-skill",
     "format": "png",

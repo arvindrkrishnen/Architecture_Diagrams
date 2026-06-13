@@ -67,3 +67,9 @@ A good diagram input should capture:
   "footer": "Primary export: PNG"
 }
 ```
+
+## Multi-level decomposition guidance
+- Keep the Level 1 overview focused on major capabilities.
+- Mark a zone for expansion when it contains many sub-capabilities or deeper service detail.
+- Prefer generating Level 2 child diagrams rather than overcrowding the overview.
+- When in doubt, keep 4-6 zones in the overview and expand detailed areas separately.

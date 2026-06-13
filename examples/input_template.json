@@ -35,5 +35,11 @@
     "backend": "drawio-skill",
     "format": "png",
     "embed_xml": true
+  },
+  "decomposition": {
+    "auto_expand": true,
+    "max_overview_zones": 6,
+    "max_items_per_zone_overview": 5,
+    "create_capability_children": true
   }
 }

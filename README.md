@@ -2,127 +2,126 @@
 
 **Author:** Arvind Radhakrishnen  
 **Primary output:** PNG architecture diagram  
-**Editable outputs:** Draw.io XML (`.drawio`) and normalized JSON  
+**Editable outputs:** Draw.io XML (`.drawio`) and normalized JSON when appropriate  
 **Primary renderer:** Agents365 Draw.io skill  
+**Input modes:** Text-first, with optional supporting images  
 **Use from:** VS Code, ChatGPT, Google Gemini, Claude, Cursor, or any agent interface that can read a skill folder and run local scripts.
 
 ---
 
 ## What this skill does
 
-This skill helps anyone describe a solution in natural language and generate a professional solution architecture diagram.
+This skill helps a user describe a solution in **plain text** and optionally attach **supporting images** such as rough sketches, whiteboard photos, sample layouts, or reference architecture screenshots.
 
-You can provide a short request such as:
+The skill then:
 
-> Build a solution architecture diagram for a policy-as-spec governance platform where architects author YAML/JSON controls, a control plane resolves specs, CI/CD pipelines enforce them, and AWS/Azure/GCP targets receive deployments.
-
-The skill converts that request into:
-
-1. **Normalized architecture JSON**
-2. **A Draw.io-ready generation prompt**
-3. **A generated PNG architecture diagram**
-4. **Editable Draw.io XML / `.drawio` output when rendered through drawio-skill**
-5. **An optional evaluation report to catch spelling, missing label, or text quality issues**
-
----
-
-## Who should use it
-
-Use this skill if you are:
-
-- an enterprise architect creating solution diagrams
-- a product owner describing a new platform
-- a solution architect documenting cloud, AI, data, security, or integration architecture
-- a consultant preparing executive-ready architecture slides
-- a developer who wants architecture diagrams generated from requirements
-- a student or founder who wants to explain a technical solution visually
+1. interprets the user's request
+2. normalizes it into architecture JSON internally
+3. selects the best layout family
+4. uses the bundled reference architecture diagrams **internally** as layout guidance
+5. generates a Draw.io-ready prompt
+6. produces a **PNG architecture diagram**
+7. produces editable **Draw.io XML / `.drawio`** and/or normalized JSON as appropriate
+8. if needed, produces **additional level-2 diagrams** that expand the main capabilities and sub-capabilities from the first diagram
 
 ---
 
-## What users need to provide
+## Core behavior requirements
 
-Users can provide either a simple natural-language description or structured JSON.
+The skill must generate diagrams so that:
+- **text is wrapped inside boxes**
+- **labels do not overflow outside boxes**
+- **text does not overlap other boxes**
+- **boxes and connectors remain readable**
+- **the main diagram stays executive-friendly**
+- **additional deeper diagrams are generated when needed** to expand capability groups
 
-### Option 1 — Natural-language input
+If a requested architecture is too dense for a single page, the skill should:
+1. generate a clean **Level 1** overview diagram
+2. generate one or more **Level 2** expansion diagrams for major capabilities or domains
+3. return all PNG and Draw.io files
+
+---
+
+## What users provide
+
+### Preferred input
+A simple text request describing what they want to build.
 
 Example:
 
 ```text
-Create a solution architecture diagram for an Article Summary Platform.
-The system ingests articles, extracts metadata, summarizes content using LLMs,
-stores evidence and citations, exposes dashboards and APIs, and uses audit,
-security, and monitoring as cross-cutting controls.
+Build a solution architecture diagram for a policy-as-spec governance platform.
+Architects author YAML or JSON controls. A control plane resolves them.
+CI/CD pipelines enforce them. Deployments target AWS, Azure, and GCP.
+Include evidence ledger, drift detection, and waiver governance.
+If needed, generate additional deeper diagrams for capabilities.
 ```
 
-The skill should convert this into the required JSON structure automatically.
+### Optional image input
+Users may also attach images such as:
+- hand-drawn sketches
+- screenshots of rough architecture notes
+- reference slides
+- whiteboard diagrams
+- component lists shown in an image
 
-### Option 2 — Structured JSON input
+Images are **optional** and are treated as supporting context only.
 
-Use `examples/input_template.json` as a starting point.
+---
 
-```json
-{
-  "title": "Article Summary Platform",
-  "subtitle": "Ingestion, summarization, evidence management, and business delivery",
-  "template": "platform_value_chain",
-  "lanes": [
-    {
-      "side": "left",
-      "title": "Inputs",
-      "items": ["Articles", "URLs", "PDFs", "Feeds", "APIs"]
-    },
-    {
-      "side": "right",
-      "title": "Outputs",
-      "items": ["Summary dashboard", "Citation report", "Insight API", "Alerts"]
-    }
-  ],
-  "zones": [
-    {
-      "id": "ingestion",
-      "title": "Content Ingestion",
-      "subtitle": "Collect and normalize",
-      "items": ["URL crawler", "Document parser", "Metadata extraction", "Deduplication"]
-    },
-    {
-      "id": "knowledge",
-      "title": "Evidence Store",
-      "subtitle": "Searchable source of truth",
-      "items": ["Raw content", "Embeddings", "Citation index", "Version history"]
-    },
-    {
-      "id": "ai",
-      "title": "AI Summarization",
-      "subtitle": "Generate and validate",
-      "items": ["LLM summarizer", "Fact checker", "Topic classifier", "Question generator"]
-    },
-    {
-      "id": "delivery",
-      "title": "Delivery Layer",
-      "subtitle": "Consume insights",
-      "items": ["Dashboard", "API gateway", "Report generator", "Notification service"]
-    }
-  ],
-  "flows": [
-    {"from": "ingestion", "to": "knowledge", "label": "curated content"},
-    {"from": "knowledge", "to": "ai", "label": "grounded context"},
-    {"from": "ai", "to": "delivery", "label": "approved summaries"}
-  ],
-  "operations": ["SSO", "Audit trail", "Observability", "Data governance", "Model monitoring"],
-  "footer": "Deployable on AWS, Azure, GCP, or private cloud",
-  "rendering_preferences": {
-    "backend": "drawio-skill",
-    "format": "png",
-    "embed_xml": true
-  }
-}
-```
+## What the skill should do automatically
+
+The skill should work with **text alone**, and use images only if provided.
+
+It should:
+- infer the best layout from the request
+- use bundled reference architecture diagrams internally for layout style selection
+- keep text wrapped inside containers
+- avoid overlapping text and boxes
+- split dense content into multiple diagrams when needed
+- avoid asking the user for evaluation criteria or extra technical metadata
+- ask follow-up questions only if the request is too incomplete to produce a meaningful diagram
+- keep labels concise and presentation-ready
+- return the generated files directly
+
+---
+
+## Reference layouts are internal
+
+The bundled reference architecture diagrams are included to guide layout selection and information organization.
+
+They are used **internally** by the skill to decide:
+- how to arrange layers and boxes
+- whether the best layout is a value chain, data platform, endpoint management map, cloud microservices map, or composite AI platform
+- how to group inputs, outputs, central platform zones, and cross-cutting controls
+- when to decompose the architecture into multiple pages
+
+The skill should **not** ask the user to interpret those internal reference diagrams.
+
+---
+
+## Supported output pattern
+
+A completed run may return one or more files:
+
+### Minimum
+- `solution_architecture_overview.png`
+- `solution_architecture_overview.drawio`
+
+### If deeper expansion is needed
+- `solution_architecture_capability_01.png`
+- `solution_architecture_capability_01.drawio`
+- `solution_architecture_capability_02.png`
+- `solution_architecture_capability_02.drawio`
+- and so on
+
+The first diagram should remain the **overview / Level 1** diagram.
+Additional diagrams should expand key capabilities to **Level 2** detail.
 
 ---
 
 ## Supported layout types
-
-Choose one of these templates, or let the skill select one automatically.
 
 | Template | Best for |
 |---|---|
@@ -132,68 +131,86 @@ Choose one of these templates, or let the skill select one automatically.
 | `enterprise_endpoint_management` | Endpoint, identity, compliance, policy, security, app management |
 | `cloud_data_platform` | Data platforms, lakehouse, ingestion, governance, analytics, AI/ML delivery |
 
-Reference layouts are documented in `docs/reference_layouts.md`.
+Reference layouts are documented in `docs/reference_layouts.md` and are for internal guidance.
 
 ---
 
-## Quick start from VS Code
 
-### 1. Download and unzip this skill
+## Single orchestration runner
 
-Unzip the package into a local folder, for example:
+This package now includes a **single orchestration runner**:
 
-```bash
-unzip architecture_diagram_skill_v3.zip
-cd architecture_diagram_skill_v3
-```
+- `run_architecture_skill.py`
 
-### 2. Prepare your input
+The runner coordinates sub-agents for:
+- intake
+- normalization
+- layout selection
+- decomposition planning
+- overview prompt generation
+- Level 2 expansion prompt generation
+- packaging / reporting
 
-Copy the blank template:
+### Parallel vs sequential execution
+The runner supports sub-agent execution with a checkpointed fallback strategy:
+- it first checks whether the execution engine can support parallel sub-agent execution
+- if parallel execution is available and requested, compatible sub-agents run in parallel
+- if parallel execution is not available, or if the probe/checkpoint detects failure, the runner falls back to **sequential execution**
 
-```bash
-cp examples/input_template.json examples/my_architecture.json
-```
+### Shared memory across sub-agents
+The runner maintains a shared context file:
+- `outputs/<run_name>/run_context.json`
 
-Edit `examples/my_architecture.json` in VS Code.
+This shared memory is used to pass normalized state, selected layout, decomposition results, and prompt file locations across sub-agents.
 
-### 3. Normalize and validate the input
-
-```bash
-python prepare_architecture_input.py   --input examples/my_architecture.json   --output outputs/prepared_input.json
-```
-
-### 4. Build the Draw.io prompt
-
-```bash
-python build_drawio_prompt.py   --input outputs/prepared_input.json   --output outputs/drawio_prompt.md
-```
-
-### 5. Render with drawio-skill
-
-Feed `outputs/drawio_prompt.md` into the imported Agents365 drawio-skill.
-
-Expected generated files:
+### What the runner generates
+For each run it creates a run folder such as:
 
 ```text
-outputs/solution_architecture.drawio
-outputs/solution_architecture.png
-outputs/prepared_input.json
+outputs/20250101_120000_solution_name/
+├── raw_request.txt
+├── draft_input.json
+├── prepared_input.json
+├── multilevel_plan.json
+├── drawio_prompt_overview.md
+├── expansion_specs/
+├── drawio_prompts/
+├── orchestration_report.json
+└── run_context.json
 ```
 
-### 6. Evaluate the PNG for spelling and label quality
+### Example usage with text input
 
 ```bash
-python evaluate_architecture_png.py   --png outputs/solution_architecture.png   --expected-json outputs/prepared_input.json   --report outputs/diagram_eval_report.json
+python run_architecture_skill.py   --text "Build a solution architecture diagram for a policy-as-spec governance platform with a control plane, CI/CD assurance, and multi-cloud targets."   --allow-parallel
 ```
 
-If issues are found, refine the input labels or prompt and regenerate.
+### Example usage with a text file
+
+```bash
+python run_architecture_skill.py   --text-file examples/request.txt   --allow-parallel
+```
+
+### Example usage with JSON input
+
+```bash
+python run_architecture_skill.py   --json-input examples/sample_multilevel_input.json   --allow-parallel
+```
+
+### Force sequential execution
+
+```bash
+python run_architecture_skill.py   --json-input examples/sample_multilevel_input.json   --force-sequential
+```
+
+The runner produces the normalized JSON, the multi-level plan, the overview draw.io prompt, and prompt files for any deeper capability expansion diagrams.
+It then tells the rendering engine what PNG and `.drawio` outputs should be created.
 
 ---
 
-## Quick start from ChatGPT
+## Quick start from ChatGPT or Gemini
 
-Use this prompt pattern:
+Use a prompt like this:
 
 ```text
 Use the Solution Architecture Diagram Skill.
@@ -201,201 +218,92 @@ Use the Solution Architecture Diagram Skill.
 Build a solution architecture diagram for:
 [describe the solution]
 
-Use a clean enterprise architecture style.
-Return:
-1. PNG diagram
-2. Draw.io XML / .drawio source if available
-3. Normalized JSON used to generate the diagram
-4. Evaluation report for spelling and label quality
+If I attach images, use them as optional supporting context.
+Use internal reference architecture layouts automatically.
+Ensure all text is wrapped inside boxes and does not overlap with other boxes.
+If needed, generate one or more additional level-2 diagrams that expand capabilities and sub-capabilities from the overview.
+Return the final PNG diagram(s) and editable Draw.io XML / .drawio file(s) if available.
 ```
-
-Example:
-
-```text
-Use the Solution Architecture Diagram Skill.
-
-Build a solution architecture diagram for a Policy-as-Spec Architecture Control Platform.
-Architects author YAML/JSON specs. A control plane resolves specs through REST,
-GraphQL, and MCP. CI/CD pipelines enforce controls using arch-ctl and OPA.
-Deployments target AWS EKS, AKS, and GCP. Cross-cutting components include
-evidence ledger, drift detector, and waiver governance.
-
-Return PNG, draw.io source, normalized JSON, and spelling evaluation report.
-```
-
-The assistant or agent should:
-1. Normalize the request into architecture JSON
-2. Select the layout
-3. Build a drawio-skill prompt
-4. Render PNG + `.drawio`
-5. Evaluate the PNG output
 
 ---
 
-## Quick start from Google Gemini
+## Quick start from VS Code
 
-Use this prompt pattern in Gemini:
-
-```text
-You have access to a Solution Architecture Diagram Skill folder.
-Read SKILL.md first.
-
-Create a PNG solution architecture diagram for:
-[describe the solution]
-
-Use the skill workflow:
-- normalize the request into JSON
-- select the best reference layout
-- generate a draw.io prompt
-- render PNG and .drawio XML if possible
-- run the PNG evaluation workflow for spelling and text quality
+```bash
+unzip architecture_diagram_skill_v5.zip
+cd architecture_diagram_skill_v5
 ```
 
-Gemini can use the same normalized JSON contract in `examples/input_template.json`.
+If using JSON input:
 
----
-
-## Quick start from any agent interface
-
-Any AI coding or assistant tool can use this skill if it can:
-
-1. Read files in this folder
-2. Execute Python scripts
-3. Invoke drawio-skill or render Draw.io XML
-4. Return generated files
-
-Generic instruction:
-
-```text
-Read SKILL.md in this folder.
-Ask me what solution architecture I want to build.
-Convert my response into the normalized JSON schema.
-Generate a drawio-skill prompt.
-Render a PNG and editable .drawio XML.
-Run the PNG evaluation workflow and fix spelling or label issues.
-Return the PNG, .drawio file, normalized JSON, and evaluation report.
+```bash
+python prepare_architecture_input.py   --input examples/my_architecture.json   --output outputs/prepared_input.json
+python build_drawio_prompt.py   --input outputs/prepared_input.json   --output outputs/drawio_prompt.md
 ```
+
+Then feed `outputs/drawio_prompt.md` into drawio-skill.
 
 ---
 
 ## Output files
 
-A completed run should produce:
+A completed run should normally produce:
 
 | File | Purpose |
 |---|---|
 | `outputs/prepared_input.json` | Clean normalized architecture input |
 | `outputs/drawio_prompt.md` | Prompt to send to drawio-skill |
-| `outputs/solution_architecture.drawio` | Editable Draw.io XML source |
-| `outputs/solution_architecture.png` | Final PNG diagram |
-| `outputs/diagram_eval_report.json` | Quality and spelling evaluation report |
+| `outputs/solution_architecture_overview.drawio` | Editable Draw.io XML source for Level 1 |
+| `outputs/solution_architecture_overview.png` | Level 1 overview diagram |
+| `outputs/solution_architecture_capability_*.drawio` | Editable Draw.io XML source for Level 2 expansions |
+| `outputs/solution_architecture_capability_*.png` | Level 2 expansion diagrams |
 
-If drawio-skill is unavailable, the skill should still return:
-
-- normalized JSON
-- generated drawio prompt
-- a note explaining that rendering requires drawio-skill / draw.io CLI
+If Draw.io rendering is unavailable, the skill should still return the normalized JSON and drawio prompt so the diagram can be rendered later.
 
 ---
 
-## Input quality tips
+## Notes
 
-Good architecture diagrams come from clean inputs.
-
-Use this structure:
-
-```text
-1. What is the solution?
-2. Who are the users or actors?
-3. What are the major layers?
-4. What systems are on the left as inputs?
-5. What systems are on the right as outputs?
-6. What are the central platform capabilities?
-7. What are the key flows?
-8. What security, audit, governance, or operations controls are cross-cutting?
-9. What cloud or deployment targets should appear?
-```
-
-Keep labels short:
-
-- Good: `Spec Repository`
-- Avoid: `A centralized repository that stores all enterprise and LOB specifications and version history`
-
-Use notes or subtitles for longer explanations.
-
----
-
-## PNG evaluation
-
-The skill includes a post-render evaluation workflow.
-
-It checks for:
-
-- spelling mistakes
-- missing labels
-- suspicious OCR mismatches
-- truncated text
-- label readability issues
-
-Run:
-
-```bash
-python evaluate_architecture_png.py   --png outputs/solution_architecture.png   --expected-json outputs/prepared_input.json   --report outputs/diagram_eval_report.json
-```
-
-For best results, combine the OCR-based script with a **vision-capable evaluator model** that visually checks the PNG.
-
----
-
-## Companion dependency
-
-This skill is designed to work with the open-source Agents365 drawio-skill repository:
-
-```text
-https://github.com/Agents365-ai/drawio-skill
-```
-
-Typical install patterns include:
-
-```bash
-npx skills add Agents365-ai/365-skills -g
-```
-
-or manual clone into a local skills directory.
-
----
-
-## Package structure
-
-```text
-architecture_diagram_skill_v3/
-├── SKILL.md
-├── README.md
-├── prepare_architecture_input.py
-├── build_drawio_prompt.py
-├── evaluate_architecture_png.py
-├── render_architecture.py
-├── skill_manifest.json
-├── data/
-│   ├── architecture_input_schema.json
-│   └── reference_architecture_patterns.json
-├── docs/
-│   ├── USAGE.md
-│   ├── input_formatting_guide.md
-│   ├── png_eval_workflow.md
-│   └── reference_layouts.md
-├── examples/
-│   ├── input_template.json
-│   ├── invoke_skill_prompt.txt
-│   ├── sample_input.json
-│   └── sample_drawio_prompt.md
-└── outputs/
-```
-
----
-
-## License and usage
-
-This skill is provided as an architecture-generation helper. The included sample reference diagrams are used only to describe layout archetypes and should not be copied literally.
+- The skill is **text-first**.
+- Images are **optional**.
+- Reference architecture diagrams are used **internally**.
+- The skill should **not ask the user for evaluation instructions or extra internal metadata**.
+- Labels should remain short, business-readable, and presentation-ready.
+- Text must be wrapped within boxes and must not overlap other boxes.
+- When the overview would be too dense, generate deeper expansion diagrams automatically.
 
 **Author:** Arvind Radhakrishnen
+
+
+## Renderer adapter
+
+This package now includes a renderer adapter:
+- `render_with_drawio_adapter.py`
+
+It can be used standalone or through `run_architecture_skill.py --render`.
+
+### What it does
+- reads the overview and Level 2 prompt files produced by the orchestration runner
+- invokes a configurable drawio-skill render command
+- writes final `.png` and `.drawio` files into the same run folder
+- supports parallel rendering when available, with fallback to sequential mode
+
+### Example standalone usage
+```bash
+python render_with_drawio_adapter.py   --run-dir outputs/<run_name>   --config examples/renderer_config.json   --dry-run
+```
+
+### Example integrated usage
+```bash
+python run_architecture_skill.py   --json-input examples/sample_multilevel_input.json   --allow-parallel   --render   --renderer-config examples/renderer_config.json
+```
+
+### What you may need to approve in your environment
+To enable end-to-end rendering, you may need to approve or provide:
+1. **installation / availability of the Agents365 drawio-skill**
+2. **installation / availability of draw.io desktop / CLI** used by the renderer
+3. **the exact local command template** that should invoke rendering in your environment
+4. **permission to execute local subprocess commands** from the runner
+5. **permission for parallel render jobs** if you want rendering to fan out in parallel
+
+If you do not yet want live rendering, you can still run the adapter in `--dry-run` mode to verify the render plan.

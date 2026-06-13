@@ -1,8 +1,8 @@
 {
   "name": "solution-architecture-diagram-skill",
-  "version": "0.3.0",
+  "version": "0.7.0",
   "author": "Arvind Radhakrishnen",
-  "description": "Generate PNG and editable Draw.io solution architecture diagrams from natural language or structured JSON.",
+  "description": "Generate PNG and editable Draw.io solution architecture diagrams from text and optional images, using internal reference layouts and multi-level decomposition with wrapped non-overlapping text.",
   "entrypoints": {
     "instructions": "SKILL.md",
     "readme": "README.md",
@@ -10,13 +10,20 @@
     "input_template": "examples/input_template.json",
     "normalize": "python prepare_architecture_input.py --input examples/my_architecture.json --output outputs/prepared_input.json",
     "build_prompt": "python build_drawio_prompt.py --input outputs/prepared_input.json --output outputs/drawio_prompt.md",
-    "evaluate_png": "python evaluate_architecture_png.py --png outputs/solution_architecture.png --expected-json outputs/prepared_input.json --report outputs/diagram_eval_report.json"
+    "evaluate_png": "python evaluate_architecture_png.py --png outputs/solution_architecture.png --expected-json outputs/prepared_input.json --report outputs/diagram_eval_report.json",
+    "plan_multilevel": "python plan_multilevel_architecture.py --input outputs/prepared_input.json --output outputs/multilevel_plan.json",
+    "runner": "python run_architecture_skill.py --text \"Build a solution architecture diagram for ...\" --allow-parallel",
+    "sub_agent_doc": "docs/sub_agent_orchestration.md",
+    "renderer_adapter": "python render_with_drawio_adapter.py --run-dir outputs/<run_name> --config examples/renderer_config.json --dry-run",
+    "runner_with_render": "python run_architecture_skill.py --json-input examples/sample_multilevel_input.json --allow-parallel --render --renderer-config examples/renderer_config.json"
   },
   "outputs": [
-    "outputs/solution_architecture.png",
-    "outputs/solution_architecture.drawio",
+    "outputs/solution_architecture_overview.png",
+    "outputs/solution_architecture_overview.drawio",
+    "outputs/solution_architecture_capability_*.png",
+    "outputs/solution_architecture_capability_*.drawio",
     "outputs/prepared_input.json",
-    "outputs/diagram_eval_report.json"
+    "outputs/multilevel_plan.json"
   ],
   "compatible_interfaces": [
     "VS Code",
@@ -26,5 +33,27 @@
     "Cursor",
     "agentic IDEs"
   ],
-  "renderer": "Agents365 drawio-skill"
+  "renderer": "Agents365 drawio-skill",
+  "inputs": {
+    "primary": "text",
+    "optional": [
+      "images"
+    ],
+    "behavior": "Accept text or JSON, optionally use images as supporting context, use internal reference architecture layouts, wrap text within boxes, avoid overlap, generate Level 2 capability diagrams when needed, and coordinate sub-agents with shared memory plus parallel-to-sequential fallback."
+  },
+  "files": [
+    "run_architecture_skill.py",
+    "docs/sub_agent_orchestration.md",
+    "examples/request.txt",
+    "render_with_drawio_adapter.py",
+    "docs/renderer_adapter.md",
+    "examples/renderer_config.json"
+  ],
+  "approvals_needed": [
+    "Approve or install Agents365 drawio-skill in the target environment",
+    "Approve or install draw.io desktop / CLI used by the renderer",
+    "Approve the local renderer command template or bridge command",
+    "Approve local subprocess execution from the orchestration runner",
+    "Approve parallel render jobs if fan-out rendering is desired"
+  ]
 }

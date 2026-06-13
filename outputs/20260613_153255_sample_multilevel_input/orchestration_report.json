@@ -1,0 +1,45 @@
+{
+  "run_id": "20260613_153255_sample_multilevel_input",
+  "execution_mode": "sequential",
+  "parallel_probe": {
+    "supported": true,
+    "message": "parallel execution probe passed"
+  },
+  "input_mode": "json",
+  "prepared_input_path": "/mnt/data/architecture_diagram_skill_v6/outputs/20260613_153255_sample_multilevel_input/prepared_input.json",
+  "overview_prompt_path": "/mnt/data/architecture_diagram_skill_v6/outputs/20260613_153255_sample_multilevel_input/drawio_prompt_overview.md",
+  "multilevel_plan_path": "/mnt/data/architecture_diagram_skill_v6/outputs/20260613_153255_sample_multilevel_input/multilevel_plan.json",
+  "expansion_prompts": [
+    {
+      "index": 1,
+      "parent_zone_title": "Architecture Control Plane",
+      "expansion_spec_path": "/mnt/data/architecture_diagram_skill_v6/outputs/20260613_153255_sample_multilevel_input/expansion_specs/01_architecture_control_plane.json",
+      "expansion_prompt_path": "/mnt/data/architecture_diagram_skill_v6/outputs/20260613_153255_sample_multilevel_input/drawio_prompts/01_architecture_control_plane.md"
+    },
+    {
+      "index": 2,
+      "parent_zone_title": "Architecture Assurance Fabric",
+      "expansion_spec_path": "/mnt/data/architecture_diagram_skill_v6/outputs/20260613_153255_sample_multilevel_input/expansion_specs/02_architecture_assurance_fabric.json",
+      "expansion_prompt_path": "/mnt/data/architecture_diagram_skill_v6/outputs/20260613_153255_sample_multilevel_input/drawio_prompts/02_architecture_assurance_fabric.md"
+    },
+    {
+      "index": 3,
+      "parent_zone_title": "Multi-Cloud Targets",
+      "expansion_spec_path": "/mnt/data/architecture_diagram_skill_v6/outputs/20260613_153255_sample_multilevel_input/expansion_specs/03_multi_cloud_targets.json",
+      "expansion_prompt_path": "/mnt/data/architecture_diagram_skill_v6/outputs/20260613_153255_sample_multilevel_input/drawio_prompts/03_multi_cloud_targets.md"
+    },
+    {
+      "index": 4,
+      "parent_zone_title": "Cross-Cutting Components",
+      "expansion_spec_path": "/mnt/data/architecture_diagram_skill_v6/outputs/20260613_153255_sample_multilevel_input/expansion_specs/04_cross_cutting_components.json",
+      "expansion_prompt_path": "/mnt/data/architecture_diagram_skill_v6/outputs/20260613_153255_sample_multilevel_input/drawio_prompts/04_cross_cutting_components.md"
+    }
+  ],
+  "expected_render_outputs": {
+    "overview_png": "outputs/solution_architecture_overview.png",
+    "overview_drawio": "outputs/solution_architecture_overview.drawio",
+    "expansion_png_pattern": "outputs/solution_architecture_capability_*.png",
+    "expansion_drawio_pattern": "outputs/solution_architecture_capability_*.drawio"
+  },
+  "next_step": "Feed the generated overview and expansion prompt markdown files into drawio-skill to render PNG and .drawio outputs."
+}

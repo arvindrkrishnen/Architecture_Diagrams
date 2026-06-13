@@ -1,0 +1,12 @@
+Build a solution architecture diagram for a Policy-as-Spec Architecture Control Platform.
+
+Inputs: Enterprise architects, LOB architects, YAML specs, JSON specs
+Outputs: Compliance dashboard, Audit evidence, Multi-cloud deployment assurance
+Operations: Governance, Audit trail, Security controls
+Capabilities:
+Authorship Layer: Enterprise policies, Domain policies, YAML / JSON specifications
+Architecture Control Plane: Spec repository, REST API, GraphQL, MCP server, Spec resolution
+Architecture Assurance Fabric: arch-ctl CLI, Build stage, Deploy stage, OPA checks, Topology verification
+Multi-Cloud Targets: AWS EKS, AKS, GCP, Harness delegates
+Cross-Cutting Components: Evidence ledger, Drift detector, Waiver governance
+Footer: Generate overview and Level 2 expansion prompts if needed

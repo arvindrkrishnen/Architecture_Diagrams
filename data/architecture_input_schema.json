@@ -106,6 +106,16 @@
           "color": {
             "type": "string",
             "pattern": "^#?[A-Fa-f0-9]{6}$"
+          },
+          "expand": {
+            "type": "boolean"
+          },
+          "children": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": true
+            }
           }
         }
       }
@@ -165,6 +175,28 @@
           ]
         },
         "embed_xml": {
+          "type": "boolean"
+        }
+      }
+    },
+    "decomposition": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "auto_expand": {
+          "type": "boolean"
+        },
+        "max_overview_zones": {
+          "type": "integer",
+          "minimum": 3,
+          "maximum": 12
+        },
+        "max_items_per_zone_overview": {
+          "type": "integer",
+          "minimum": 3,
+          "maximum": 12
+        },
+        "create_capability_children": {
           "type": "boolean"
         }
       }

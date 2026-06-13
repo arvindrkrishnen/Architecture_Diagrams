@@ -1,0 +1,301 @@
+{
+  "overview": {
+    "title": "Policy-as-Spec Architecture Control Platform",
+    "subtitle": "Overview plus capability expansion diagrams",
+    "template": "platform_value_chain",
+    "output_basename": "solution_architecture_overview",
+    "zones": [
+      {
+        "id": "authoring",
+        "title": "Authorship Layer",
+        "subtitle": "Architect-owned specs",
+        "items": [
+          "Enterprise Architects",
+          "LOB Architects",
+          "YAML / JSON Specs"
+        ],
+        "columns": 1,
+        "expand": false
+      },
+      {
+        "id": "control_plane",
+        "title": "Architecture Control Plane",
+        "subtitle": "Single source of truth",
+        "items": [
+          "Spec Repository",
+          "REST API",
+          "GraphQL",
+          "MCP Server",
+          "Spec Resolution"
+        ],
+        "columns": 1,
+        "expand": true,
+        "children": [
+          {
+            "title": "Spec Repository",
+            "subtitle": "",
+            "items": [
+              "Versioning",
+              "Hashing",
+              "Promotion",
+              "Rollback"
+            ]
+          },
+          {
+            "title": "Interfaces",
+            "subtitle": "",
+            "items": [
+              "GET /specs/resolve",
+              "Dashboard queries",
+              "MCP tools"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "assurance",
+        "title": "Architecture Assurance Fabric",
+        "subtitle": "Pipeline enforcement",
+        "items": [
+          "arch-ctl CLI",
+          "Build Stage",
+          "Deploy Stage",
+          "OPA Checks",
+          "Topology Verification"
+        ],
+        "columns": 1,
+        "expand": true,
+        "children": [
+          {
+            "title": "Build Stage",
+            "subtitle": "",
+            "items": [
+              "Dependency Scan",
+              "IaC Plan",
+              "Container Image Check"
+            ]
+          },
+          {
+            "title": "Deploy Stage",
+            "subtitle": "",
+            "items": [
+              "BCP / DR Gates",
+              "LB Spec",
+              "Topology Verification"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "targets",
+        "title": "Multi-Cloud Targets",
+        "subtitle": "Deployment endpoints",
+        "items": [
+          "AWS EKS",
+          "AKS",
+          "GCP",
+          "Harness Delegates"
+        ],
+        "columns": 1,
+        "expand": true,
+        "children": [
+          {
+            "title": "AWS EKS",
+            "subtitle": "",
+            "items": [
+              "Primary Cluster",
+              "Delegate",
+              "Policy Results"
+            ]
+          },
+          {
+            "title": "AKS / GCP",
+            "subtitle": "",
+            "items": [
+              "Secondary Cluster",
+              "Optional Cluster",
+              "Delegate Routing"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "controls",
+        "title": "Cross-Cutting Components",
+        "subtitle": "Governance and evidence",
+        "items": [
+          "Evidence Ledger",
+          "Drift Detector",
+          "Waiver Governance"
+        ],
+        "columns": 1,
+        "expand": true,
+        "children": [
+          {
+            "title": "Evidence & Drift",
+            "subtitle": "",
+            "items": [
+              "Immutable Log",
+              "Expiry Signals",
+              "CVE Alerts"
+            ]
+          },
+          {
+            "title": "Waivers",
+            "subtitle": "",
+            "items": [
+              "PR-based Workflow",
+              "Expiry Limit",
+              "Approval History"
+            ]
+          }
+        ]
+      }
+    ],
+    "notes": "Level 1 overview diagram"
+  },
+  "expansions": [
+    {
+      "parent_zone_id": "control_plane",
+      "parent_zone_title": "Architecture Control Plane",
+      "title": "Architecture Control Plane \u2014 Level 2 Expansion",
+      "subtitle": "Detailed expansion of Architecture Control Plane",
+      "output_basename": "solution_architecture_capability_01",
+      "template": "platform_value_chain",
+      "items": [
+        "Spec Repository",
+        "REST API",
+        "GraphQL",
+        "MCP Server",
+        "Spec Resolution"
+      ],
+      "children": [
+        {
+          "title": "Spec Repository",
+          "subtitle": "",
+          "items": [
+            "Versioning",
+            "Hashing",
+            "Promotion",
+            "Rollback"
+          ]
+        },
+        {
+          "title": "Interfaces",
+          "subtitle": "",
+          "items": [
+            "GET /specs/resolve",
+            "Dashboard queries",
+            "MCP tools"
+          ]
+        }
+      ]
+    },
+    {
+      "parent_zone_id": "assurance",
+      "parent_zone_title": "Architecture Assurance Fabric",
+      "title": "Architecture Assurance Fabric \u2014 Level 2 Expansion",
+      "subtitle": "Detailed expansion of Architecture Assurance Fabric",
+      "output_basename": "solution_architecture_capability_02",
+      "template": "platform_value_chain",
+      "items": [
+        "arch-ctl CLI",
+        "Build Stage",
+        "Deploy Stage",
+        "OPA Checks",
+        "Topology Verification"
+      ],
+      "children": [
+        {
+          "title": "Build Stage",
+          "subtitle": "",
+          "items": [
+            "Dependency Scan",
+            "IaC Plan",
+            "Container Image Check"
+          ]
+        },
+        {
+          "title": "Deploy Stage",
+          "subtitle": "",
+          "items": [
+            "BCP / DR Gates",
+            "LB Spec",
+            "Topology Verification"
+          ]
+        }
+      ]
+    },
+    {
+      "parent_zone_id": "targets",
+      "parent_zone_title": "Multi-Cloud Targets",
+      "title": "Multi-Cloud Targets \u2014 Level 2 Expansion",
+      "subtitle": "Detailed expansion of Multi-Cloud Targets",
+      "output_basename": "solution_architecture_capability_03",
+      "template": "platform_value_chain",
+      "items": [
+        "AWS EKS",
+        "AKS",
+        "GCP",
+        "Harness Delegates"
+      ],
+      "children": [
+        {
+          "title": "AWS EKS",
+          "subtitle": "",
+          "items": [
+            "Primary Cluster",
+            "Delegate",
+            "Policy Results"
+          ]
+        },
+        {
+          "title": "AKS / GCP",
+          "subtitle": "",
+          "items": [
+            "Secondary Cluster",
+            "Optional Cluster",
+            "Delegate Routing"
+          ]
+        }
+      ]
+    },
+    {
+      "parent_zone_id": "controls",
+      "parent_zone_title": "Cross-Cutting Components",
+      "title": "Cross-Cutting Components \u2014 Level 2 Expansion",
+      "subtitle": "Detailed expansion of Cross-Cutting Components",
+      "output_basename": "solution_architecture_capability_04",
+      "template": "platform_value_chain",
+      "items": [
+        "Evidence Ledger",
+        "Drift Detector",
+        "Waiver Governance"
+      ],
+      "children": [
+        {
+          "title": "Evidence & Drift",
+          "subtitle": "",
+          "items": [
+            "Immutable Log",
+            "Expiry Signals",
+            "CVE Alerts"
+          ]
+        },
+        {
+          "title": "Waivers",
+          "subtitle": "",
+          "items": [
+            "PR-based Workflow",
+            "Expiry Limit",
+            "Approval History"
+          ]
+        }
+      ]
+    }
+  ],
+  "summary": {
+    "has_expansions": true,
+    "expansion_count": 4
+  }
+}

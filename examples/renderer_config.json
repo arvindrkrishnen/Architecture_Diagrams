@@ -1,0 +1,9 @@
+{
+  "command_template": "YOUR_RENDER_COMMAND --prompt-file \"{prompt}\" --output-png \"{png}\" --output-drawio \"{drawio}\"",
+  "allow_parallel": true,
+  "dry_run": true,
+  "notes": [
+    "Replace YOUR_RENDER_COMMAND with the local command that invokes drawio-skill or your bridge script.",
+    "Supported placeholders: {prompt}, {png}, {drawio}, {name}, {run_dir}"
+  ]
+}

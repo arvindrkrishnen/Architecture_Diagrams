@@ -27,80 +27,79 @@ Create a polished **solution architecture diagram** and export it as **PNG**. Pr
 - orthogonal
 
 ## Diagram title
-- Agentic Vendor Intelligence Platform — Solution Architecture
+- Policy-as-Spec Architecture Control Platform
 
 ## Diagram subtitle
-- Unified ingestion, AI research orchestration, evidence store, and business delivery layer
+- Overview plus capability expansion diagrams
 
 ## Structural content
 
 ### Lanes
-### Left lane — Inputs
-- Vendor websites
-- Analyst reports
-- RFP documents
-- CRM notes
-- Market news
-- APIs
+### Left lane — Lifecycle
+- Author
+- Resolve
+- Enforce
+- Deploy
+- Assure
 
-### Right lane — Outputs
-- Vendor dashboards
-- Comparison matrices
-- Executive briefs
-- RFP responses
-- Alerts & tasks
+### Right lane — Interfaces
+- REST API
+- GraphQL
+- MCP Server
 
 ### Capability zones
-### Zone: Data integration
-Subtitle: Normalize and enrich
-- Web/API connectors
-- Document parser
-- Metadata extraction
-- Source lineage
+### Zone: Authorship Layer
+Subtitle: Architect-owned specs
+- Enterprise Architects
+- LOB Architects
+- YAML / JSON Specs
 
-### Zone: Knowledge fabric
-Subtitle: Searchable evidence
-- Vector index
-- Entity graph
-- Taxonomy mapping
-- Citation store
+### Zone: Architecture Control Plane
+Subtitle: Single source of truth
+- Spec Repository
+- REST API
+- GraphQL
+- MCP Server
+- Spec Resolution
+Expansion hint: This zone may be expanded into a Level 2 diagram.
 
-### Zone: Predictive & generative AI
-Subtitle: Multi-agent research
-- Research agent
-- Comparator agent
-- Risk summarizer
-- Question generator
+### Zone: Architecture Assurance Fabric
+Subtitle: Pipeline enforcement
+- arch-ctl CLI
+- Build Stage
+- Deploy Stage
+- OPA Checks
+- Topology Verification
+Expansion hint: This zone may be expanded into a Level 2 diagram.
 
-### Zone: Decision orchestration
-Subtitle: Human-in-loop workflows
-- Rules engine
-- Review queues
-- Approval workflow
-- Audit trail
+### Zone: Multi-Cloud Targets
+Subtitle: Deployment endpoints
+- AWS EKS
+- AKS
+- GCP
+- Harness Delegates
+Expansion hint: This zone may be expanded into a Level 2 diagram.
 
-### Zone: Apps, APIs & analytics
-Subtitle: Business consumption
-- Dashboard builder
-- Insight API
-- Report generator
-- Notification service
+### Zone: Cross-Cutting Components
+Subtitle: Governance and evidence
+- Evidence Ledger
+- Drift Detector
+- Waiver Governance
+Expansion hint: This zone may be expanded into a Level 2 diagram.
 
 ### Flows
-- ingestion -> knowledge (curated data)
-- knowledge -> ai (retrieval)
-- ai -> orchestration (recommendations)
-- orchestration -> delivery (approved outputs)
+- authoring -> control_plane (publish specs)
+- control_plane -> assurance (resolved controls)
+- assurance -> targets (policy enforcement)
+- targets -> controls (evidence and drift)
 
 ### Operations / cross-cutting layer
-- User management & SSO
-- Workflow automation
-- ModelOps
-- DataOps
-- Audit & compliance
+- Audit Trail
+- Governance
+- Security Controls
 
 ### Footer
-- Deployable on AWS, Azure, GCP, or private cloud
+- Generate overview and Level 2 expansion diagrams where useful
 
 ## Mandatory layout quality rules
 - Wrap all text inside boxes and containers.

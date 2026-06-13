@@ -2,7 +2,6 @@
 import argparse
 import json
 import re
-from pathlib import Path
 
 ALLOWED_TEMPLATES = {
     "platform_value_chain",
@@ -44,6 +43,14 @@ def dedupe_preserve(items):
     return out
 
 
+def normalize_child(child):
+    return {
+        'title': clean_text(child.get('title', ''), 80),
+        'subtitle': clean_text(child.get('subtitle', ''), 120),
+        'items': dedupe_preserve([clean_text(x, 60) for x in child.get('items', []) if clean_text(x, 60)])[:12]
+    }
+
+
 def normalize(data):
     out = dict(data)
     out['title'] = clean_text(out.get('title', ''), 120)
@@ -74,13 +81,18 @@ def normalize(data):
         items = dedupe_preserve(items)[:12]
         if not zid or not title or not items:
             raise ValueError('Each zone must have id, title, and at least one item')
-        zones.append({
+        zone_out = {
             'id': zid,
             'title': title,
             'subtitle': subtitle,
             'items': items,
-            'columns': int(zone.get('columns', 1) or 1)
-        })
+            'columns': int(zone.get('columns', 1) or 1),
+            'expand': bool(zone.get('expand', False))
+        }
+        children = [normalize_child(c) for c in zone.get('children', []) if normalize_child(c).get('title') or normalize_child(c).get('items')]
+        if children:
+            zone_out['children'] = children
+        zones.append(zone_out)
     if len(zones) < 2:
         raise ValueError('At least two zones are required')
     out['zones'] = zones
@@ -104,6 +116,12 @@ def normalize(data):
     ops = [clean_text(x, 60) for x in out.get('operations', []) if clean_text(x, 60)]
     out['operations'] = dedupe_preserve(ops)[:12]
     out['footer'] = clean_text(out.get('footer', ''), 180)
+    out['decomposition'] = {
+        'auto_expand': bool(out.get('decomposition', {}).get('auto_expand', True)),
+        'max_overview_zones': int(out.get('decomposition', {}).get('max_overview_zones', 6) or 6),
+        'max_items_per_zone_overview': int(out.get('decomposition', {}).get('max_items_per_zone_overview', 5) or 5),
+        'create_capability_children': bool(out.get('decomposition', {}).get('create_capability_children', True))
+    }
     out['rendering_preferences'] = out.get('rendering_preferences', {
         'backend': 'drawio-skill', 'format': 'png', 'embed_xml': True
     })
