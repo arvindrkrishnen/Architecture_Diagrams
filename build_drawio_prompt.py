@@ -23,6 +23,7 @@ def main():
 
     architecture = load_json(Path(args.input))
     patterns = load_json(Path(args.patterns))
+    assets_lib = load_json(Path(args.patterns).parent / 'reference_asset_library.json')
     template_id = architecture['template']
     template = next((t for t in patterns['templates'] if t['id'] == template_id), None)
     if not template:
@@ -49,6 +50,15 @@ def main():
 
     ops_md = bullets(architecture.get('operations', [])) if architecture.get('operations') else '- None specified'
     decomp = architecture.get('decomposition', {})
+    style_selection = architecture.get('style_selection', {})
+    style_profiles = patterns.get('style_profiles', {})
+    style_profile = style_profiles.get(template.get('style_profile', ''), {})
+    asset_map = {a['id']: a for a in assets_lib.get('assets', [])}
+    asset_notes = []
+    for aid in template.get('reference_assets', []):
+        a = asset_map.get(aid)
+        if a:
+            asset_notes.append(f"- {a['title']} | family={a['layout_family']} | intent={a['architecture_communication_intent']} | placement={a['box_placement_model']} | palette={', '.join(a.get('palette', [])[:5])}")
 
     md = f"""# Draw.io Skill Prompt
 
@@ -68,6 +78,23 @@ Create a polished **solution architecture diagram** and export it as **PNG**. Pr
 
 ## Layout intent
 {template.get('prompt_scaffold','')}
+
+## Style profile
+- Style profile: {template.get('style_profile','')}
+- Primary: {style_profile.get('primary','')}
+- Secondary: {style_profile.get('secondary','')}
+- Accent: {style_profile.get('accent','')}
+- Container: {style_profile.get('container','')}
+- Border: {style_profile.get('border','')}
+- Guidance: {style_profile.get('note','')}
+
+## Selected recommendation
+- Primary layout: {style_selection.get('primary_layout_template', template.get('id'))}
+- Palette donor: {style_selection.get('secondary_palette_donor', {}).get('asset_title', 'template default')}
+- Selection rationale: {', '.join(style_selection.get('why_this_layout', [])) if style_selection else 'template default'}
+
+## Internal reference assets to learn from
+{chr(10).join(asset_notes) if asset_notes else '- No specific reference assets listed'}
 
 ### Layout grammar
 {bullets(template.get('layout',{}).get('information_grammar', []))}
@@ -101,6 +128,20 @@ Create a polished **solution architecture diagram** and export it as **PNG**. Pr
 ### Footer
 - {architecture.get('footer', '')}
 
+## Mandatory semantic placement rules
+- Place technology components in semantically correct areas.
+- Data stores and databases belong in storage, data platform, persistence, or metadata zones.
+- APIs, REST, GraphQL, and MCP belong in interface, control plane, access, or delivery zones.
+- Cloud runtimes such as EKS, AKS, GCP, EC2, Lambda, and Kubernetes belong in cloud target, compute, platform, or landing-zone areas.
+- Analytics tools belong in access, delivery, reporting, analytics, or consumption areas.
+- Governance, audit, waiver, evidence, and policy components belong in governance, control, operations, or assurance bands.
+
+## Mandatory spelling and label rules
+- Preserve canonical capitalization for technology names such as GraphQL, Kubernetes, AWS, Azure, GCP, EKS, AKS, REST API, MCP, YAML, JSON, CI/CD, IaC, MLOps, OPA, and Terraform.
+- Use the technology terms allowlist when checking labels.
+- Avoid invented misspellings or compressed labels.
+- Use short labels and wrap text rather than reducing font size excessively.
+
 ## Mandatory layout quality rules
 - Wrap all text inside boxes and containers.
 - Do not allow text to overflow box boundaries.
@@ -120,7 +161,9 @@ Create a polished **solution architecture diagram** and export it as **PNG**. Pr
 - Use clean grouping containers and consistent spacing.
 - Keep labels short.
 - Use orthogonal connectors and avoid line crossings where possible.
-- Use color sparingly for major grouping, not decoration.
+- Use the template style profile and internal reference asset palette mood for macro segmentation.
+- Borrow color schemes similarly to the internal references, but keep the diagram original.
+- Use header bars, panels, and cross-cutting bands when the reference family indicates them.
 - Keep the work original. Do not copy the proprietary reference diagrams literally.
 
 ## Final rendering instructions

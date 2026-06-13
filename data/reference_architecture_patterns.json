@@ -1,99 +1,286 @@
 {
-  "version": "0.1.0",
-  "purpose": "Reference slide patterns for generating solution architecture diagrams as PNG files from user input.",
+  "version": "0.8.0",
+  "purpose": "Reference slide patterns and style families for generating solution architecture diagrams as PNG and draw.io files from user input.",
   "canvas_defaults": {
     "width": 1600,
     "height": 900,
     "background": "#FFFFFF",
     "font_family": "DejaVu Sans",
-    "title_color": "#2B66B1",
+    "title_color": "#1F3B73",
     "body_color": "#222222",
     "line_color": "#6B7280"
   },
   "input_contract": {
     "title": "string",
     "subtitle": "string optional",
-    "template": "one of: platform_value_chain, composite_ai_platform, cloud_tenant_microservices, enterprise_endpoint_management, cloud_data_platform",
+    "template": "one of: platform_value_chain, composite_ai_platform, cloud_tenant_microservices, enterprise_endpoint_management, cloud_data_platform, cloud_service_operating_model, service_orchestration_workflow, iot_ot_security_layers, modern_data_lakehouse, identity_multicloud_control_plane",
     "lanes": "array of source/target side lanes with label, items, side",
     "zones": "array of main architecture zones with title, subtitle, items, columns, color",
     "flows": "array of arrows between item ids or zone ids with label and direction",
     "footer": "string optional",
-    "style": "optional palette and layout overrides"
+    "style": "optional palette, header band, and layout overrides"
+  },
+  "style_profiles": {
+    "clean_enterprise_blue": {
+      "primary": "#2F73D8",
+      "secondary": "#8FB8F3",
+      "accent": "#1F3B73",
+      "container": "#F7FAFF",
+      "border": "#4B6FA9",
+      "note": "Use for control planes, operating models, or identity-centric enterprise diagrams."
+    },
+    "aws_red_orange": {
+      "primary": "#D92D20",
+      "secondary": "#E99B00",
+      "accent": "#4B5563",
+      "container": "#F4F4F5",
+      "border": "#C94632",
+      "note": "Use for data platforms with strong ingestion/core/delivery segmentation."
+    },
+    "security_green_teal": {
+      "primary": "#2F8F83",
+      "secondary": "#E8B04A",
+      "accent": "#4B5563",
+      "container": "#F8FBFA",
+      "border": "#4C9C90",
+      "note": "Use for risk, OT, IoT, and security-centric views."
+    },
+    "neutral_process_blue": {
+      "primary": "#3B66D9",
+      "secondary": "#9ED3E8",
+      "accent": "#5B6470",
+      "container": "#F5F6F8",
+      "border": "#5D88CC",
+      "note": "Use for workflow, portal, and orchestration swimlane diagrams."
+    },
+    "modern_lakehouse": {
+      "primary": "#4B6FD8",
+      "secondary": "#E2A31A",
+      "accent": "#7A7A7A",
+      "container": "#FAFAFA",
+      "border": "#8FA8E8",
+      "note": "Use for modern data lakehouse and self-service analytics views."
+    },
+    "identity_green_blue": {
+      "primary": "#2D6CDF",
+      "secondary": "#47A55A",
+      "accent": "#7C3AED",
+      "container": "#F9FBFF",
+      "border": "#6E8EDC",
+      "note": "Use for identity control plane and multi-cloud landing zone layouts."
+    }
   },
   "templates": [
     {
       "id": "platform_value_chain",
-      "name": "Connected intelligence / low-code AI platform overview",
-      "reference": "Uploaded MasterCraft-style product overview image",
-      "best_for": ["AI platform overview", "business capability map", "end-to-end product architecture"],
+      "name": "Connected intelligence / capability value chain",
+      "reference_assets": [
+        "platform_value_chain_mastercraft"
+      ],
+      "best_for": [
+        "AI platform overview",
+        "business capability map",
+        "end-to-end product architecture"
+      ],
       "layout": {
         "type": "left_to_right_value_chain",
-        "main_container": {"x": 170, "y": 210, "w": 1200, "h": 520, "radius": 22},
-        "left_inputs": {"x": 30, "y": 270, "w": 135, "h": 360},
-        "right_outputs": {"x": 1400, "y": 250, "w": 160, "h": 430},
-        "top_ribbons": ["Low-code", "Collaborative user experience", "Open, flexible, and extensible"],
+        "main_container": {
+          "x": 170,
+          "y": 210,
+          "w": 1200,
+          "h": 520,
+          "radius": 22
+        },
+        "left_inputs": {
+          "x": 30,
+          "y": 270,
+          "w": 135,
+          "h": 360
+        },
+        "right_outputs": {
+          "x": 1400,
+          "y": 250,
+          "w": 160,
+          "h": 430
+        },
+        "top_ribbons": [
+          "Low-code",
+          "Collaborative user experience",
+          "Open, flexible, and extensible"
+        ],
         "operations_band": true,
         "cloud_footer": true
       },
       "visual_rules": [
         "Use 4 to 6 large rounded capability blocks in the center.",
         "Place data sources on the left and business outputs on the right.",
-        "Use bold black ribbon labels above major capability groups.",
+        "Use bold label pills or ribbons above major capability groups.",
         "Reserve a bottom band for operations, audit, workflow automation, and SSO."
       ],
-      "default_palette": {"primary":"#5B8BD7", "box":"#DCE8F7", "accent":"#111111", "muted":"#F2F4F7"}
+      "placement_semantics": [
+        "Dominant center platform boundary",
+        "Side rails communicate external context",
+        "Bottom band represents cross-cutting operations"
+      ],
+      "default_palette": {
+        "primary": "#5B8BD7",
+        "box": "#DCE8F7",
+        "accent": "#111111",
+        "muted": "#F2F4F7"
+      },
+      "style_profile": "clean_enterprise_blue"
     },
     {
       "id": "composite_ai_platform",
       "name": "Composite AI capability platform map",
-      "reference": "Uploaded TCS CAP.ai-style overview image",
-      "best_for": ["agentic ecosystem", "AI for business and IT", "portfolio of reusable solutions"],
+      "reference_assets": [
+        "composite_ai_platform_tcs"
+      ],
+      "best_for": [
+        "agentic ecosystem",
+        "AI for business and IT",
+        "portfolio of reusable solutions"
+      ],
       "layout": {
         "type": "center_capability_matrix_with_side_industries",
-        "main_container": {"x": 230, "y": 110, "w": 1120, "h": 720, "radius": 24},
-        "left_industries": {"x": 20, "y": 130, "w": 180, "h": 620},
-        "right_service_lines": {"x": 1390, "y": 130, "w": 180, "h": 620},
+        "main_container": {
+          "x": 230,
+          "y": 110,
+          "w": 1120,
+          "h": 720,
+          "radius": 24
+        },
+        "left_industries": {
+          "x": 20,
+          "y": 130,
+          "w": 180,
+          "h": 620
+        },
+        "right_service_lines": {
+          "x": 1390,
+          "y": 130,
+          "w": 180,
+          "h": 620
+        },
         "bottom_core_solutions": true
       },
       "visual_rules": [
         "Use a central grouped platform boundary.",
         "Create vertical groups such as Channel Hub, AI for Business, AI for IT, and Agentic Ecosystem.",
-        "Show transforming businesses on the left and transforming service lines on the right.",
+        "Show context pillars on the left and right.",
         "Use small tiles for reusable core solutions at the bottom."
       ],
-      "default_palette": {"primary":"#2F73D8", "secondary":"#F37021", "box":"#FFFFFF", "muted":"#F8FAFC"}
+      "placement_semantics": [
+        "Columns communicate parallel capability domains",
+        "Side pillars communicate industry or transformation context",
+        "Bottom row communicates reusable assets"
+      ],
+      "default_palette": {
+        "primary": "#2F73D8",
+        "secondary": "#F37021",
+        "box": "#FFFFFF",
+        "muted": "#F8FAFC"
+      },
+      "style_profile": "clean_enterprise_blue"
     },
     {
       "id": "cloud_tenant_microservices",
-      "name": "Cloud microservices with tenant system and peripheral integration",
-      "reference": "Uploaded AWS cloud microservices architecture image",
-      "best_for": ["cloud migration", "SaaS platform", "tenant onboarding", "microservices", "AWS architecture"],
+      "name": "Cloud microservices with tenant and peripheral integration",
+      "reference_assets": [
+        "cloud_tenant_microservices_aws"
+      ],
+      "best_for": [
+        "cloud migration",
+        "SaaS platform",
+        "tenant onboarding",
+        "microservices",
+        "AWS architecture"
+      ],
       "layout": {
         "type": "left_tenant_to_right_cloud",
-        "left_peripherals": {"x": 20, "y": 70, "w": 330, "h": 760},
-        "tenant_system": {"x": 360, "y": 70, "w": 330, "h": 760},
-        "cloud_platform": {"x": 720, "y": 40, "w": 830, "h": 800},
-        "microservices_box": {"x": 910, "y": 250, "w": 520, "h": 310},
-        "portal_box": {"x": 790, "y": 610, "w": 690, "h": 200}
+        "left_peripherals": {
+          "x": 20,
+          "y": 70,
+          "w": 330,
+          "h": 760
+        },
+        "tenant_system": {
+          "x": 360,
+          "y": 70,
+          "w": 330,
+          "h": 760
+        },
+        "cloud_platform": {
+          "x": 720,
+          "y": 40,
+          "w": 830,
+          "h": 800
+        },
+        "microservices_box": {
+          "x": 910,
+          "y": 250,
+          "w": 520,
+          "h": 310
+        },
+        "portal_box": {
+          "x": 790,
+          "y": 610,
+          "w": 690,
+          "h": 200
+        }
       },
       "visual_rules": [
         "Use left-to-right flow from operator/peripherals to tenant system to cloud services.",
         "Show security services on the left edge of cloud platform and storage/messaging at the top.",
-        "Place REST microservices in a central EC2 or container platform box.",
+        "Place microservices in a central cloud box.",
         "Place back-office portal and tenant onboarding capabilities at the bottom."
       ],
-      "default_palette": {"primary":"#5AA243", "secondary":"#2F62B3", "box":"#F8FAFC", "muted":"#EEF6E8"}
+      "placement_semantics": [
+        "Left-to-right journey conveys progression",
+        "Nested cloud zones communicate deployment tiers",
+        "Utility strips are good for security and storage"
+      ],
+      "default_palette": {
+        "primary": "#5AA243",
+        "secondary": "#2F62B3",
+        "box": "#F8FAFC",
+        "muted": "#EEF6E8"
+      },
+      "style_profile": "clean_enterprise_blue"
     },
     {
       "id": "enterprise_endpoint_management",
       "name": "Enterprise endpoint, app, policy, identity, and security management",
-      "reference": "Uploaded Microsoft Intune-style product family image",
-      "best_for": ["endpoint management", "device compliance", "conditional access", "mobile threat defense", "identity integration"],
+      "reference_assets": [
+        "endpoint_management_intune"
+      ],
+      "best_for": [
+        "endpoint management",
+        "device compliance",
+        "conditional access",
+        "mobile threat defense",
+        "identity integration"
+      ],
       "layout": {
         "type": "large_service_boundary_with_connected_external_systems",
-        "service_boundary": {"x": 100, "y": 70, "w": 1180, "h": 610},
-        "external_left": {"x": 20, "y": 155, "w": 180, "h": 410},
-        "external_right": {"x": 1280, "y": 140, "w": 280, "h": 620},
+        "service_boundary": {
+          "x": 100,
+          "y": 70,
+          "w": 1180,
+          "h": 610
+        },
+        "external_left": {
+          "x": 20,
+          "y": 155,
+          "w": 180,
+          "h": 410
+        },
+        "external_right": {
+          "x": 1280,
+          "y": 140,
+          "w": 280,
+          "h": 620
+        },
         "device_groups_bottom": true
       },
       "visual_rules": [
@@ -102,34 +289,391 @@
         "Group managed devices by enrollment model at the bottom.",
         "Use arrows for compliance, targeting, authentication, and data/reporting flows."
       ],
-      "default_palette": {"primary":"#5DADE2", "secondary":"#4F83CC", "box":"#EEF4F8", "muted":"#D9EEF9"}
+      "placement_semantics": [
+        "Central service dominates",
+        "External systems surround and interact with it",
+        "Bottom groups communicate endpoint coverage"
+      ],
+      "default_palette": {
+        "primary": "#5DADE2",
+        "secondary": "#4F83CC",
+        "box": "#EEF4F8",
+        "muted": "#D9EEF9"
+      },
+      "style_profile": "clean_enterprise_blue"
     },
     {
       "id": "cloud_data_platform",
       "name": "Cloud data platform with ingestion, governance, processing, and access layers",
-      "reference": "Public AWS/PwC Unified Sustainability Hub architecture image",
-      "source_url": "https://d2908q01vomqb2.cloudfront.net/77de68daecd823babbb58edb1c8e14d7106e83bb/2024/04/26/PwC-Unified-Sustainability-Hub-2.1.png",
-      "best_for": ["lakehouse", "data governance", "ESG data platform", "analytics and ML delivery", "AWS data architecture"],
+      "reference_assets": [
+        "cloud_data_platform_pwc_public",
+        "cloud_data_platform_large_user"
+      ],
+      "best_for": [
+        "lakehouse",
+        "data governance",
+        "ESG data platform",
+        "analytics and ML delivery",
+        "AWS data architecture"
+      ],
       "layout": {
         "type": "data_sources_ingestion_core_delivery",
-        "left_data_sources": {"x": 10, "y": 50, "w": 200, "h": 790},
-        "ingestion": {"x": 225, "y": 50, "w": 190, "h": 790},
-        "core_platform": {"x": 430, "y": 50, "w": 840, "h": 790},
-        "delivery": {"x": 1290, "y": 50, "w": 280, "h": 790}
+        "left_data_sources": {
+          "x": 10,
+          "y": 50,
+          "w": 200,
+          "h": 790
+        },
+        "ingestion": {
+          "x": 225,
+          "y": 50,
+          "w": 190,
+          "h": 790
+        },
+        "core_platform": {
+          "x": 430,
+          "y": 50,
+          "w": 840,
+          "h": 790
+        },
+        "delivery": {
+          "x": 1290,
+          "y": 50,
+          "w": 280,
+          "h": 790
+        }
       },
       "visual_rules": [
         "Use four vertical macro areas: data sources, ingestion, compute/storage/catalog/governance, and access/delivery.",
-        "Put the lakehouse/data tiers across the top of the core platform.",
-        "Place stream processing, metadata, control, and common platform services in bottom bands.",
+        "Put the data tiers or lakehouse progression near the top or middle of the core platform.",
+        "Place stream processing, metadata, control, and common platform services in lower bands.",
         "Use right-side cards for analytics users, downstream apps, orchestration, and AI/ML."
       ],
-      "default_palette": {"primary":"#E22D22", "secondary":"#F59E0B", "box":"#F4F4F5", "muted":"#FAFAFA"}
+      "placement_semantics": [
+        "Columns convey lifecycle stages",
+        "Core platform should be largest area",
+        "Bottom bands communicate shared services and governance"
+      ],
+      "default_palette": {
+        "primary": "#E22D22",
+        "secondary": "#F59E0B",
+        "box": "#F4F4F5",
+        "muted": "#FAFAFA"
+      },
+      "style_profile": "aws_red_orange"
+    },
+    {
+      "id": "cloud_service_operating_model",
+      "name": "Cloud service operating model / brokerage stack",
+      "reference_assets": [
+        "cloud_service_operating_model"
+      ],
+      "best_for": [
+        "service stack",
+        "cloud operating model",
+        "governance model",
+        "provider responsibilities"
+      ],
+      "layout": {
+        "type": "layered_service_stack",
+        "left_context_band": {
+          "x": 0,
+          "y": 40,
+          "w": 70,
+          "h": 760
+        },
+        "center_stack": {
+          "x": 90,
+          "y": 120,
+          "w": 650,
+          "h": 500
+        },
+        "top_audits": {
+          "x": 90,
+          "y": 20,
+          "w": 650,
+          "h": 80
+        },
+        "bottom_broker": {
+          "x": 90,
+          "y": 690,
+          "w": 650,
+          "h": 90
+        }
+      },
+      "visual_rules": [
+        "Use a layered SaaS/PaaS/IaaS stack within a provider boundary.",
+        "Place audit or assessment tiles across the top.",
+        "Represent security and privacy as long horizontal cross-cutting bands.",
+        "Use a bottom band for cloud broker functions."
+      ],
+      "placement_semantics": [
+        "Vertical layers convey abstraction hierarchy",
+        "Horizontal bands communicate cross-cutting governance",
+        "Top and bottom bands provide ecosystem context"
+      ],
+      "default_palette": {
+        "primary": "#4B78C2",
+        "secondary": "#8FBBF5",
+        "box": "#F4F5F7",
+        "muted": "#E9EDF2"
+      },
+      "style_profile": "neutral_process_blue"
+    },
+    {
+      "id": "service_orchestration_workflow",
+      "name": "Service orchestration and portal workflow map",
+      "reference_assets": [
+        "service_orchestration_portal"
+      ],
+      "best_for": [
+        "workflow architecture",
+        "portal and order orchestration",
+        "service catalog flows",
+        "network operations"
+      ],
+      "layout": {
+        "type": "horizontal_swimlane_workflow",
+        "lane_count": 6,
+        "future_panel": true,
+        "step_box_style": "rounded"
+      },
+      "visual_rules": [
+        "Use horizontal lanes for major process domains.",
+        "Fill each lane with sequential step boxes.",
+        "Use arrows primarily within the lane and between related lanes.",
+        "Reserve a right-side future state or target capability panel if needed."
+      ],
+      "placement_semantics": [
+        "Rows convey process ownership or domain",
+        "Step progression communicates sequence",
+        "Right panel communicates target state"
+      ],
+      "default_palette": {
+        "primary": "#4E6CD8",
+        "secondary": "#A8DCEA",
+        "box": "#FFFFFF",
+        "muted": "#F1F3F6"
+      },
+      "style_profile": "neutral_process_blue"
+    },
+    {
+      "id": "iot_ot_security_layers",
+      "name": "IoT / OT layered security and risk view",
+      "reference_assets": [
+        "iot_ot_risk_architecture"
+      ],
+      "best_for": [
+        "IoT security",
+        "OT architecture",
+        "industrial platform",
+        "risk/threat mapping"
+      ],
+      "layout": {
+        "type": "layered_environment_with_side_tables",
+        "left_table": true,
+        "center_layers": 3,
+        "right_matrix": true
+      },
+      "visual_rules": [
+        "Use a left column for technologies or controls.",
+        "Use a center layered environment stack from edge to middleware to business processes to cloud.",
+        "Use a right-side risk and threat matrix.",
+        "Use vertical arrows to show integration or communication."
+      ],
+      "placement_semantics": [
+        "Center layers communicate environment hierarchy",
+        "Left table communicates control or technology inventory",
+        "Right matrix communicates risk context"
+      ],
+      "default_palette": {
+        "primary": "#5CA79B",
+        "secondary": "#E6B247",
+        "box": "#F8F8F8",
+        "muted": "#F4FBF8"
+      },
+      "style_profile": "security_green_teal"
+    },
+    {
+      "id": "modern_data_lakehouse",
+      "name": "Modern data lakehouse and self-service analytics platform",
+      "reference_assets": [
+        "modern_data_platform_databricks"
+      ],
+      "best_for": [
+        "modern data platform",
+        "lakehouse",
+        "bronze silver gold",
+        "self-service analytics",
+        "ML platform"
+      ],
+      "layout": {
+        "type": "bottom_data_progression_with_top_consumption",
+        "left_sources": {
+          "x": 10,
+          "y": 180,
+          "w": 170,
+          "h": 420
+        },
+        "bottom_storage": {
+          "x": 210,
+          "y": 420,
+          "w": 900,
+          "h": 280
+        },
+        "mid_compute": {
+          "x": 250,
+          "y": 210,
+          "w": 930,
+          "h": 200
+        },
+        "top_consumption": {
+          "x": 270,
+          "y": 40,
+          "w": 780,
+          "h": 150
+        },
+        "right_compute": {
+          "x": 1160,
+          "y": 190,
+          "w": 240,
+          "h": 310
+        }
+      },
+      "visual_rules": [
+        "Show source data on the left, the lakehouse progression along the bottom, compute or self-service capabilities in the middle, and dashboards or data apps at the top.",
+        "Use arrows to show bronze to silver to gold progression.",
+        "Keep BI or SQL compute on the right."
+      ],
+      "placement_semantics": [
+        "Bottom progression communicates data maturation",
+        "Middle boxes communicate enablement capabilities",
+        "Top band communicates consumption"
+      ],
+      "default_palette": {
+        "primary": "#5D7CE2",
+        "secondary": "#E1A01D",
+        "box": "#FFFFFF",
+        "muted": "#F7F7F7"
+      },
+      "style_profile": "modern_lakehouse"
+    },
+    {
+      "id": "identity_multicloud_control_plane",
+      "name": "Identity-centric multi-cloud control plane and landing zones",
+      "reference_assets": [
+        "identity_centric_multicloud_landing_zone"
+      ],
+      "best_for": [
+        "landing zones",
+        "identity architecture",
+        "multi-cloud security",
+        "governance and monitoring"
+      ],
+      "layout": {
+        "type": "central_control_plane_with_supporting_bands",
+        "left_actor_panel": {
+          "x": 35,
+          "y": 115,
+          "w": 180,
+          "h": 620
+        },
+        "center_control_plane": {
+          "x": 290,
+          "y": 120,
+          "w": 490,
+          "h": 330
+        },
+        "right_cloud_panels": {
+          "x": 835,
+          "y": 120,
+          "w": 430,
+          "h": 340
+        },
+        "mid_governance_band": true,
+        "lower_workload_band": true,
+        "bottom_monitoring_band": true,
+        "legend": true
+      },
+      "visual_rules": [
+        "Use a left actor/persona panel.",
+        "Use a large central control plane with multiple sub-capabilities.",
+        "Use right-side cloud landing zone and application panels.",
+        "Use horizontal governance, workload identity, and monitoring bands beneath the control plane.",
+        "Include a compact legend if multiple arrow styles are used."
+      ],
+      "placement_semantics": [
+        "Central control plane is primary governance anchor",
+        "Bands below communicate lifecycle and support services",
+        "Right panels communicate governed targets"
+      ],
+      "default_palette": {
+        "primary": "#2F6BDA",
+        "secondary": "#47A45A",
+        "accent": "#7E55C7",
+        "box": "#FFFFFF",
+        "muted": "#F8FAFF"
+      },
+      "style_profile": "identity_green_blue"
+    }
+  ],
+  "selection_rules": [
+    {
+      "if_keywords": [
+        "bronze",
+        "silver",
+        "gold",
+        "lakehouse",
+        "databricks"
+      ],
+      "choose": "modern_data_lakehouse"
+    },
+    {
+      "if_keywords": [
+        "landing zone",
+        "entra",
+        "identity control plane",
+        "multi-cloud"
+      ],
+      "choose": "identity_multicloud_control_plane"
+    },
+    {
+      "if_keywords": [
+        "iot",
+        "ot",
+        "threat",
+        "risk matrix",
+        "industrial"
+      ],
+      "choose": "iot_ot_security_layers"
+    },
+    {
+      "if_keywords": [
+        "service catalog",
+        "orchestration",
+        "portal",
+        "billing",
+        "provisioning"
+      ],
+      "choose": "service_orchestration_workflow"
+    },
+    {
+      "if_keywords": [
+        "saas",
+        "paas",
+        "iaas",
+        "broker",
+        "cloud carrier"
+      ],
+      "choose": "cloud_service_operating_model"
     }
   ],
   "generation_guidelines": {
-    "diagram_density": "Prefer 20-45 labeled boxes. Keep labels short. Use multi-line wrapping.",
+    "diagram_density": "Prefer 18-50 labeled boxes. Keep labels short. Use multi-line wrapping.",
     "icon_policy": "Use simple geometric icons or labeled chips unless a licensed icon library is provided by the user.",
     "style_policy": "The output should be original and reference the layout patterns, not copy exact proprietary artwork.",
+    "color_policy": "Borrow palette mood and segmentation logic, not exact brand art.",
+    "placement_policy": "Use reference metadata to infer hierarchy: outer context rails, dominant boundaries, bands, lanes, and progression arrows.",
     "output": "PNG at 1600x900 by default."
   }
 }

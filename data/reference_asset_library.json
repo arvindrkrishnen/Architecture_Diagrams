@@ -1,0 +1,519 @@
+{
+  "version": "0.8.0",
+  "purpose": "Expanded internal reference asset library used to select layout families, color schemes, and architectural communication patterns for draw.io based rendering.",
+  "usage_rules": [
+    "Assets are internal layout and style references only and must not be copied literally.",
+    "Use the metadata to infer grouping, emphasis, flow direction, and color treatment.",
+    "Prefer selecting a single dominant layout family and, if useful, a secondary style donor for palette only.",
+    "Preserve original user content while borrowing only the organizational grammar from the reference assets."
+  ],
+  "assets": [
+    {
+      "id": "platform_value_chain_mastercraft",
+      "file": "mastercraft_platform_overview.png",
+      "title": "Connected intelligence platform overview",
+      "source": "user_provided_reference",
+      "layout_family": "platform_value_chain",
+      "layout_primitives": [
+        "left_input_rail",
+        "central_platform_boundary",
+        "capability_tiles",
+        "right_output_rail",
+        "operations_band"
+      ],
+      "box_placement_model": "left-right journey with single dominant middle boundary and bottom operations strip",
+      "architecture_communication_intent": "Show how upstream data and applications enter a platform, how central capabilities are grouped, and how outputs are delivered to business users.",
+      "use_cases": [
+        "AI platform overview",
+        "product overview",
+        "capability chain",
+        "platform to outcomes"
+      ],
+      "selection_signals": [
+        "inputs and outputs need side rails",
+        "4-6 major capabilities",
+        "operations band needed"
+      ],
+      "style_cues": {
+        "header_bars": true,
+        "rounded_containers": true,
+        "thin_connectors": true,
+        "minimal_arrows": true
+      },
+      "dimensions": {
+        "width": 987,
+        "height": 517
+      },
+      "palette": [
+        "#F0F0F0",
+        "#E0E0F0",
+        "#E0E0E0",
+        "#C0C0C0",
+        "#A0A0A0",
+        "#C0E0E0",
+        "#C0C0E0"
+      ]
+    },
+    {
+      "id": "composite_ai_platform_tcs",
+      "file": "tcs_cap_ai_overview.png",
+      "title": "Composite AI capability platform map",
+      "source": "user_provided_reference",
+      "layout_family": "composite_ai_platform",
+      "layout_primitives": [
+        "left_context_pillar",
+        "central_capability_columns",
+        "right_context_pillar",
+        "bottom_solution_tiles"
+      ],
+      "box_placement_model": "center weighted capability matrix with side context pillars and bottom reusable solution row",
+      "architecture_communication_intent": "Communicate a portfolio of AI capabilities spanning business, IT, and agentic ecosystems, with context sectors on the sides and reusable assets at the bottom.",
+      "use_cases": [
+        "AI operating model",
+        "capability map",
+        "business vs IT platform",
+        "portfolio map"
+      ],
+      "selection_signals": [
+        "little need for detailed flow arrows",
+        "multiple parallel capability domains",
+        "portfolio or ecosystem view"
+      ],
+      "style_cues": {
+        "header_bars": false,
+        "rounded_containers": true,
+        "thin_connectors": false,
+        "minimal_arrows": true
+      },
+      "dimensions": {
+        "width": 1005,
+        "height": 537
+      },
+      "palette": [
+        "#F0F0F0",
+        "#E0E0E0",
+        "#C0C0C0",
+        "#A0A0A0",
+        "#E0E0F0",
+        "#C0E0E0",
+        "#F0E0E0"
+      ]
+    },
+    {
+      "id": "cloud_tenant_microservices_aws",
+      "file": "cloud_tenant_microservices.png",
+      "title": "Cloud tenant microservices architecture",
+      "source": "user_provided_reference",
+      "layout_family": "cloud_tenant_microservices",
+      "layout_primitives": [
+        "actor_rail",
+        "tenant_boundary",
+        "cloud_boundary",
+        "utility_strip",
+        "microservice_cluster",
+        "admin_portal_band"
+      ],
+      "box_placement_model": "left peripherals and devices, center tenant/mobile stack, right cloud platform with nested zones",
+      "architecture_communication_intent": "Show a migration path from edge devices through client or tenant systems into APIs, microservices, storage, and admin functions in the cloud.",
+      "use_cases": [
+        "SaaS platform",
+        "microservices",
+        "edge to cloud",
+        "cloud migration"
+      ],
+      "selection_signals": [
+        "clear actor-to-cloud progression",
+        "need for nested cloud services",
+        "multiple system boundaries"
+      ],
+      "style_cues": {
+        "header_bars": true,
+        "rounded_containers": false,
+        "thin_connectors": true,
+        "minimal_arrows": false
+      },
+      "dimensions": {
+        "width": 1011,
+        "height": 660
+      },
+      "palette": [
+        "#F0F0F0",
+        "#E0E0E0",
+        "#A0A0A0",
+        "#C0C0C0",
+        "#808080",
+        "#E0F0E0",
+        "#E0E0F0"
+      ]
+    },
+    {
+      "id": "endpoint_management_intune",
+      "file": "endpoint_management.png",
+      "title": "Endpoint and app management service boundary",
+      "source": "user_provided_reference",
+      "layout_family": "enterprise_endpoint_management",
+      "layout_primitives": [
+        "central_service_canvas",
+        "left_service_extensions",
+        "right_external_systems",
+        "bottom_device_groups"
+      ],
+      "box_placement_model": "large central boundary with surrounding integrations and grouped endpoints below",
+      "architecture_communication_intent": "Show how management services, identity, app stores, compliance, and device types are connected under one operating service.",
+      "use_cases": [
+        "endpoint management",
+        "device compliance",
+        "policy and identity",
+        "security architecture"
+      ],
+      "selection_signals": [
+        "one dominant central platform",
+        "multiple external integrations",
+        "endpoint/device populations"
+      ],
+      "style_cues": {
+        "header_bars": false,
+        "rounded_containers": true,
+        "thin_connectors": true,
+        "minimal_arrows": false
+      },
+      "dimensions": {
+        "width": 965,
+        "height": 566
+      },
+      "palette": [
+        "#F0F0F0",
+        "#C0E0E0",
+        "#E0F0F0",
+        "#E0E0E0",
+        "#C0C0C0",
+        "#E0E0F0",
+        "#C0C0E0"
+      ]
+    },
+    {
+      "id": "cloud_data_platform_pwc_public",
+      "file": "aws_unified_sustainability_hub.png",
+      "title": "Unified sustainability hub data platform",
+      "source": "public_link_user_provided",
+      "layout_family": "cloud_data_platform",
+      "layout_primitives": [
+        "source_column",
+        "ingestion_column",
+        "core_platform_frame",
+        "delivery_column",
+        "tiered_lakehouse",
+        "bottom_shared_services"
+      ],
+      "box_placement_model": "four macro-columns with a large center core and bottom supporting bands",
+      "architecture_communication_intent": "Show how many data sources are ingested, governed, processed, and delivered to analytics, AI/ML, users, and downstream applications.",
+      "use_cases": [
+        "lakehouse",
+        "data platform",
+        "governed ingestion",
+        "analytics delivery"
+      ],
+      "selection_signals": [
+        "multi-source ingestion",
+        "large governed compute core",
+        "separate delivery/consumption area"
+      ],
+      "style_cues": {
+        "header_bars": true,
+        "rounded_containers": false,
+        "thin_connectors": true,
+        "minimal_arrows": false
+      },
+      "dimensions": {
+        "width": 1000,
+        "height": 585
+      },
+      "palette": [
+        "#F0F0F0",
+        "#E0E0E0",
+        "#C0C0C0",
+        "#F0E0E0",
+        "#A0A0A0",
+        "#F0C0C0",
+        "#E0C0C0"
+      ]
+    },
+    {
+      "id": "cloud_data_platform_large_user",
+      "file": "aws_data_platform_large.png",
+      "title": "Large cloud data platform reference",
+      "source": "user_provided_reference",
+      "layout_family": "cloud_data_platform",
+      "layout_primitives": [
+        "source_column",
+        "ingestion_column",
+        "governance_band",
+        "lakehouse_tiers",
+        "metadata_band",
+        "common_platform_services"
+      ],
+      "box_placement_model": "same as unified sustainability hub but with richer sub-zones and denser component layout",
+      "architecture_communication_intent": "Show a detailed enterprise lakehouse with governance and core data processing engine plus access and users.",
+      "use_cases": [
+        "detailed data platform",
+        "enterprise data architecture",
+        "AWS analytics platform"
+      ],
+      "selection_signals": [
+        "high density data platform",
+        "need governance and metadata bands",
+        "many source and consumer groups"
+      ],
+      "style_cues": {
+        "header_bars": true,
+        "rounded_containers": false,
+        "thin_connectors": true,
+        "minimal_arrows": false
+      },
+      "dimensions": {
+        "width": 1547,
+        "height": 912
+      },
+      "palette": [
+        "#F0F0F0",
+        "#E0E0E0",
+        "#C0C0C0",
+        "#E0C0C0",
+        "#A0A0A0",
+        "#F0E0E0",
+        "#808080"
+      ]
+    },
+    {
+      "id": "cloud_service_operating_model",
+      "file": "cloud_service_operating_model.png",
+      "title": "Cloud service operating model",
+      "source": "user_provided_reference",
+      "layout_family": "cloud_service_operating_model",
+      "layout_primitives": [
+        "left_vertical_context_band",
+        "layered_service_stack",
+        "top_audit_tiles",
+        "bottom_broker_band",
+        "horizontal_crosscutting_bands"
+      ],
+      "box_placement_model": "center service stack surrounded by audit/control capabilities, with cross-cutting security and privacy bands",
+      "architecture_communication_intent": "Explain layered cloud services (SaaS/PaaS/IaaS), provider responsibilities, and brokerage / governance functions.",
+      "use_cases": [
+        "operating model",
+        "cloud governance",
+        "service stack",
+        "broker model"
+      ],
+      "selection_signals": [
+        "layered stack required",
+        "cross-cutting governance bands",
+        "operating model vs data flow"
+      ],
+      "style_cues": {
+        "header_bars": false,
+        "rounded_containers": false,
+        "thin_connectors": false,
+        "minimal_arrows": true
+      },
+      "dimensions": {
+        "width": 612,
+        "height": 560
+      },
+      "palette": [
+        "#F0F0F0",
+        "#E0E0E0",
+        "#C0C0C0",
+        "#60A0E0",
+        "#204080",
+        "#A0A0A0",
+        "#E0F0F0"
+      ]
+    },
+    {
+      "id": "service_orchestration_portal",
+      "file": "cloud_service_orchestration_portal.png",
+      "title": "Service portal and orchestration workflow map",
+      "source": "user_provided_reference",
+      "layout_family": "service_orchestration_workflow",
+      "layout_primitives": [
+        "horizontal_process_rows",
+        "step_boxes",
+        "two_way_process_arrows",
+        "future_state_panel"
+      ],
+      "box_placement_model": "multiple horizontal swimlanes with sequential boxes and a future-state callout panel on the right",
+      "architecture_communication_intent": "Show workflows across portal, orchestration, billing, provisioning, network management, and operations.",
+      "use_cases": [
+        "service catalog",
+        "workflow architecture",
+        "orchestration",
+        "operating process map"
+      ],
+      "selection_signals": [
+        "horizontal lanes",
+        "many process steps",
+        "need a future-state panel"
+      ],
+      "style_cues": {
+        "header_bars": false,
+        "rounded_containers": true,
+        "thin_connectors": true,
+        "minimal_arrows": false
+      },
+      "dimensions": {
+        "width": 1142,
+        "height": 537
+      },
+      "palette": [
+        "#F0F0F0",
+        "#E0E0E0",
+        "#E0E0F0",
+        "#E0F0F0",
+        "#C0C0C0",
+        "#A0A0A0",
+        "#C0E0F0"
+      ]
+    },
+    {
+      "id": "iot_ot_risk_architecture",
+      "file": "iot_ot_risk_architecture.png",
+      "title": "IoT / OT security and risk architecture",
+      "source": "user_provided_reference",
+      "layout_family": "iot_ot_security_layers",
+      "layout_primitives": [
+        "left_technology_list",
+        "center_layered_pyramids",
+        "right_risk_threat_matrix",
+        "vertical_integration_axes"
+      ],
+      "box_placement_model": "center layered environment model flanked by technology inventory and risk/threat tables",
+      "architecture_communication_intent": "Show how cloud, IT business processes, OT middleware, and edge environments connect, while explicitly relating them to technologies and threats.",
+      "use_cases": [
+        "IoT security",
+        "OT architecture",
+        "risk mapping",
+        "industrial platform"
+      ],
+      "selection_signals": [
+        "security/risk emphasis",
+        "need threat matrix",
+        "layered environment stack"
+      ],
+      "style_cues": {
+        "header_bars": true,
+        "rounded_containers": false,
+        "thin_connectors": true,
+        "minimal_arrows": true
+      },
+      "dimensions": {
+        "width": 1162,
+        "height": 546
+      },
+      "palette": [
+        "#F0F0F0",
+        "#E0E0E0",
+        "#C0C0C0",
+        "#40A080",
+        "#A0A0A0",
+        "#E0A020",
+        "#80C0A0"
+      ]
+    },
+    {
+      "id": "modern_data_platform_databricks",
+      "file": "modern_data_platform_databricks.png",
+      "title": "Modern data and analytics platform",
+      "source": "user_provided_reference",
+      "layout_family": "modern_data_lakehouse",
+      "layout_primitives": [
+        "left_sources",
+        "bronze_silver_gold_flow",
+        "mid_compute_boxes",
+        "top_consumption_band",
+        "right_sql_compute_box"
+      ],
+      "box_placement_model": "bottom lakehouse storage progression supporting middle compute capabilities and top consumption tools",
+      "architecture_communication_intent": "Show raw-to-curated-to-derived data progression with self-serve analytics, data science, MLOps, BI, and dashboard consumers.",
+      "use_cases": [
+        "lakehouse",
+        "databricks architecture",
+        "analytics platform",
+        "ML platform"
+      ],
+      "selection_signals": [
+        "bronze/silver/gold pattern",
+        "top dashboard band",
+        "mid compute and MLOps blocks"
+      ],
+      "style_cues": {
+        "header_bars": false,
+        "rounded_containers": false,
+        "thin_connectors": true,
+        "minimal_arrows": false
+      },
+      "dimensions": {
+        "width": 1356,
+        "height": 850
+      },
+      "palette": [
+        "#F0F0F0",
+        "#E0E0E0",
+        "#C0C0C0",
+        "#E0E0F0",
+        "#F0E0E0",
+        "#F0F0E0",
+        "#C0E0E0"
+      ]
+    },
+    {
+      "id": "identity_centric_multicloud_landing_zone",
+      "file": "identity_centric_multicloud_landing_zone.png",
+      "title": "Identity-centric multi-cloud landing zone architecture",
+      "source": "user_provided_reference",
+      "layout_family": "identity_multicloud_control_plane",
+      "layout_primitives": [
+        "left_actor_panel",
+        "central_identity_control_plane",
+        "right_multicloud_and_app_panels",
+        "mid_lifecycle_band",
+        "lower_workload_band",
+        "bottom_monitoring_band",
+        "legend"
+      ],
+      "box_placement_model": "strong central control plane with right-side landing zones and applications, supported by layered governance and monitoring bands",
+      "architecture_communication_intent": "Show how a central identity control plane governs access, lifecycle, workloads, landing zones, and monitoring across multi-cloud environments.",
+      "use_cases": [
+        "landing zone architecture",
+        "identity security",
+        "multi-cloud control plane",
+        "platform security"
+      ],
+      "selection_signals": [
+        "central control plane",
+        "multi-cloud panels",
+        "governance and monitoring bands",
+        "persona actor rail"
+      ],
+      "style_cues": {
+        "header_bars": true,
+        "rounded_containers": true,
+        "thin_connectors": true,
+        "minimal_arrows": false
+      },
+      "dimensions": {
+        "width": 1291,
+        "height": 867
+      },
+      "palette": [
+        "#F0F0F0",
+        "#E0E0E0",
+        "#E0E0F0",
+        "#C0C0C0",
+        "#F0F0E0",
+        "#F0E0E0",
+        "#C0C0E0"
+      ]
+    }
+  ]
+}

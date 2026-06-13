@@ -9,8 +9,8 @@ Create a polished **solution architecture diagram** and export it as **PNG**. Pr
 - If supported, export as embedded PNG using a `.drawio.png` filename
 
 ## Selected layout archetype
-- Template id: `identity_multicloud_control_plane`
-- Template name: Identity-centric multi-cloud control plane and landing zones
+- Template id: `platform_value_chain`
+- Template name: Connected intelligence / capability value chain
 - Markdown reference: ``
 - Draw.io preset: `architecture`
 
@@ -18,21 +18,21 @@ Create a polished **solution architecture diagram** and export it as **PNG**. Pr
 
 
 ## Style profile
-- Style profile: identity_green_blue
-- Primary: #2D6CDF
-- Secondary: #47A55A
-- Accent: #7C3AED
-- Container: #F9FBFF
-- Border: #6E8EDC
-- Guidance: Use for identity control plane and multi-cloud landing zone layouts.
+- Style profile: clean_enterprise_blue
+- Primary: #2F73D8
+- Secondary: #8FB8F3
+- Accent: #1F3B73
+- Container: #F7FAFF
+- Border: #4B6FA9
+- Guidance: Use for control planes, operating models, or identity-centric enterprise diagrams.
 
 ## Selected recommendation
-- Primary layout: identity_multicloud_control_plane
-- Palette donor: Identity-centric multi-cloud landing zone architecture
-- Selection rationale: best-for match: identity architecture, best-for match: multi-cloud security, best-for match: governance and monitoring, selection signal: central control plane, selection signal: multi-cloud panels
+- Primary layout: platform_value_chain
+- Palette donor: template default
+- Selection rationale: template default
 
 ## Internal reference assets to learn from
-- Identity-centric multi-cloud landing zone architecture | family=identity_multicloud_control_plane | intent=Show how a central identity control plane governs access, lifecycle, workloads, landing zones, and monitoring across multi-cloud environments. | placement=strong central control plane with right-side landing zones and applications, supported by layered governance and monitoring bands | palette=#F0F0F0, #E0E0E0, #E0E0F0, #C0C0C0, #F0F0E0
+- Connected intelligence platform overview | family=platform_value_chain | intent=Show how upstream data and applications enter a platform, how central capabilities are grouped, and how outputs are delivered to business users. | placement=left-right journey with single dominant middle boundary and bottom operations strip | palette=#F0F0F0, #E0E0F0, #E0E0E0, #C0C0C0, #A0A0A0
 
 ### Layout grammar
 
@@ -44,71 +44,29 @@ Create a polished **solution architecture diagram** and export it as **PNG**. Pr
 - orthogonal
 
 ## Diagram title
-- Policy-as-Spec Architecture Control Platform
+- Architecture Assurance Fabric — Level 2 Expansion
 
 ## Diagram subtitle
-- Overview plus capability expansion diagrams
+- Detailed expansion of Architecture Assurance Fabric
 
 ## Structural content
 
 ### Lanes
-### Left lane — Lifecycle
-- Author
-- Resolve
-- Enforce
-- Deploy
-- Assure
-
-### Right lane — Interfaces
-- REST API
-- GraphQL
-- MCP Server
+- No lanes provided
 
 ### Capability zones
-### Zone: Authorship Layer
-Subtitle: Architect-owned specs
-- Enterprise Architects
-- LOB Architects
-- YAML / JSON Specs
+### Zone: Build Stage
+- Dependency Scan
+- IaC Plan
+- Container Image Check
 
-### Zone: Architecture Control Plane
-Subtitle: Single source of truth
-- Spec Repository
-- REST API
-- GraphQL
-- MCP Server
-- Spec Resolution
-Expansion hint: This zone may be expanded into a Level 2 diagram.
-
-### Zone: Architecture Assurance Fabric
-Subtitle: Pipeline enforcement
-- arch-ctl CLI
-- Build Stage
-- Deploy Stage
-- OPA Checks
+### Zone: Deploy Stage
+- BCP / DR Gates
+- LB Spec
 - Topology Verification
-Expansion hint: This zone may be expanded into a Level 2 diagram.
-
-### Zone: Multi-Cloud Targets
-Subtitle: Deployment endpoints
-- AWS EKS
-- AKS
-- GCP
-- Harness Delegates
-Expansion hint: This zone may be expanded into a Level 2 diagram.
-
-### Zone: Cross-Cutting Components
-Subtitle: Governance and evidence
-- Evidence Ledger
-- Drift Detector
-- Waiver Governance
-Expansion hint: This zone may be expanded into a Level 2 diagram.
 
 ### Flows
-- authoring -> control_plane (publish specs)
-- control_plane -> assurance (resolved controls)
-- assurance -> targets (policy enforcement)
-- targets -> controls (evidence and drift)
+- child_1 -> child_2 (detail flow)
 
 ### Operations / cross-cutting layer
 - Audit Trail
@@ -116,7 +74,7 @@ Expansion hint: This zone may be expanded into a Level 2 diagram.
 - Security Controls
 
 ### Footer
-- Generate overview and Level 2 expansion diagrams where useful
+- Level 2 expansion of Architecture Assurance Fabric
 
 ## Mandatory semantic placement rules
 - Place technology components in semantically correct areas.
@@ -144,7 +102,7 @@ Expansion hint: This zone may be expanded into a Level 2 diagram.
 - This diagram should be treated as the Level 1 overview unless otherwise specified.
 - If content is dense, reduce detail in the overview and create additional Level 2 expansion diagrams.
 - Use consistent naming between the overview and expansion diagrams.
-- Respect decomposition preferences: auto_expand=True, max_overview_zones=6, max_items_per_zone_overview=5, create_capability_children=True.
+- Respect decomposition preferences: auto_expand=False, max_overview_zones=6, max_items_per_zone_overview=5, create_capability_children=False.
 
 ## Styling guidance
 - Make the diagram presentation-ready and business-readable.

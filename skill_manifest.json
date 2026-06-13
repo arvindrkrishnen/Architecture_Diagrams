@@ -1,8 +1,8 @@
 {
   "name": "solution-architecture-diagram-skill",
-  "version": "0.7.0",
+  "version": "0.9.0",
   "author": "Arvind Radhakrishnen",
-  "description": "Generate PNG and editable Draw.io solution architecture diagrams from text and optional images, using internal reference layouts and multi-level decomposition with wrapped non-overlapping text.",
+  "description": "Generate PNG and editable Draw.io architecture diagrams with per-run layout/palette recommendations, text wrapping, spelling guardrails, technology placement validation, and multi-level decomposition.",
   "entrypoints": {
     "instructions": "SKILL.md",
     "readme": "README.md",
@@ -15,7 +15,11 @@
     "runner": "python run_architecture_skill.py --text \"Build a solution architecture diagram for ...\" --allow-parallel",
     "sub_agent_doc": "docs/sub_agent_orchestration.md",
     "renderer_adapter": "python render_with_drawio_adapter.py --run-dir outputs/<run_name> --config examples/renderer_config.json --dry-run",
-    "runner_with_render": "python run_architecture_skill.py --json-input examples/sample_multilevel_input.json --allow-parallel --render --renderer-config examples/renderer_config.json"
+    "runner_with_render": "python run_architecture_skill.py --json-input examples/sample_multilevel_input.json --allow-parallel --render --renderer-config examples/renderer_config.json",
+    "layout_semantics": "docs/layout_semantics.md",
+    "recommend_layouts": "python recommend_layouts.py --input outputs/prepared_input.json --output outputs/layout_recommendations.json --topn 2",
+    "validate_technology_placement": "python validate_technology_placement.py --input outputs/prepared_input.json --output outputs/technology_placement_report.json",
+    "quality_guardrails": "docs/quality_guardrails.md"
   },
   "outputs": [
     "outputs/solution_architecture_overview.png",
@@ -23,7 +27,9 @@
     "outputs/solution_architecture_capability_*.png",
     "outputs/solution_architecture_capability_*.drawio",
     "outputs/prepared_input.json",
-    "outputs/multilevel_plan.json"
+    "outputs/multilevel_plan.json",
+    "outputs/<run_name>/layout_recommendations.json",
+    "outputs/<run_name>/technology_placement_report.json"
   ],
   "compatible_interfaces": [
     "VS Code",
@@ -47,7 +53,20 @@
     "examples/request.txt",
     "render_with_drawio_adapter.py",
     "docs/renderer_adapter.md",
-    "examples/renderer_config.json"
+    "examples/renderer_config.json",
+    "data/reference_asset_library.json",
+    "docs/layout_semantics.md",
+    "assets/reference_layouts/aws_unified_sustainability_hub.png",
+    "assets/reference_layouts/aws_data_platform_large.png",
+    "assets/reference_layouts/cloud_service_operating_model.png",
+    "assets/reference_layouts/cloud_service_orchestration_portal.png",
+    "assets/reference_layouts/iot_ot_risk_architecture.png",
+    "assets/reference_layouts/modern_data_platform_databricks.png",
+    "assets/reference_layouts/identity_centric_multicloud_landing_zone.png",
+    "recommend_layouts.py",
+    "validate_technology_placement.py",
+    "docs/quality_guardrails.md",
+    "data/technology_terms_allowlist.txt"
   ],
   "approvals_needed": [
     "Approve or install Agents365 drawio-skill in the target environment",

@@ -67,7 +67,17 @@ def probe_parallel_execution() -> Tuple[bool, str]:
 
 def choose_template(text: str) -> str:
     t = text.lower()
-    if any(k in t for k in ['data platform', 'lakehouse', 'ingestion', 'governance', 'analytics', 'warehouse']):
+    if any(k in t for k in ['bronze', 'silver', 'gold', 'databricks', 'self-service analytics', 'lakehouse']):
+        return 'modern_data_lakehouse'
+    if any(k in t for k in ['landing zone', 'entra', 'multi-cloud landing', 'identity control plane']):
+        return 'identity_multicloud_control_plane'
+    if any(k in t for k in ['iot', 'ot', 'industrial', 'threat', 'risk matrix']):
+        return 'iot_ot_security_layers'
+    if any(k in t for k in ['service catalog', 'order orchestration', 'billing', 'provisioning', 'workflow']):
+        return 'service_orchestration_workflow'
+    if any(k in t for k in ['saas', 'paas', 'iaas', 'broker model', 'cloud carrier']):
+        return 'cloud_service_operating_model'
+    if any(k in t for k in ['data platform', 'ingestion', 'governance', 'analytics', 'warehouse']):
         return 'cloud_data_platform'
     if any(k in t for k in ['endpoint', 'device', 'intune', 'identity', 'conditional access', 'compliance']):
         return 'enterprise_endpoint_management'
@@ -203,7 +213,9 @@ def draft_spec_from_text(text: str) -> Dict[str, Any]:
         'subtitle': subtitle,
         'template': template if template in {
             'platform_value_chain', 'composite_ai_platform', 'cloud_tenant_microservices',
-            'enterprise_endpoint_management', 'cloud_data_platform'
+            'enterprise_endpoint_management', 'cloud_data_platform', 'cloud_service_operating_model',
+            'service_orchestration_workflow', 'iot_ot_security_layers', 'modern_data_lakehouse',
+            'identity_multicloud_control_plane'
         } else choose_template(text),
         'lanes': [],
         'zones': zones,
@@ -262,6 +274,47 @@ def normalization_agent(memory: Dict[str, Any], run_dir: Path) -> AgentResult:
     }
     return AgentResult('normalization_agent', payload)
 
+
+
+
+def recommendation_agent(memory: Dict[str, Any], run_dir: Path) -> AgentResult:
+    prepared_path = Path(memory['working']['prepared_input_path'])
+    rec_path = run_dir / 'layout_recommendations.json'
+    run_cmd([
+        sys.executable, 'recommend_layouts.py',
+        '--input', str(prepared_path),
+        '--patterns', str(ROOT / 'data' / 'reference_architecture_patterns.json'),
+        '--assets', str(ROOT / 'data' / 'reference_asset_library.json'),
+        '--output', str(rec_path),
+        '--topn', '2'
+    ], ROOT)
+    rec = load_json(rec_path)
+    # Apply default selected recommendation to the prepared input for downstream prompt generation.
+    default = rec.get('default_selected_recommendation') or {}
+    if default.get('primary_layout_template'):
+        spec = load_json(prepared_path)
+        spec['template'] = default['primary_layout_template']
+        spec['style_selection'] = default
+        save_json(prepared_path, spec)
+    return AgentResult('recommendation_agent', {
+        'layout_recommendations_path': str(rec_path),
+        'layout_recommendations': rec,
+        'selected_recommendation': rec.get('default_selected_recommendation')
+    })
+
+
+def technology_placement_agent(memory: Dict[str, Any], run_dir: Path) -> AgentResult:
+    prepared_path = Path(memory['working']['prepared_input_path'])
+    report_path = run_dir / 'technology_placement_report.json'
+    run_cmd([
+        sys.executable, 'validate_technology_placement.py',
+        '--input', str(prepared_path),
+        '--output', str(report_path)
+    ], ROOT)
+    return AgentResult('technology_placement_agent', {
+        'technology_placement_report_path': str(report_path),
+        'technology_placement_report': load_json(report_path)
+    })
 
 def layout_agent(memory: Dict[str, Any], run_dir: Path) -> AgentResult:
     spec = memory['working']['prepared_input']
@@ -454,6 +507,8 @@ def packaging_agent(memory: Dict[str, Any], run_dir: Path) -> AgentResult:
         'prepared_input_path': memory['working'].get('prepared_input_path'),
         'overview_prompt_path': memory['working'].get('overview_prompt_path'),
         'multilevel_plan_path': memory['working'].get('multilevel_plan_path'),
+        'layout_recommendations_path': memory['working'].get('layout_recommendations_path'),
+        'technology_placement_report_path': memory['working'].get('technology_placement_report_path'),
         'expansion_prompts': memory['working'].get('expansion_outputs', []),
         'expected_render_outputs': {
             'overview_png': 'outputs/solution_architecture_overview.png',
@@ -545,6 +600,12 @@ def main() -> None:
     merge_agent_results(memory, result)
     checkpoint(memory, run_dir, result.name)
 
+    # recommendation and placement guardrails must run before prompt generation
+    for pre_agent in [recommendation_agent, technology_placement_agent]:
+        result = pre_agent(memory, run_dir)
+        merge_agent_results(memory, result)
+        checkpoint(memory, run_dir, result.name)
+
     # parallelizable middle stage with checkpoint-based fallback strategy
     if parallel_enabled:
         try:
@@ -573,6 +634,8 @@ def main() -> None:
     print(f"Prepared input: {memory['working'].get('prepared_input_path')}")
     print(f"Overview prompt: {memory['working'].get('overview_prompt_path')}")
     print(f"Multilevel plan: {memory['working'].get('multilevel_plan_path')}")
+    print(f"Layout recommendations: {memory['working'].get('layout_recommendations_path')}")
+    print(f"Technology placement report: {memory['working'].get('technology_placement_report_path')}")
     print(f"Expansion prompt count: {len(memory['working'].get('expansion_outputs', []))}")
     print(f"Report: {memory['working'].get('orchestration_report_path')}")
     if memory['working'].get('render_report_path'):

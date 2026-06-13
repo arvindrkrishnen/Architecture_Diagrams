@@ -307,3 +307,56 @@ To enable end-to-end rendering, you may need to approve or provide:
 5. **permission for parallel render jobs** if you want rendering to fan out in parallel
 
 If you do not yet want live rendering, you can still run the adapter in `--dry-run` mode to verify the render plan.
+
+
+## Enhanced reference asset library
+
+The skill now includes an expanded internal reference asset library with richer metadata.
+
+It captures for each reference:
+- layout family
+- visual placement primitives
+- architectural communication intent
+- box placement model
+- selection signals
+- color palette cues
+- recommended use cases
+
+Key files:
+- `data/reference_asset_library.json`
+- `data/reference_architecture_patterns.json`
+- `docs/reference_layouts.md`
+- `docs/layout_semantics.md`
+
+The renderer should use these assets internally to pick a layout and a similar color scheme, while keeping the final diagram original.
+
+
+## Primary layout and palette recommendations
+
+Each run now generates 1-2 recommendations so the user can choose the preferred visual direction.
+
+Each recommendation includes:
+- primary layout template
+- secondary palette donor
+- rationale for the recommendation
+- communication intent
+- guardrails for text wrapping, spelling, and technology placement
+
+Generated file:
+- `layout_recommendations.json`
+
+If the user does not select a recommendation, the runner uses recommendation 1 by default.
+
+## Quality guardrails
+
+The skill includes guardrails to ensure:
+- word spelling checks are in place
+- canonical technology capitalization is preserved
+- technology components are placed in the right architecture zones
+- boxes and text are cleanly displayed
+- long content is decomposed into Level 2 diagrams when needed
+
+Generated guardrail files include:
+- `technology_placement_report.json`
+- `layout_recommendations.json`
+- optional PNG evaluation report after rendering

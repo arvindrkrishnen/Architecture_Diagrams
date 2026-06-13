@@ -25,7 +25,12 @@
         "composite_ai_platform",
         "cloud_tenant_microservices",
         "enterprise_endpoint_management",
-        "cloud_data_platform"
+        "cloud_data_platform",
+        "cloud_service_operating_model",
+        "service_orchestration_workflow",
+        "iot_ot_security_layers",
+        "modern_data_lakehouse",
+        "identity_multicloud_control_plane"
       ]
     },
     "lanes": {
