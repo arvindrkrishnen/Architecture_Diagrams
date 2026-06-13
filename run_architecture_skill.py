@@ -316,6 +316,56 @@ def technology_placement_agent(memory: Dict[str, Any], run_dir: Path) -> AgentRe
         'technology_placement_report': load_json(report_path)
     })
 
+
+
+def build_business_outcome_description(spec: Dict[str, Any]) -> str:
+    if spec.get('business_outcome_description'):
+        return spec['business_outcome_description']
+    capabilities = ', '.join([z.get('title','') for z in spec.get('zones', [])[:3] if z.get('title')])
+    outputs: List[str] = []
+    for lane in spec.get('lanes', []):
+        if lane.get('side') == 'right':
+            outputs.extend(lane.get('items', [])[:3])
+    outcome = ', '.join(outputs) or 'measurable business outcomes'
+    return f"The architecture connects {capabilities or 'core capabilities'} through governed flows and shared controls to deliver {outcome} with speed, resilience, and executive visibility."
+
+
+def runtime_guardrail_agent(memory: Dict[str, Any], run_dir: Path) -> AgentResult:
+    prepared_path = Path(memory['working']['prepared_input_path'])
+    spec = load_json(prepared_path)
+    spec['business_outcome_description'] = build_business_outcome_description(spec)
+    save_json(prepared_path, spec)
+    # Guardrails are executed without generating eval files. Non-strict by default so the runner can continue and prompts can carry remediation instructions.
+    run_cmd([
+        sys.executable, 'validate_runtime_guardrails.py',
+        '--input', str(prepared_path),
+        '--quiet'
+    ], ROOT)
+    return AgentResult('runtime_guardrail_agent', {
+        'business_outcome_description': spec.get('business_outcome_description'),
+        'runtime_guardrails_executed': True
+    })
+
+
+def variant_prompt_agent(memory: Dict[str, Any], run_dir: Path) -> AgentResult:
+    prepared_path = Path(memory['working']['prepared_input_path'])
+    recommendations_path = Path(memory['working'].get('layout_recommendations_path', run_dir / 'layout_recommendations.json'))
+    variant_dir = run_dir / 'variant_prompts'
+    run_cmd([
+        sys.executable, 'generate_variant_prompts.py',
+        '--input', str(prepared_path),
+        '--recommendations', str(recommendations_path),
+        '--output-dir', str(variant_dir),
+        '--patterns', str(ROOT / 'data' / 'reference_architecture_patterns.json'),
+        '--count', str(memory.get('variant_count', 3))
+    ], ROOT)
+    prompts = sorted(str(p) for p in variant_dir.glob('variant_*.md'))
+    return AgentResult('variant_prompt_agent', {
+        'variant_prompt_dir': str(variant_dir),
+        'variant_prompts': prompts,
+        'variant_count': len(prompts)
+    })
+
 def layout_agent(memory: Dict[str, Any], run_dir: Path) -> AgentResult:
     spec = memory['working']['prepared_input']
     payload = {
@@ -493,8 +543,9 @@ def render_adapter_agent(memory: Dict[str, Any], run_dir: Path) -> AgentResult:
         cmd.append('--dry-run')
     run_cmd(cmd, ROOT)
     report_path = run_dir / 'render_report.json'
-    payload = {'render_report_path': str(report_path)}
+    payload = {'render_adapter_executed': True}
     if report_path.exists():
+        payload['render_report_path'] = str(report_path)
         payload['render_report'] = load_json(report_path)
     return AgentResult('render_adapter_agent', payload)
 
@@ -511,16 +562,45 @@ def packaging_agent(memory: Dict[str, Any], run_dir: Path) -> AgentResult:
         'technology_placement_report_path': memory['working'].get('technology_placement_report_path'),
         'expansion_prompts': memory['working'].get('expansion_outputs', []),
         'expected_render_outputs': {
-            'overview_png': 'outputs/solution_architecture_overview.png',
-            'overview_drawio': 'outputs/solution_architecture_overview.drawio',
-            'expansion_png_pattern': 'outputs/solution_architecture_capability_*.png',
-            'expansion_drawio_pattern': 'outputs/solution_architecture_capability_*.drawio'
+            'variant_01_png': 'outputs/<run_name>/solution_architecture_variant_01.png',
+            'variant_01_drawio': 'outputs/<run_name>/solution_architecture_variant_01.drawio',
+            'variant_02_png': 'outputs/<run_name>/solution_architecture_variant_02.png',
+            'variant_02_drawio': 'outputs/<run_name>/solution_architecture_variant_02.drawio',
+            'variant_03_png': 'outputs/<run_name>/solution_architecture_variant_03.png',
+            'variant_03_drawio': 'outputs/<run_name>/solution_architecture_variant_03.drawio'
         },
-        'next_step': 'Feed the generated overview and expansion prompt markdown files into drawio-skill to render PNG and .drawio outputs.'
+        'final_output_policy': 'User-facing outputs should be PNG and .drawio only; evaluation and JSON files are internal/debug only.',
+        'next_step': 'Feed the generated variant prompt markdown files into drawio-skill to render three PNG and three .drawio outputs.'
     }
     report_path = run_dir / 'orchestration_report.json'
     save_json(report_path, summary)
     return AgentResult('packaging_agent', {'orchestration_report_path': str(report_path), 'orchestration_report': summary})
+
+
+
+def cleanup_non_artifact_outputs(run_dir: Path) -> None:
+    """Remove internal JSON/eval/debug files so user-facing run output is PNG and .drawio only.
+    This is intended for live rendering runs, not dry-runs or debug runs.
+    """
+    for pattern in ['*.json', '*eval*', '*report*']:
+        for path in run_dir.rglob(pattern):
+            if path.suffix.lower() in {'.png', '.drawio'}:
+                continue
+            try:
+                path.unlink()
+            except Exception:
+                pass
+    # Remove empty internal folders if possible.
+    for sub in ['variant_specs', 'expansion_specs']:
+        folder = run_dir / sub
+        if folder.exists():
+            try:
+                for child in folder.iterdir():
+                    if child.is_file():
+                        child.unlink()
+                folder.rmdir()
+            except Exception:
+                pass
 
 
 def main() -> None:
@@ -537,6 +617,8 @@ def main() -> None:
     parser.add_argument('--renderer-config', default='', help='Optional renderer config JSON file for render_with_drawio_adapter.py')
     parser.add_argument('--renderer-command-template', default='', help='Optional renderer command template')
     parser.add_argument('--renderer-dry-run', action='store_true', help='Dry run the renderer adapter without executing the render command')
+    parser.add_argument('--variant-count', type=int, default=3, help='Number of top-level PNG/.drawio variants to generate. Default: 3')
+    parser.add_argument('--debug-json', action='store_true', help='Keep and emphasize internal JSON/debug files. By default user-facing outputs are PNG and .drawio only.')
     args = parser.parse_args()
 
     if args.force_sequential and args.allow_parallel:
@@ -581,6 +663,13 @@ def main() -> None:
             'forced_sequential': bool(args.force_sequential)
         },
         'working': {},
+        'variant_count': max(1, min(args.variant_count, 3)),
+        'final_output_policy': {
+            'user_facing_only': not bool(args.debug_json),
+            'allowed_extensions': ['.png', '.drawio'],
+            'suppress_eval_files': True,
+            'suppress_json_files': True
+        },
         'rendering': {
             'enabled': bool(args.render),
             'renderer_config': args.renderer_config,
@@ -600,8 +689,8 @@ def main() -> None:
     merge_agent_results(memory, result)
     checkpoint(memory, run_dir, result.name)
 
-    # recommendation and placement guardrails must run before prompt generation
-    for pre_agent in [recommendation_agent, technology_placement_agent]:
+    # recommendation, semantic placement, and runtime readability guardrails must run before prompt generation
+    for pre_agent in [recommendation_agent, technology_placement_agent, runtime_guardrail_agent]:
         result = pre_agent(memory, run_dir)
         merge_agent_results(memory, result)
         checkpoint(memory, run_dir, result.name)
@@ -621,6 +710,11 @@ def main() -> None:
     # expansion agents: parallel if supported, else sequential
     run_expansion_agents(memory, run_dir, parallel_enabled=memory['execution']['mode'] == 'parallel')
 
+    # Generate three top-level output variants. The renderer adapter will prefer these variant prompts.
+    result = variant_prompt_agent(memory, run_dir)
+    merge_agent_results(memory, result)
+    checkpoint(memory, run_dir, result.name)
+
     if memory['rendering'].get('enabled'):
         result = render_adapter_agent(memory, run_dir)
         merge_agent_results(memory, result)
@@ -630,6 +724,9 @@ def main() -> None:
     merge_agent_results(memory, result)
     checkpoint(memory, run_dir, result.name)
 
+    if memory['rendering'].get('enabled') and not memory['rendering'].get('renderer_dry_run') and memory['final_output_policy'].get('user_facing_only'):
+        cleanup_non_artifact_outputs(run_dir)
+
     print(f'Run directory: {run_dir}')
     print(f"Prepared input: {memory['working'].get('prepared_input_path')}")
     print(f"Overview prompt: {memory['working'].get('overview_prompt_path')}")
@@ -637,6 +734,8 @@ def main() -> None:
     print(f"Layout recommendations: {memory['working'].get('layout_recommendations_path')}")
     print(f"Technology placement report: {memory['working'].get('technology_placement_report_path')}")
     print(f"Expansion prompt count: {len(memory['working'].get('expansion_outputs', []))}")
+    print(f"Variant prompt count: {len(memory['working'].get('variant_prompts', []))}")
+    print('User-facing output policy: PNG and .drawio variants only; eval/JSON files are not final artifacts.')
     print(f"Report: {memory['working'].get('orchestration_report_path')}")
     if memory['working'].get('render_report_path'):
         print(f"Render report: {memory['working'].get('render_report_path')}")

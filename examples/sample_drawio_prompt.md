@@ -9,8 +9,8 @@ Create a polished **solution architecture diagram** and export it as **PNG**. Pr
 - If supported, export as embedded PNG using a `.drawio.png` filename
 
 ## Selected layout archetype
-- Template id: `identity_multicloud_control_plane`
-- Template name: Identity-centric multi-cloud control plane and landing zones
+- Template id: `platform_value_chain`
+- Template name: Connected intelligence / capability value chain
 - Markdown reference: ``
 - Draw.io preset: `architecture`
 
@@ -18,21 +18,21 @@ Create a polished **solution architecture diagram** and export it as **PNG**. Pr
 
 
 ## Style profile
-- Style profile: identity_green_blue
-- Primary: #2D6CDF
-- Secondary: #47A55A
-- Accent: #7C3AED
-- Container: #F9FBFF
-- Border: #6E8EDC
-- Guidance: Use for identity control plane and multi-cloud landing zone layouts.
+- Style profile: clean_enterprise_blue
+- Primary: #2F73D8
+- Secondary: #8FB8F3
+- Accent: #1F3B73
+- Container: #F7FAFF
+- Border: #4B6FA9
+- Guidance: Use for control planes, operating models, or identity-centric enterprise diagrams.
 
 ## Selected recommendation
-- Primary layout: identity_multicloud_control_plane
-- Palette donor: Identity-centric multi-cloud landing zone architecture
-- Selection rationale: best-for match: identity architecture, best-for match: multi-cloud security, best-for match: governance and monitoring, selection signal: central control plane, selection signal: multi-cloud panels
+- Primary layout: platform_value_chain
+- Palette donor: template default
+- Selection rationale: template default
 
 ## Internal reference assets to learn from
-- Identity-centric multi-cloud landing zone architecture | family=identity_multicloud_control_plane | intent=Show how a central identity control plane governs access, lifecycle, workloads, landing zones, and monitoring across multi-cloud environments. | placement=strong central control plane with right-side landing zones and applications, supported by layered governance and monitoring bands | palette=#F0F0F0, #E0E0E0, #E0E0F0, #C0C0C0, #F0F0E0
+- Connected intelligence platform overview | family=platform_value_chain | intent=Show how upstream data and applications enter a platform, how central capabilities are grouped, and how outputs are delivered to business users. | placement=left-right journey with single dominant middle boundary and bottom operations strip | palette=#F0F0F0, #E0E0F0, #E0E0E0, #C0C0C0, #A0A0A0
 
 ### Layout grammar
 
@@ -44,79 +44,85 @@ Create a polished **solution architecture diagram** and export it as **PNG**. Pr
 - orthogonal
 
 ## Diagram title
-- Policy-as-Spec Architecture Control Platform
+- Agentic Vendor Intelligence Platform — Solution Architecture
 
 ## Diagram subtitle
-- Overview plus capability expansion diagrams
+- Unified ingestion, AI research orchestration, evidence store, and business delivery layer
+
+## CIO-ready business outcome description
+- Create a brief CIO-ready statement explaining how the capabilities and sub-capabilities connect through governed flows to deliver the stated business outcome.
+
+Instruction: include this as a short, readable callout near the title or in a clearly labeled executive outcome panel. Keep it to 1-2 sentences and 20-45 words.
 
 ## Structural content
 
 ### Lanes
-### Left lane — Lifecycle
-- Author
-- Resolve
-- Enforce
-- Deploy
-- Assure
+### Left lane — Inputs
+- Vendor websites
+- Analyst reports
+- RFP documents
+- CRM notes
+- Market news
+- APIs
 
-### Right lane — Interfaces
-- REST API
-- GraphQL
-- MCP Server
+### Right lane — Outputs
+- Vendor dashboards
+- Comparison matrices
+- Executive briefs
+- RFP responses
+- Alerts & tasks
 
 ### Capability zones
-### Zone: Authorship Layer
-Subtitle: Architect-owned specs
-- Enterprise Architects
-- LOB Architects
-- YAML / JSON Specs
+### Zone: Data integration
+Subtitle: Normalize and enrich
+- Web/API connectors
+- Document parser
+- Metadata extraction
+- Source lineage
 
-### Zone: Architecture Control Plane
-Subtitle: Single source of truth
-- Spec Repository
-- REST API
-- GraphQL
-- MCP Server
-- Spec Resolution
-Expansion hint: This zone may be expanded into a Level 2 diagram.
+### Zone: Knowledge fabric
+Subtitle: Searchable evidence
+- Vector index
+- Entity graph
+- Taxonomy mapping
+- Citation store
 
-### Zone: Architecture Assurance Fabric
-Subtitle: Pipeline enforcement
-- arch-ctl CLI
-- Build Stage
-- Deploy Stage
-- OPA Checks
-- Topology Verification
-Expansion hint: This zone may be expanded into a Level 2 diagram.
+### Zone: Predictive & generative AI
+Subtitle: Multi-agent research
+- Research agent
+- Comparator agent
+- Risk summarizer
+- Question generator
 
-### Zone: Multi-Cloud Targets
-Subtitle: Deployment endpoints
-- AWS EKS
-- AKS
-- GCP
-- Harness Delegates
-Expansion hint: This zone may be expanded into a Level 2 diagram.
+### Zone: Decision orchestration
+Subtitle: Human-in-loop workflows
+- Rules engine
+- Review queues
+- Approval workflow
+- Audit trail
 
-### Zone: Cross-Cutting Components
-Subtitle: Governance and evidence
-- Evidence Ledger
-- Drift Detector
-- Waiver Governance
-Expansion hint: This zone may be expanded into a Level 2 diagram.
+### Zone: Apps, APIs & analytics
+Subtitle: Business consumption
+- Dashboard builder
+- Insight API
+- Report generator
+- Notification service
 
 ### Flows
-- authoring -> control_plane (publish specs)
-- control_plane -> assurance (resolved controls)
-- assurance -> targets (policy enforcement)
-- targets -> controls (evidence and drift)
+- ingestion -> knowledge (curated data)
+- knowledge -> ai (retrieval)
+- ai -> orchestration (recommendations)
+- orchestration -> delivery (approved outputs)
 
 ### Operations / cross-cutting layer
-- Audit Trail
-- Governance
-- Security Controls
+- User management & SSO
+- Workflow automation
+- ModelOps
+- DataOps
+- Audit & compliance
 
 ### Footer
-- Generate overview and Level 2 expansion diagrams where useful
+- Deployable on AWS, Azure, GCP, or private cloud
 
 ## Mandatory semantic placement rules
 - Place technology components in semantically correct areas.
@@ -132,13 +138,24 @@ Expansion hint: This zone may be expanded into a Level 2 diagram.
 - Avoid invented misspellings or compressed labels.
 - Use short labels and wrap text rather than reducing font size excessively.
 
-## Mandatory layout quality rules
+## Mandatory ADA/readability layout quality rules
 - Wrap all text inside boxes and containers.
 - Do not allow text to overflow box boundaries.
+- Do not let text touch box borders. Maintain at least 8-12 px internal padding.
+- Body text must be at least 14 pt. Section headers must be at least 16 pt. Main title must be at least 26 pt.
+- Use high-contrast colors that approximate WCAG AA readability.
 - Do not overlap text with adjacent boxes, connectors, icons, or arrows.
 - Increase box size or spacing when wrapping is needed.
 - Prefer shorter labels over tiny unreadable fonts.
 - Keep the overview diagram clean and presentation-ready.
+
+## Mandatory connector rules
+- Use only orthogonal connectors with horizontal and vertical segments.
+- Do not use diagonal connectors.
+- Route connectors around boxes, not through boxes.
+- Do not let connectors overlap text or pass over box interiors.
+- Use waypoints or elbow connectors to avoid crossing major containers.
+- Keep connector labels short and clearly separated from box labels.
 
 ## Multi-level decomposition rules
 - This diagram should be treated as the Level 1 overview unless otherwise specified.
@@ -159,4 +176,5 @@ Expansion hint: This zone may be expanded into a Level 2 diagram.
 ## Final rendering instructions
 - Use drawio-skill to generate the diagram.
 - Export PNG.
-- Preserve editable source if supported.
+- Preserve editable .drawio source if supported.
+- Produce user-facing artifacts only as PNG and Draw.io files. Do not produce user-facing eval files or JSON files.

@@ -1,0 +1,10 @@
+{
+  "version": "1.0",
+  "font": {"body_min_pt": 14, "header_min_pt": 16, "title_min_pt": 26, "subtitle_min_pt": 14},
+  "padding": {"minimum_internal_padding_px": 8, "preferred_internal_padding_px": 12, "container_padding_px": 16},
+  "connectors": {"orthogonal_only": true, "allow_diagonal": false, "avoid_box_intersections": true, "avoid_text_overlap": true},
+  "contrast": {"target": "WCAG AA approximate", "normal_text_ratio": 4.5},
+  "business_outcome_description": {"required": true, "min_words": 20, "max_words": 45, "audience": "CIO"},
+  "variants": {"count": 3, "names": ["recommended_enterprise_view", "alternate_style_view", "executive_simplified_view"]},
+  "final_output_policy": {"user_facing_extensions": [".png", ".drawio"], "suppress_eval_files": true, "suppress_json_files": true}
+}

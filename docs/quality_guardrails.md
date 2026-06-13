@@ -39,3 +39,23 @@ Warnings are heuristic, but should be reviewed before final rendering.
 - Boxes should have enough padding for wrapped labels.
 - Connectors should not cross labels where possible.
 - If a diagram becomes crowded, create Level 2 expansion diagrams.
+
+
+## ADA-oriented font and padding guardrails
+- Body labels must render at 14 pt or larger.
+- Section headers must render at 16 pt or larger.
+- Titles must render at 26 pt or larger.
+- Text must use adequate contrast and not rely on low-contrast grays.
+- Text must be wrapped inside boxes and must not touch the borders.
+- Each text container should use at least 8-12 px internal padding.
+
+## Connector guardrails
+- Use orthogonal connectors only.
+- Route connectors around boxes.
+- Do not run connectors through text, labels, or box interiors.
+- Use elbow waypoints when needed.
+
+## Runtime and rendered revalidation
+- `validate_runtime_guardrails.py` runs before prompt generation and does not create eval files.
+- `validate_rendered_guardrails.py` runs after rendering when `.drawio` files are present and does not create eval files.
+- Guardrail failures should trigger regeneration or prompt tightening, not user-facing JSON/eval output.

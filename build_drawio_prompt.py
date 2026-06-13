@@ -111,6 +111,11 @@ Create a polished **solution architecture diagram** and export it as **PNG**. Pr
 ## Diagram subtitle
 - {architecture.get('subtitle','')}
 
+## CIO-ready business outcome description
+- {architecture.get('business_outcome_description', '') or 'Create a brief CIO-ready statement explaining how the capabilities and sub-capabilities connect through governed flows to deliver the stated business outcome.'}
+
+Instruction: include this as a short, readable callout near the title or in a clearly labeled executive outcome panel. Keep it to 1-2 sentences and 20-45 words.
+
 ## Structural content
 
 ### Lanes
@@ -142,13 +147,24 @@ Create a polished **solution architecture diagram** and export it as **PNG**. Pr
 - Avoid invented misspellings or compressed labels.
 - Use short labels and wrap text rather than reducing font size excessively.
 
-## Mandatory layout quality rules
+## Mandatory ADA/readability layout quality rules
 - Wrap all text inside boxes and containers.
 - Do not allow text to overflow box boundaries.
+- Do not let text touch box borders. Maintain at least 8-12 px internal padding.
+- Body text must be at least 14 pt. Section headers must be at least 16 pt. Main title must be at least 26 pt.
+- Use high-contrast colors that approximate WCAG AA readability.
 - Do not overlap text with adjacent boxes, connectors, icons, or arrows.
 - Increase box size or spacing when wrapping is needed.
 - Prefer shorter labels over tiny unreadable fonts.
 - Keep the overview diagram clean and presentation-ready.
+
+## Mandatory connector rules
+- Use only orthogonal connectors with horizontal and vertical segments.
+- Do not use diagonal connectors.
+- Route connectors around boxes, not through boxes.
+- Do not let connectors overlap text or pass over box interiors.
+- Use waypoints or elbow connectors to avoid crossing major containers.
+- Keep connector labels short and clearly separated from box labels.
 
 ## Multi-level decomposition rules
 - This diagram should be treated as the Level 1 overview unless otherwise specified.
@@ -169,7 +185,8 @@ Create a polished **solution architecture diagram** and export it as **PNG**. Pr
 ## Final rendering instructions
 - Use drawio-skill to generate the diagram.
 - Export PNG.
-- Preserve editable source if supported.
+- Preserve editable .drawio source if supported.
+- Produce user-facing artifacts only as PNG and Draw.io files. Do not produce user-facing eval files or JSON files.
 """
 
     Path(args.output).write_text(md, encoding='utf-8')

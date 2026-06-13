@@ -17,3 +17,5 @@ Please produce:
 4. A normalized architecture JSON file when appropriate
 
 Keep labels short, professional, and presentation-ready.
+
+Generate exactly three visual variants as PNG and Draw.io files. Ensure ADA-readable fonts, internal padding, orthogonal connectors, no connector overlap, and a brief CIO-ready business outcome description. Do not return eval files or JSON files as final outputs.

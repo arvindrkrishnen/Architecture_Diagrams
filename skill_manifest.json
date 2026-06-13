@@ -1,8 +1,8 @@
 {
   "name": "solution-architecture-diagram-skill",
-  "version": "0.9.0",
+  "version": "1.0.0-v10",
   "author": "Arvind Radhakrishnen",
-  "description": "Generate PNG and editable Draw.io architecture diagrams with per-run layout/palette recommendations, text wrapping, spelling guardrails, technology placement validation, and multi-level decomposition.",
+  "description": "Generate three PNG and Draw.io solution architecture variants with ADA-readable text, orthogonal connector routing, CIO-ready outcome narrative, primary/secondary layout recommendations, and runtime/rendered guardrails.",
   "entrypoints": {
     "instructions": "SKILL.md",
     "readme": "README.md",
@@ -22,14 +22,12 @@
     "quality_guardrails": "docs/quality_guardrails.md"
   },
   "outputs": [
-    "outputs/solution_architecture_overview.png",
-    "outputs/solution_architecture_overview.drawio",
-    "outputs/solution_architecture_capability_*.png",
-    "outputs/solution_architecture_capability_*.drawio",
-    "outputs/prepared_input.json",
-    "outputs/multilevel_plan.json",
-    "outputs/<run_name>/layout_recommendations.json",
-    "outputs/<run_name>/technology_placement_report.json"
+    "solution_architecture_variant_01.png",
+    "solution_architecture_variant_01.drawio",
+    "solution_architecture_variant_02.png",
+    "solution_architecture_variant_02.drawio",
+    "solution_architecture_variant_03.png",
+    "solution_architecture_variant_03.drawio"
   ],
   "compatible_interfaces": [
     "VS Code",
@@ -66,7 +64,12 @@
     "recommend_layouts.py",
     "validate_technology_placement.py",
     "docs/quality_guardrails.md",
-    "data/technology_terms_allowlist.txt"
+    "data/technology_terms_allowlist.txt",
+    "docs/ada_visual_guardrails.md",
+    "data/ada_diagram_quality_rules.json",
+    "validate_runtime_guardrails.py",
+    "validate_rendered_guardrails.py",
+    "generate_variant_prompts.py"
   ],
   "approvals_needed": [
     "Approve or install Agents365 drawio-skill in the target environment",
@@ -74,5 +77,25 @@
     "Approve the local renderer command template or bridge command",
     "Approve local subprocess execution from the orchestration runner",
     "Approve parallel render jobs if fan-out rendering is desired"
-  ]
+  ],
+  "final_output_policy": {
+    "user_facing_outputs_only": [
+      ".png",
+      ".drawio"
+    ],
+    "do_not_return_eval_files": true,
+    "do_not_return_json_files": true,
+    "internal_json_allowed_for_orchestration": true
+  },
+  "guardrails": {
+    "font_body_min_pt": 14,
+    "font_header_min_pt": 16,
+    "font_title_min_pt": 26,
+    "internal_padding_px": "8-12",
+    "connectors": "orthogonal horizontal/vertical only",
+    "no_connector_overlap": true,
+    "business_outcome_description_required": true,
+    "runtime_validation": "validate_runtime_guardrails.py",
+    "rendered_validation": "validate_rendered_guardrails.py"
+  }
 }

@@ -323,3 +323,38 @@ Generated guardrail files include:
 - `technology_placement_report.json`
 - `layout_recommendations.json`
 - optional PNG evaluation report after rendering
+
+
+## v10 guardrail and output behavior
+
+This version adds stricter visual quality guardrails and a three-variant output pattern.
+
+### Readability and ADA-oriented rendering
+The generated diagram prompts require:
+- body text at 14 pt or larger
+- section headers at 16 pt or larger
+- title at 26 pt or larger
+- high-contrast text/background combinations
+- wrapped text inside boxes
+- 8-12 px internal padding so text does not touch borders
+- box resizing or Level 2 decomposition instead of shrinking text too far
+
+### Connector guardrails
+The diagram prompts require:
+- horizontal / vertical orthogonal connectors only
+- no diagonal connectors by default
+- connectors routed around boxes, not through boxes
+- connector labels separated from box labels
+- no connector overlap with text, icons, or container interiors
+
+### CIO-ready outcome narrative
+Each Level 1 diagram includes a short executive description explaining how the capabilities and sub-capabilities connect to deliver the business outcome.
+
+### Three output variants
+Each run prepares three variants:
+1. `solution_architecture_variant_01.png` and `.drawio` - recommended enterprise view
+2. `solution_architecture_variant_02.png` and `.drawio` - alternate style / palette view
+3. `solution_architecture_variant_03.png` and `.drawio` - executive simplified view
+
+### Output policy
+User-facing generated outputs should be PNG and Draw.io files only. Evaluation and JSON files are internal/debug artifacts and should not be returned as final outputs. In live rendering mode, the runner can clean internal JSON/report files after rendering unless debug mode is enabled.

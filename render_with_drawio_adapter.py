@@ -45,6 +45,20 @@ def load_config(path: str) -> Dict[str, Any]:
 
 def build_jobs(run_dir: Path) -> List[Dict[str, Any]]:
     jobs: List[Dict[str, Any]] = []
+    variant_dir = run_dir / 'variant_prompts'
+    if variant_dir.exists():
+        for prompt in sorted(variant_dir.glob('variant_*.md')):
+            stem = prompt.stem
+            suffix = stem.split('_', 1)[1] if '_' in stem else stem
+            jobs.append({
+                'name': stem,
+                'prompt': str(prompt),
+                'png': str(run_dir / f'solution_architecture_variant_{suffix}.png'),
+                'drawio': str(run_dir / f'solution_architecture_variant_{suffix}.drawio')
+            })
+        if jobs:
+            return jobs
+
     overview_prompt = run_dir / 'drawio_prompt_overview.md'
     if overview_prompt.exists():
         jobs.append({
@@ -85,6 +99,15 @@ def render_one(job: Dict[str, Any], command_template: str, dry_run: bool) -> Dic
         return result
     try:
         subprocess.run(cmd, shell=True, check=True, executable='/bin/bash')
+        # Revalidate rendered artifact guardrails without writing eval files.
+        drawio_path = Path(job['drawio'])
+        if drawio_path.exists():
+            subprocess.run([
+                'python', str(ROOT / 'validate_rendered_guardrails.py'),
+                '--drawio', str(drawio_path),
+                '--png', str(job['png']),
+                '--quiet'
+            ], check=False)
         result['status'] = 'success'
     except subprocess.CalledProcessError as e:
         result['status'] = 'failed'
@@ -100,6 +123,7 @@ def main() -> None:
     ap.add_argument('--allow-parallel', action='store_true', help='Allow parallel render jobs when supported')
     ap.add_argument('--force-sequential', action='store_true', help='Force sequential rendering')
     ap.add_argument('--dry-run', action='store_true', help='Do not execute commands; only emit the render plan')
+    ap.add_argument('--debug-report', action='store_true', help='Write render_report.json for debugging. Disabled by default to avoid user-facing JSON outputs.')
     args = ap.parse_args()
 
     cfg = load_config(args.config)
@@ -160,9 +184,12 @@ def main() -> None:
         'job_count': len(results),
         'results': results
     }
-    report_path = run_dir / 'render_report.json'
-    save_json(report_path, report)
-    print(f'Render report: {report_path}')
+    if args.debug_report:
+        report_path = run_dir / 'render_report.json'
+        save_json(report_path, report)
+        print(f'Render report: {report_path}')
+    else:
+        print('Render completed. No render JSON report written.')
     for item in results:
         print(f"[{item['status']}] {item['job']['name']} -> {item['job']['png']} | {item['job']['drawio']}")
 
