@@ -195,17 +195,32 @@ def infer_technical_services(spec: Dict[str, Any]) -> Dict[str, List[Dict[str, A
     return buckets
 
 
+def infer_pattern(label: str, explicit: str = '') -> str:
+    if explicit:
+        return explicit
+    lo = (label or '').lower()
+    if any(k in lo for k in ['kafka','event','queue','async','pub/sub','publish']): return 'async_event'
+    if any(k in lo for k in ['stream','cdc']): return 'streaming'
+    if any(k in lo for k in ['batch','etl','file']): return 'batch_etl'
+    if 'webhook' in lo: return 'webhook'
+    if 'grpc' in lo: return 'grpc'
+    if any(k in lo for k in ['replication','replicate']): return 'database_replication'
+    if any(k in lo for k in ['api','rest','graphql','request','query']): return 'sync_api'
+    return 'logical'
+
+
 def infer_integrations(spec: Dict[str, Any], tech: Dict[str, List[Dict[str, Any]]]) -> List[Dict[str, Any]]:
     flows=[]
     for f in spec.get('flows', []):
         label = f.get('label','flow')
-        style = 'event' if any(k in label.lower() for k in ['event','stream','queue','async']) else 'sync' if any(k in label.lower() for k in ['api','request','query']) else 'logical'
-        flows.append({'from': f.get('from'), 'to': f.get('to'), 'label': label, 'direction': 'source_to_target', 'protocol_style': style, 'payload_type': 'business / technical payload'})
+        pattern = infer_pattern(label, f.get('pattern',''))
+        protocol = f.get('protocol_style') or ('REST/JSON' if pattern == 'sync_api' else 'event' if pattern in ['async_event','pub_sub','streaming'] else pattern)
+        flows.append({'from': f.get('from'), 'to': f.get('to'), 'label': label, 'direction': f.get('direction','source_to_target'), 'protocol_style': protocol, 'payload_type': f.get('payload_type','business / technical payload'), 'pattern': pattern, 'timing': f.get('timing','runtime')})
     names = [svc['name'] for svcs in tech.values() for svc in svcs]
     if any('API Gateway' in n or 'REST' in n for n in names):
-        flows.append({'from':'external_systems','to':'integration_apis','label':'API requests', 'direction':'inbound', 'protocol_style':'sync', 'payload_type':'JSON / HTTP'})
+        flows.append({'from':'external_systems','to':'integration_apis','label':'API requests', 'direction':'source_to_target', 'protocol_style':'REST/JSON', 'payload_type':'JSON / HTTP', 'pattern':'sync_api', 'timing':'runtime'})
     if any('Kafka' in n or 'EventBridge' in n or 'Queue' in n for n in names):
-        flows.append({'from':'core_services','to':'event_processing','label':'events', 'direction':'publish_subscribe', 'protocol_style':'event', 'payload_type':'event envelope'})
+        flows.append({'from':'core_services','to':'event_processing','label':'events', 'direction':'bidirectional', 'protocol_style':'event', 'payload_type':'event envelope', 'pattern':'async_event', 'timing':'runtime'})
     return flows
 
 
@@ -267,7 +282,38 @@ def build_component_inventory(spec: Dict[str, Any], tech: Dict[str, List[Dict[st
     return inv
 
 
-def enrich(spec: Dict[str, Any], raw_text: str = '') -> Dict[str, Any]:
+
+def load_domain_vocab(domain: str, vocab_dir: Path) -> Dict[str, Any]:
+    if not domain:
+        return {}
+    path = vocab_dir / f"{domain}.json"
+    if path.exists():
+        return load_json(path)
+    return {}
+
+
+def enrich_with_domain_vocabulary(spec: Dict[str, Any], raw_text: str, domain: str, vocab_dir: Path) -> Dict[str, Any]:
+    if not domain:
+        domain = spec.get('domain', '')
+    vocab = load_domain_vocab(domain, vocab_dir)
+    if not vocab:
+        return {'domain': domain, 'matched_terms': [], 'services': [], 'cross_cutting_defaults': []}
+    text = (all_text(spec) + ' ' + raw_text).lower()
+    matches=[]; services=[]
+    for term, meta in vocab.get('terms', {}).items():
+        if term.lower() in text:
+            row = {'term': term, **meta}
+            matches.append(row)
+            services.append({'name': meta.get('canonical',''), 'category': meta.get('category','platform_control_plane'), 'zone': meta.get('zone','domain_controls'), 'flow_pattern': meta.get('flow_pattern','sync_api')})
+    return {
+        'domain': vocab.get('domain', domain),
+        'matched_terms': matches,
+        'services': services,
+        'cross_cutting_defaults': vocab.get('cross_cutting_defaults', []),
+        'annotation_defaults': vocab.get('annotation_defaults', [])
+    }
+
+def enrich(spec: Dict[str, Any], raw_text: str = '', domain: str = '', vocab_dir: Path | None = None) -> Dict[str, Any]:
     enriched = dict(spec)
     business_capabilities = infer_business_capabilities(spec)
     actors_systems = infer_actors_and_external_systems(spec)
@@ -277,6 +323,14 @@ def enrich(spec: Dict[str, Any], raw_text: str = '') -> Dict[str, Any]:
     decisions = infer_decisions(raw_text, spec)
     mapping = map_capabilities_to_technical(business_capabilities, technical_services)
     inventory = build_component_inventory(spec, technical_services)
+    vocab_dir = vocab_dir or (Path(__file__).resolve().parent / 'data' / 'domain_vocabularies')
+    domain_context = enrich_with_domain_vocabulary(spec, raw_text, domain or spec.get('domain',''), vocab_dir)
+    for svc in domain_context.get('services', []):
+        cat = svc.get('category','platform_control_plane')
+        technical_services.setdefault(cat, [])
+        if svc.get('name') and not any(x.get('name') == svc.get('name') for x in technical_services[cat]):
+            technical_services[cat].append({'name': svc.get('name'), 'source_zone_id': svc.get('zone'), 'source_zone_title': 'Domain Controls', 'purpose': f"Domain-specific service inferred from {domain_context.get('domain','domain')} vocabulary"})
+            inventory.append({'name': svc.get('name'), 'category': cat, 'category_label': CATEGORY_LABELS.get(cat, cat), 'group': 'Domain Controls', 'purpose': 'Domain vocabulary enrichment'})
 
     outcome_text = spec.get('business_outcome_description') or (
         f"{spec.get('title','The solution')} connects business capabilities, platform services, integrations, and cross-cutting controls to deliver governed, resilient, and measurable outcomes for CIO stakeholders."
@@ -293,7 +347,8 @@ def enrich(spec: Dict[str, Any], raw_text: str = '') -> Dict[str, Any]:
         'architectural_decisions': decisions['architectural_decisions'],
         'business_to_technical_mapping': mapping,
         'component_inventory': inventory,
-        'communication_goal': outcome_text
+        'communication_goal': outcome_text,
+        'domain_context': domain_context
     }
     enriched['business_outcome_description'] = outcome_text
     return enriched
@@ -305,10 +360,13 @@ def main() -> None:
     ap.add_argument('--output', required=True)
     ap.add_argument('--raw-text', default='')
     ap.add_argument('--raw-text-file', default='')
+    ap.add_argument('--domain', default='')
+    ap.add_argument('--domain-vocab-dir', default='data/domain_vocabularies')
     args = ap.parse_args()
     spec = load_json(Path(args.input))
     raw = args.raw_text or (Path(args.raw_text_file).read_text(encoding='utf-8') if args.raw_text_file and Path(args.raw_text_file).exists() else '')
-    save_json(Path(args.output), enrich(spec, raw))
+    vocab_dir = Path(args.domain_vocab_dir) if Path(args.domain_vocab_dir).is_absolute() else Path(__file__).resolve().parent / args.domain_vocab_dir
+    save_json(Path(args.output), enrich(spec, raw, domain=args.domain, vocab_dir=vocab_dir))
     print(f'Wrote enriched architecture model to {args.output}')
 
 if __name__ == '__main__':

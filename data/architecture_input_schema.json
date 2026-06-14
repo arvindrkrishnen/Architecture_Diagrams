@@ -147,6 +147,50 @@
           "label": {
             "type": "string",
             "maxLength": 60
+          },
+          "pattern": {
+            "type": "string",
+            "enum": [
+              "sync_api",
+              "async_event",
+              "batch_etl",
+              "streaming",
+              "webhook",
+              "pub_sub",
+              "grpc",
+              "file_transfer",
+              "database_replication",
+              "logical"
+            ]
+          },
+          "direction": {
+            "type": "string",
+            "enum": [
+              "source_to_target",
+              "target_to_source",
+              "bidirectional"
+            ]
+          },
+          "payload_type": {
+            "type": "string",
+            "maxLength": 100
+          },
+          "protocol_style": {
+            "type": "string",
+            "maxLength": 100
+          },
+          "timing": {
+            "type": "string",
+            "enum": [
+              "design_time",
+              "build_time",
+              "deploy_time",
+              "runtime",
+              "governance_time",
+              "scheduled",
+              "event_driven",
+              "on_demand"
+            ]
           }
         }
       }
@@ -213,6 +257,44 @@
     "business_outcome_description": {
       "type": "string",
       "maxLength": 500
+    },
+    "domain": {
+      "type": "string",
+      "description": "Optional domain vocabulary pack, e.g. financial_services, healthcare, cloud_platform, ai_ml_platform."
+    },
+    "annotations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "highlight",
+              "risk_flag",
+              "callout",
+              "decision_point",
+              "investment_marker"
+            ]
+          },
+          "target_zone_id": {
+            "type": "string"
+          },
+          "label": {
+            "type": "string",
+            "maxLength": 120
+          },
+          "color_role": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "source_content": {
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Optional article/blog extraction model."
     }
   }
 }

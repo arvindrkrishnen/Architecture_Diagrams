@@ -1,0 +1,66 @@
+{
+  "domain": "cloud_platform",
+  "terms": {
+    "microservices": {
+      "canonical": "Microservices Runtime",
+      "zone": "runtime_platform",
+      "category": "compute",
+      "template_affinity": [
+        "cloud_tenant_microservices"
+      ],
+      "flow_pattern": "sync_api"
+    },
+    "aws": {
+      "canonical": "AWS Cloud Platform",
+      "zone": "cloud_platform",
+      "category": "platform_control_plane",
+      "template_affinity": [
+        "cloud_tenant_microservices",
+        "cloud_data_platform"
+      ],
+      "flow_pattern": "sync_api"
+    },
+    "azure": {
+      "canonical": "Azure Cloud Platform",
+      "zone": "cloud_platform",
+      "category": "platform_control_plane",
+      "template_affinity": [
+        "identity_multicloud_control_plane"
+      ],
+      "flow_pattern": "sync_api"
+    },
+    "gcp": {
+      "canonical": "Google Cloud Platform",
+      "zone": "cloud_platform",
+      "category": "platform_control_plane",
+      "template_affinity": [
+        "cloud_data_platform"
+      ],
+      "flow_pattern": "sync_api"
+    },
+    "kubernetes": {
+      "canonical": "Kubernetes Cluster",
+      "zone": "runtime_platform",
+      "category": "compute",
+      "template_affinity": [
+        "cloud_tenant_microservices"
+      ],
+      "flow_pattern": "sync_api"
+    },
+    "terraform": {
+      "canonical": "Infrastructure as Code",
+      "zone": "cicd_devex",
+      "category": "cicd_devex",
+      "template_affinity": [
+        "cloud_tenant_microservices"
+      ],
+      "flow_pattern": "sync_api"
+    }
+  },
+  "cross_cutting_defaults": [
+    "Cloud Guardrails",
+    "Landing Zone Standards",
+    "Cost Allocation",
+    "Observability Baseline"
+  ]
+}

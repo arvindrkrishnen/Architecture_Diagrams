@@ -417,3 +417,62 @@ New companion artifacts generated per run:
 - `capability_map.md`
 
 The renderer prompt is now more prescriptive and includes communication goal, view type, component catalog, icon guidance, relationship/flow instructions, visual style rules, guardrail checklist, and business-to-technical mapping.
+
+---
+
+## v13 enhancement summary
+
+This version applies the latest assessment, gaps, and recommendations.
+
+### New capabilities
+- Claude-native rendering path for environments without drawio-skill CLI
+- domain vocabulary packs for financial services, healthcare, retail/ecommerce, cloud platform, AI/ML, manufacturing/IoT, and public sector
+- ranked icon resolution with canonical names, aliases, keyword scoring, and fallback icons
+- template-aware decomposition thresholds
+- CIO-ready business narrative generator
+- hex-precise enterprise palettes
+- connector semantic layer for sync API, async event, batch, streaming, webhook, pub/sub, gRPC, file transfer, and replication flows
+- annotation / callout schema
+- article/blog-to-diagram extractor
+- richer multi-view planning and companion artifacts
+
+### Recommended v13 usage
+
+```bash
+python run_architecture_skill.py \
+  --text-file examples/request.txt \
+  --domain financial_services \
+  --allow-parallel \
+  --variant-count 3
+```
+
+### Claude-native mode
+
+```bash
+python run_architecture_skill.py \
+  --text-file examples/request.txt \
+  --render \
+  --render-mode claude-native
+```
+
+### Article/blog extraction mode
+
+```bash
+python run_architecture_skill.py \
+  --text-file article.md \
+  --source-kind article
+```
+
+### Companion artifacts generated
+- `executive_summary.md`
+- `architecture_decisions.md`
+- `component_inventory.json`
+- `capability_map.md`
+- `run_context.json`
+
+### New documentation
+- `docs/assessment_gaps_applied.md`
+- `docs/domain_vocabularies.md`
+- `docs/claude_native_rendering.md`
+- `docs/article_to_diagram_extraction.md`
+- `docs/architecture_views_and_artifacts.md`

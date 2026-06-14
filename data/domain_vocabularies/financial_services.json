@@ -1,0 +1,177 @@
+{
+  "domain": "financial_services",
+  "description": "Vocabulary for banking, capital markets, lending, risk, compliance, regulatory reporting, and model governance architectures.",
+  "terms": {
+    "ccar": {
+      "canonical": "CCAR/DFAST Engine",
+      "zone": "risk_and_compliance",
+      "category": "observability_governance",
+      "template_affinity": [
+        "cloud_data_platform",
+        "composite_ai_platform"
+      ],
+      "flow_pattern": "batch_etl"
+    },
+    "dfast": {
+      "canonical": "CCAR/DFAST Engine",
+      "zone": "risk_and_compliance",
+      "category": "observability_governance",
+      "template_affinity": [
+        "cloud_data_platform",
+        "composite_ai_platform"
+      ],
+      "flow_pattern": "batch_etl"
+    },
+    "stress testing": {
+      "canonical": "Stress Testing Platform",
+      "zone": "risk_and_compliance",
+      "category": "compute",
+      "template_affinity": [
+        "cloud_data_platform"
+      ],
+      "flow_pattern": "batch_etl"
+    },
+    "basel": {
+      "canonical": "Basel / RWA Calculation",
+      "zone": "risk_and_compliance",
+      "category": "compute",
+      "template_affinity": [
+        "cloud_data_platform"
+      ],
+      "flow_pattern": "batch_etl"
+    },
+    "rwa": {
+      "canonical": "Risk Weighted Assets Engine",
+      "zone": "risk_and_compliance",
+      "category": "compute",
+      "template_affinity": [
+        "cloud_data_platform"
+      ],
+      "flow_pattern": "batch_etl"
+    },
+    "aml": {
+      "canonical": "AML Monitoring Engine",
+      "zone": "compliance_controls",
+      "category": "observability_governance",
+      "template_affinity": [
+        "cloud_data_platform",
+        "service_orchestration_workflow"
+      ],
+      "flow_pattern": "streaming"
+    },
+    "kyc": {
+      "canonical": "KYC / Customer Due Diligence",
+      "zone": "compliance_controls",
+      "category": "security_identity",
+      "template_affinity": [
+        "service_orchestration_workflow"
+      ],
+      "flow_pattern": "sync_api"
+    },
+    "model risk": {
+      "canonical": "Model Risk Management (MRM)",
+      "zone": "governance",
+      "category": "observability_governance",
+      "template_affinity": [
+        "composite_ai_platform"
+      ],
+      "flow_pattern": "sync_api"
+    },
+    "cecl": {
+      "canonical": "CECL Loss Forecasting",
+      "zone": "risk_and_compliance",
+      "category": "compute",
+      "template_affinity": [
+        "cloud_data_platform"
+      ],
+      "flow_pattern": "batch_etl"
+    },
+    "mifid": {
+      "canonical": "MiFID II Reporting",
+      "zone": "regulatory_reporting",
+      "category": "integration_apis",
+      "template_affinity": [
+        "service_orchestration_workflow"
+      ],
+      "flow_pattern": "file_transfer"
+    },
+    "reg reporting": {
+      "canonical": "Regulatory Reporting Hub",
+      "zone": "regulatory_reporting",
+      "category": "integration_apis",
+      "template_affinity": [
+        "cloud_data_platform"
+      ],
+      "flow_pattern": "batch_etl"
+    },
+    "bcbs 239": {
+      "canonical": "BCBS 239 Data Lineage & Controls",
+      "zone": "data_platform",
+      "category": "observability_governance",
+      "template_affinity": [
+        "cloud_data_platform"
+      ],
+      "flow_pattern": "batch_etl"
+    },
+    "sox": {
+      "canonical": "SOX Controls Evidence",
+      "zone": "governance",
+      "category": "observability_governance",
+      "template_affinity": [
+        "platform_value_chain"
+      ],
+      "flow_pattern": "sync_api"
+    },
+    "trade surveillance": {
+      "canonical": "Trade Surveillance Platform",
+      "zone": "compliance_controls",
+      "category": "observability_governance",
+      "template_affinity": [
+        "cloud_tenant_microservices"
+      ],
+      "flow_pattern": "streaming"
+    },
+    "pii": {
+      "canonical": "PII Data Classification",
+      "zone": "data_governance",
+      "category": "security_identity",
+      "template_affinity": [
+        "cloud_data_platform"
+      ],
+      "flow_pattern": "sync_api"
+    },
+    "npi": {
+      "canonical": "NPI Data Classification",
+      "zone": "data_governance",
+      "category": "security_identity",
+      "template_affinity": [
+        "cloud_data_platform"
+      ],
+      "flow_pattern": "sync_api"
+    },
+    "mnpi": {
+      "canonical": "MNPI Controls",
+      "zone": "data_governance",
+      "category": "security_identity",
+      "template_affinity": [
+        "cloud_data_platform"
+      ],
+      "flow_pattern": "sync_api"
+    }
+  },
+  "cross_cutting_defaults": [
+    "Regulatory & Compliance Controls",
+    "Model Risk Management",
+    "Audit Evidence",
+    "Data Lineage",
+    "Data Classification"
+  ],
+  "annotation_defaults": [
+    {
+      "type": "highlight",
+      "target_zone_id": "governance",
+      "label": "Regulatory controls are cross-cutting",
+      "color_role": "security_compliance"
+    }
+  ]
+}

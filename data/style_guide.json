@@ -1,11 +1,13 @@
 {
-  "version": "1.0.0",
+  "version": "1.3.0",
   "purpose": "Standard color, typography, spacing, boundary, and legend rules for architecture diagrams.",
   "domains": {
     "business_capability": {
-      "color": "#EAF4FF",
-      "border": "#2F73D8",
-      "header": "#1F5EAD",
+      "header": "#1E3A5F",
+      "body": "#EEF4FB",
+      "text": "#FFFFFF",
+      "color": "#EEF4FB",
+      "border": "#1E3A5F",
       "role": "Business capabilities, value streams, outcomes"
     },
     "compute": {
@@ -63,10 +65,52 @@
       "role": "Resilience, DR, BCP, failover"
     },
     "external_system": {
-      "color": "#F3F4F6",
-      "border": "#6B7280",
-      "header": "#4B5563",
-      "role": "External actors, systems, vendors"
+      "header": "#374151",
+      "body": "#F9FAFB",
+      "text": "#FFFFFF",
+      "color": "#F9FAFB",
+      "border": "#374151",
+      "role": "Actors, external systems, vendors"
+    },
+    "data_platform": {
+      "header": "#065F46",
+      "body": "#ECFDF5",
+      "text": "#FFFFFF",
+      "color": "#ECFDF5",
+      "border": "#065F46",
+      "role": "Data platform, data governance, lineage"
+    },
+    "integration": {
+      "header": "#7C3AED",
+      "body": "#F5F3FF",
+      "text": "#FFFFFF",
+      "color": "#F5F3FF",
+      "border": "#7C3AED",
+      "role": "Integration and interoperability"
+    },
+    "security_compliance": {
+      "header": "#991B1B",
+      "body": "#FEF2F2",
+      "text": "#FFFFFF",
+      "color": "#FEF2F2",
+      "border": "#991B1B",
+      "role": "Security, compliance, policy, controls"
+    },
+    "ai_ml": {
+      "header": "#92400E",
+      "body": "#FFFBEB",
+      "text": "#FFFFFF",
+      "color": "#FFFBEB",
+      "border": "#92400E",
+      "role": "AI/ML, LLM, agentic capabilities"
+    },
+    "cloud_infrastructure": {
+      "header": "#1D4ED8",
+      "body": "#EFF6FF",
+      "text": "#FFFFFF",
+      "color": "#EFF6FF",
+      "border": "#1D4ED8",
+      "role": "Cloud infrastructure and runtime"
     }
   },
   "visual_rules": {
@@ -86,6 +130,114 @@
       "internal_padding_px": 12
     },
     "connector_rules": "orthogonal connectors only; no diagonal lines; route around boxes and avoid crossing major containers",
-    "level1_style": "executive polish with strong visual hierarchy, clear focal point, generous but not wasteful whitespace"
+    "level1_style": "executive polish with strong visual hierarchy, clear focal point, generous but not wasteful whitespace",
+    "annotation_rules": {
+      "highlight": "small pill callout on target zone header",
+      "risk_flag": "red warning flag anchored to target zone",
+      "callout": "small side note linked with a thin orthogonal connector"
+    }
+  },
+  "palettes": {
+    "enterprise_light": {
+      "canvas_bg": "#F8FAFC",
+      "zone_header_bg": "#1E3A5F",
+      "zone_body_bg": "#EEF4FB",
+      "connector_default": "#2563EB",
+      "connector_async": "#D97706",
+      "text_primary": "#0F1B2D",
+      "text_secondary": "#4B5563",
+      "accent_highlight": "#059669",
+      "border_subtle": "#CBD5E1",
+      "risk_red": "#B91C1C"
+    },
+    "enterprise_dark": {
+      "canvas_bg": "#0F1B2D",
+      "zone_header_bg": "#1E3A5F",
+      "zone_body_bg": "#162440",
+      "connector_default": "#4A9EFF",
+      "connector_async": "#FFB347",
+      "text_primary": "#FFFFFF",
+      "text_secondary": "#A8C4E0",
+      "accent_highlight": "#00D4AA",
+      "border_subtle": "#2D4A6B",
+      "risk_red": "#FB7185"
+    },
+    "boardroom_blue": {
+      "canvas_bg": "#FFFFFF",
+      "zone_header_bg": "#173B66",
+      "zone_body_bg": "#F1F6FD",
+      "connector_default": "#1D4ED8",
+      "connector_async": "#B45309",
+      "text_primary": "#102033",
+      "text_secondary": "#475569",
+      "accent_highlight": "#0E9F6E",
+      "border_subtle": "#BFD3EA",
+      "risk_red": "#B91C1C"
+    }
+  },
+  "connector_styles": {
+    "sync_api": {
+      "style": "solid",
+      "line_width": 2,
+      "arrow": "open",
+      "color": "#2563EB",
+      "label_hint": "REST/JSON or request/response"
+    },
+    "async_event": {
+      "style": "dashed",
+      "line_width": 2,
+      "arrow": "open",
+      "color": "#D97706",
+      "label_hint": "events / messages"
+    },
+    "batch_etl": {
+      "style": "dotted",
+      "line_width": 2,
+      "arrow": "open",
+      "color": "#2563EB",
+      "label_hint": "batch file or scheduled transfer"
+    },
+    "streaming": {
+      "style": "solid",
+      "line_width": 3,
+      "arrow": "block",
+      "color": "#D97706",
+      "label_hint": "streaming events"
+    },
+    "webhook": {
+      "style": "dashed",
+      "line_width": 2,
+      "arrow": "open",
+      "color": "#7C3AED",
+      "label_hint": "webhook callback"
+    },
+    "pub_sub": {
+      "style": "dashed",
+      "line_width": 2,
+      "arrow": "block",
+      "color": "#D97706",
+      "label_hint": "publish/subscribe"
+    },
+    "grpc": {
+      "style": "solid",
+      "line_width": 2,
+      "arrow": "open",
+      "color": "#0F766E",
+      "label_hint": "gRPC"
+    },
+    "file_transfer": {
+      "style": "dotted",
+      "line_width": 2,
+      "arrow": "open",
+      "color": "#64748B",
+      "label_hint": "file transfer"
+    },
+    "database_replication": {
+      "style": "double",
+      "line_width": 2,
+      "arrow": "open",
+      "color": "#065F46",
+      "label_hint": "replication / CDC"
+    }
   }
 }

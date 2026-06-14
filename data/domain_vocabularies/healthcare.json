@@ -1,0 +1,57 @@
+{
+  "domain": "healthcare",
+  "terms": {
+    "hipaa": {
+      "canonical": "HIPAA Compliance Controls",
+      "zone": "compliance_controls",
+      "category": "security_identity",
+      "template_affinity": [
+        "enterprise_endpoint_management",
+        "cloud_data_platform"
+      ],
+      "flow_pattern": "sync_api"
+    },
+    "ehr": {
+      "canonical": "EHR Integration",
+      "zone": "external_systems",
+      "category": "integration_apis",
+      "template_affinity": [
+        "service_orchestration_workflow"
+      ],
+      "flow_pattern": "sync_api"
+    },
+    "phi": {
+      "canonical": "PHI Data Protection",
+      "zone": "data_governance",
+      "category": "security_identity",
+      "template_affinity": [
+        "cloud_data_platform"
+      ],
+      "flow_pattern": "sync_api"
+    },
+    "hl7": {
+      "canonical": "HL7 / FHIR Interface",
+      "zone": "integration",
+      "category": "integration_apis",
+      "template_affinity": [
+        "service_orchestration_workflow"
+      ],
+      "flow_pattern": "sync_api"
+    },
+    "fhir": {
+      "canonical": "FHIR API Gateway",
+      "zone": "integration",
+      "category": "integration_apis",
+      "template_affinity": [
+        "service_orchestration_workflow"
+      ],
+      "flow_pattern": "sync_api"
+    }
+  },
+  "cross_cutting_defaults": [
+    "HIPAA Controls",
+    "PHI Encryption",
+    "Clinical Audit Trail",
+    "Data Consent"
+  ]
+}

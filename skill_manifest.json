@@ -1,8 +1,8 @@
 {
   "name": "solution-architecture-diagram-skill",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "author": "Arvind Radhakrishnen",
-  "description": "Generate executive-ready architecture diagrams using enriched architecture modeling, icon-aware prompts, multi-view planning, and companion architecture artifacts.",
+  "description": "Architecture diagram skill with domain vocabulary enrichment, Claude-native rendering, ranked icon resolution, template-aware decomposition, connector semantics, article-to-diagram extraction, multi-view planning, and companion artifacts.",
   "entrypoints": {
     "instructions": "SKILL.md",
     "readme": "README.md",
@@ -22,7 +22,12 @@
     "quality_guardrails": "docs/quality_guardrails.md",
     "enrich_model": "python enrich_architecture_model.py --input outputs/prepared_input.json --output outputs/enriched_architecture_model.json",
     "plan_views": "python plan_architecture_views.py --input outputs/enriched_architecture_model.json --output outputs/architecture_view_plan.json",
-    "generate_companions": "python generate_companion_artifacts.py --input outputs/enriched_architecture_model.json --view-plan outputs/architecture_view_plan.json --output-dir outputs/<run_name>"
+    "generate_companions": "python generate_companion_artifacts.py --input outputs/enriched_architecture_model.json --view-plan outputs/architecture_view_plan.json --output-dir outputs/<run_name>",
+    "runner_domain_aware": "python run_architecture_skill.py --text-file examples/request.txt --domain financial_services --allow-parallel",
+    "runner_claude_native": "python run_architecture_skill.py --text-file examples/request.txt --render --render-mode claude-native",
+    "article_extractor": "python extract_architecture_from_article.py --input-file article.md --output outputs/article_extraction.json",
+    "narrative_generator": "python generate_narrative.py --input outputs/prepared_input.json --output outputs/business_narrative.json",
+    "apply_guardrail_corrections": "python apply_guardrail_corrections.py --report outputs/render_report.json --output outputs/correction_report.json"
   },
   "outputs": [
     "solution_architecture_variant_01.png",
@@ -86,7 +91,22 @@
     "data/style_guide.json",
     "data/canonical_architecture_model_schema.json",
     "docs/architecture_model_enrichment.md",
-    "docs/prescriptive_renderer_prompting.md"
+    "docs/prescriptive_renderer_prompting.md",
+    "generate_narrative.py",
+    "extract_architecture_from_article.py",
+    "docs/assessment_gaps_applied.md",
+    "docs/domain_vocabularies.md",
+    "docs/claude_native_rendering.md",
+    "docs/article_to_diagram_extraction.md",
+    "docs/architecture_views_and_artifacts.md",
+    "data/domain_vocabularies/financial_services.json",
+    "data/domain_vocabularies/healthcare.json",
+    "data/domain_vocabularies/retail_ecommerce.json",
+    "data/domain_vocabularies/cloud_platform.json",
+    "data/domain_vocabularies/ai_ml_platform.json",
+    "data/domain_vocabularies/manufacturing_iot.json",
+    "data/domain_vocabularies/government_public_sector.json",
+    "apply_guardrail_corrections.py"
   ],
   "approvals_needed": [
     "Approve or install Agents365 drawio-skill in the target environment",
@@ -114,5 +134,20 @@
     "business_outcome_description_required": true,
     "runtime_validation": "validate_runtime_guardrails.py",
     "rendered_validation": "validate_rendered_guardrails.py"
-  }
+  },
+  "capabilities": [
+    "annotations_callouts",
+    "article_blog_to_diagram_extraction",
+    "business_narrative_generation",
+    "claude_native_rendering",
+    "companion_artifact_generation",
+    "connector_semantics",
+    "domain_vocabulary_enrichment",
+    "domain_vocabulary_placement_validation",
+    "guardrail_auto_correction_hooks",
+    "hex_precise_palettes",
+    "multi_view_architecture_planning",
+    "ranked_icon_resolution",
+    "template_aware_decomposition"
+  ]
 }

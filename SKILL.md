@@ -380,3 +380,137 @@ New companion artifacts generated per run:
 - `capability_map.md`
 
 The renderer prompt is now more prescriptive and includes communication goal, view type, component catalog, icon guidance, relationship/flow instructions, visual style rules, guardrail checklist, and business-to-technical mapping.
+
+## Claude-native rendering path
+
+If the Agents365 drawio-skill CLI is not available, such as in claude.ai or Claude API environments, use the Claude-native rendering path.
+
+```bash
+python run_architecture_skill.py \
+  --text-file examples/request.txt \
+  --render \
+  --render-mode claude-native
+```
+
+The renderer adapter emits a self-contained Claude-native instruction file asking Claude to generate:
+1. an inline SVG preview
+2. draw.io-compatible XML wrapped in an `mxGraphModel` block
+3. ADA-compliant text, padding, wrapping, and orthogonal connector routing
+
+## Quick start from Claude (claude.ai or Claude API)
+
+Paste this prompt into Claude:
+
+```text
+Use the Solution Architecture Diagram Skill.
+
+Build a solution architecture diagram for:
+[describe your solution in 2–10 sentences, including the business problem, users, key technical services, cloud platforms, and governance/security requirements]
+
+Requirements:
+- Select the most appropriate layout template automatically.
+- Keep the Level 1 diagram executive-ready: no more than 6–8 capability zones.
+- Generate Level 2 expansion diagrams if the architecture is dense.
+- Use official cloud/platform icons where available.
+- Apply the enterprise_light palette unless executive/board mode is requested.
+- Include a 3-sentence CIO narrative in the subtitle or narrative block.
+- Ensure all text is wrapped inside boxes with at least 10px padding.
+- Use orthogonal connectors only.
+- Differentiate sync API, async event, batch/file, streaming, and replication connectors visually.
+- Return normalized JSON, drawio prompt markdown, and an inline SVG preview of the Level 1 diagram when drawio-skill is unavailable.
+```
+
+## Financial services architecture intelligence
+
+When the request involves banking, capital markets, insurance, risk, or financial services:
+
+- Map regulatory requirements to architecture zones automatically:
+  - CCAR/DFAST → risk_and_compliance
+  - Basel / RWA → risk_and_compliance
+  - AML/KYC → compliance_controls
+  - SOX → governance overlay
+  - BCBS 239 → data_platform / lineage controls
+  - MiFID II / RegReporting → integration and reporting zones
+- Always include a Regulatory & Compliance cross-cutting band.
+- Add Model Risk Management for AI/ML architectures in financial services.
+- Label sensitive data flows with data classification when known, such as PII, NPI, or MNPI.
+- Use Secure Enclave or Trusted Execution Environment boundary styling for sensitive compute zones.
+
+## Executive presentation mode
+
+When the user says “executive,” “CxO,” “board,” “investor,” or “steering committee”:
+
+- Limit the Level 1 diagram to 5 capability zones maximum.
+- Use business capability labels on Level 1 and move technology specifics to Level 2.
+- Increase title font to 32pt, zone header to 20pt, and body text to 16pt.
+- Add a Key Outcomes banner with 3–4 business outcomes.
+- Prefer the enterprise_dark or boardroom_blue palette for projected presentations.
+- Generate a Technical Appendix view set with full technology detail.
+
+## Claude self-evaluation checklist
+
+Before returning any diagram output, Claude or any LLM renderer must verify:
+
+- [ ] Does the Level 1 diagram tell a clear business story in under 10 seconds?
+- [ ] Are all capability zones labeled in business language, not technology jargon?
+- [ ] Is every flow labeled with direction and integration pattern?
+- [ ] Are all cross-cutting concerns shown as bands or overlays, not scattered boxes?
+- [ ] Is the color palette consistent and hex-precise?
+- [ ] Is the title at least 26pt, section text at least 16pt, and body text at least 14pt?
+- [ ] Does the subtitle or description contain a CIO-ready narrative?
+- [ ] Are external systems and actors positioned at the diagram boundary, not inside the platform?
+- [ ] If the architecture is for a regulated industry, is there a compliance band?
+- [ ] Does the diagram have a legend if more than 3 connector types or 4 domain colors are used?
+
+If any item is unchecked, correct it before returning the output.
+
+## Article / blog to diagram mode
+
+When the source material is prose-first, use article mode:
+
+```bash
+python run_architecture_skill.py --text-file article.md --source-kind article
+```
+
+This invokes `extract_architecture_from_article.py` to infer layers, components, interfaces, flows, sequence models, feedback loops, and diagram-ready payloads before the normal architecture diagram pipeline runs.
+
+## Domain vocabulary packs
+
+Use `--domain` to activate a vocabulary pack:
+
+```bash
+python run_architecture_skill.py --text-file examples/request.txt --domain financial_services
+```
+
+Available packs include financial_services, healthcare, retail_ecommerce, cloud_platform, ai_ml_platform, manufacturing_iot, and government_public_sector.
+
+## Connector semantic layer
+
+Flows may include:
+
+```json
+{
+  "from": "api_gateway",
+  "to": "order_service",
+  "label": "REST / JSON",
+  "pattern": "sync_api",
+  "direction": "source_to_target",
+  "payload_type": "JSON",
+  "timing": "runtime"
+}
+```
+
+Supported patterns: sync_api, async_event, batch_etl, streaming, webhook, pub_sub, grpc, file_transfer, database_replication, logical.
+
+## Annotation and callout layer
+
+Use annotations to mark business-critical information:
+
+```json
+{
+  "annotations": [
+    {"type": "highlight", "target_zone_id": "ai_decisioning", "label": "FY26 Investment Priority", "color_role": "accent_highlight"},
+    {"type": "risk_flag", "target_zone_id": "legacy_mainframe", "label": "Technical Debt — Retire by Q4", "color_role": "risk_red"}
+  ]
+}
+```

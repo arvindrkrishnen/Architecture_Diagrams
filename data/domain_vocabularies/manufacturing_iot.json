@@ -1,0 +1,56 @@
+{
+  "domain": "manufacturing_iot",
+  "terms": {
+    "iot": {
+      "canonical": "IoT Edge Gateway",
+      "zone": "edge_layer",
+      "category": "integration_apis",
+      "template_affinity": [
+        "iot_ot_security_layers"
+      ],
+      "flow_pattern": "streaming"
+    },
+    "ot": {
+      "canonical": "OT Network Segment",
+      "zone": "ot_layer",
+      "category": "networking",
+      "template_affinity": [
+        "iot_ot_security_layers"
+      ],
+      "flow_pattern": "sync_api"
+    },
+    "scada": {
+      "canonical": "SCADA System",
+      "zone": "ot_layer",
+      "category": "external_system",
+      "template_affinity": [
+        "iot_ot_security_layers"
+      ],
+      "flow_pattern": "sync_api"
+    },
+    "plc": {
+      "canonical": "PLC / Control Device",
+      "zone": "edge_layer",
+      "category": "external_system",
+      "template_affinity": [
+        "iot_ot_security_layers"
+      ],
+      "flow_pattern": "streaming"
+    },
+    "mqtt": {
+      "canonical": "MQTT Broker",
+      "zone": "integration",
+      "category": "integration_apis",
+      "template_affinity": [
+        "iot_ot_security_layers"
+      ],
+      "flow_pattern": "pub_sub"
+    }
+  },
+  "cross_cutting_defaults": [
+    "OT Segmentation",
+    "Device Identity",
+    "Threat Monitoring",
+    "Safety Controls"
+  ]
+}

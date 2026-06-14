@@ -1,0 +1,66 @@
+{
+  "domain": "ai_ml_platform",
+  "terms": {
+    "rag": {
+      "canonical": "RAG Orchestration",
+      "zone": "ai_orchestration",
+      "category": "platform_control_plane",
+      "template_affinity": [
+        "composite_ai_platform"
+      ],
+      "flow_pattern": "sync_api"
+    },
+    "llm": {
+      "canonical": "LLM Gateway",
+      "zone": "ai_orchestration",
+      "category": "integration_apis",
+      "template_affinity": [
+        "composite_ai_platform"
+      ],
+      "flow_pattern": "sync_api"
+    },
+    "vector": {
+      "canonical": "Vector Store",
+      "zone": "knowledge_store",
+      "category": "data_storage",
+      "template_affinity": [
+        "composite_ai_platform"
+      ],
+      "flow_pattern": "sync_api"
+    },
+    "mlops": {
+      "canonical": "MLOps Pipeline",
+      "zone": "cicd_devex",
+      "category": "cicd_devex",
+      "template_affinity": [
+        "modern_data_lakehouse"
+      ],
+      "flow_pattern": "sync_api"
+    },
+    "agent": {
+      "canonical": "Agent Orchestration",
+      "zone": "ai_orchestration",
+      "category": "platform_control_plane",
+      "template_affinity": [
+        "composite_ai_platform"
+      ],
+      "flow_pattern": "sync_api"
+    },
+    "prompt": {
+      "canonical": "Prompt Registry",
+      "zone": "governance",
+      "category": "observability_governance",
+      "template_affinity": [
+        "composite_ai_platform"
+      ],
+      "flow_pattern": "sync_api"
+    }
+  },
+  "cross_cutting_defaults": [
+    "Model Monitoring",
+    "Prompt Governance",
+    "Evidence Store",
+    "PII Filtering",
+    "Responsible AI Controls"
+  ]
+}

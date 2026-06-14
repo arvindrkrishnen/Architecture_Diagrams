@@ -1,0 +1,56 @@
+{
+  "domain": "retail_ecommerce",
+  "terms": {
+    "order": {
+      "canonical": "Order Management Service",
+      "zone": "business_services",
+      "category": "compute",
+      "template_affinity": [
+        "service_orchestration_workflow"
+      ],
+      "flow_pattern": "sync_api"
+    },
+    "inventory": {
+      "canonical": "Inventory Service",
+      "zone": "business_services",
+      "category": "data_storage",
+      "template_affinity": [
+        "service_orchestration_workflow"
+      ],
+      "flow_pattern": "sync_api"
+    },
+    "cart": {
+      "canonical": "Cart Service",
+      "zone": "experience",
+      "category": "compute",
+      "template_affinity": [
+        "cloud_tenant_microservices"
+      ],
+      "flow_pattern": "sync_api"
+    },
+    "payment": {
+      "canonical": "Payment Gateway Integration",
+      "zone": "integration",
+      "category": "integration_apis",
+      "template_affinity": [
+        "service_orchestration_workflow"
+      ],
+      "flow_pattern": "sync_api"
+    },
+    "recommendation": {
+      "canonical": "Personalization / Recommendation Engine",
+      "zone": "ai_ml",
+      "category": "compute",
+      "template_affinity": [
+        "composite_ai_platform"
+      ],
+      "flow_pattern": "sync_api"
+    }
+  },
+  "cross_cutting_defaults": [
+    "PCI Controls",
+    "Fraud Monitoring",
+    "Customer Data Privacy",
+    "Order Observability"
+  ]
+}

@@ -1,0 +1,47 @@
+{
+  "domain": "government_public_sector",
+  "terms": {
+    "fedramp": {
+      "canonical": "FedRAMP Controls",
+      "zone": "compliance_controls",
+      "category": "security_identity",
+      "template_affinity": [
+        "identity_multicloud_control_plane"
+      ],
+      "flow_pattern": "sync_api"
+    },
+    "fisma": {
+      "canonical": "FISMA Compliance",
+      "zone": "compliance_controls",
+      "category": "observability_governance",
+      "template_affinity": [
+        "identity_multicloud_control_plane"
+      ],
+      "flow_pattern": "sync_api"
+    },
+    "nist": {
+      "canonical": "NIST Control Framework",
+      "zone": "governance",
+      "category": "observability_governance",
+      "template_affinity": [
+        "identity_multicloud_control_plane"
+      ],
+      "flow_pattern": "sync_api"
+    },
+    "citizen": {
+      "canonical": "Citizen Services Portal",
+      "zone": "experience",
+      "category": "compute",
+      "template_affinity": [
+        "service_orchestration_workflow"
+      ],
+      "flow_pattern": "sync_api"
+    }
+  },
+  "cross_cutting_defaults": [
+    "NIST Controls",
+    "Audit Evidence",
+    "Data Residency",
+    "Accessibility Compliance"
+  ]
+}

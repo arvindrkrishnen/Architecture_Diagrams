@@ -255,7 +255,17 @@ def intake_agent(memory: Dict[str, Any], run_dir: Path) -> AgentResult:
     else:
         text = memory['inputs']['text']
         save_text(run_dir / 'raw_request.txt', text)
-        payload = {'draft_spec': draft_spec_from_text(text), 'input_mode': 'text'}
+        if memory['inputs'].get('source_kind') == 'article':
+            extracted_path = run_dir / 'article_extraction.json'
+            run_cmd([
+                sys.executable, 'extract_architecture_from_article.py',
+                '--input-file', str(run_dir / 'raw_request.txt'),
+                '--output', str(extracted_path)
+            ], ROOT)
+            extracted = load_json(extracted_path)
+            payload = {'draft_spec': extracted.get('diagram_payload', draft_spec_from_text(text)), 'input_mode': 'article_text', 'article_extraction_path': str(extracted_path), 'article_extraction': extracted}
+        else:
+            payload = {'draft_spec': draft_spec_from_text(text), 'input_mode': 'text'}
     return AgentResult('intake_agent', payload)
 
 
@@ -263,11 +273,14 @@ def normalization_agent(memory: Dict[str, Any], run_dir: Path) -> AgentResult:
     draft_path = run_dir / 'draft_input.json'
     prepared_path = run_dir / 'prepared_input.json'
     save_json(draft_path, memory['working']['draft_spec'])
-    run_cmd([
+    cmd = [
         sys.executable, 'prepare_architecture_input.py',
         '--input', str(draft_path),
         '--output', str(prepared_path)
-    ], ROOT)
+    ]
+    if memory.get('inputs', {}).get('domain'):
+        cmd.extend(['--domain', memory['inputs']['domain']])
+    run_cmd(cmd, ROOT)
     payload = {
         'prepared_input_path': str(prepared_path),
         'prepared_input': load_json(prepared_path)
@@ -330,6 +343,8 @@ def enrichment_agent(memory: Dict[str, Any], run_dir: Path) -> AgentResult:
     ]
     if raw_text_file.exists():
         cmd.extend(['--raw-text-file', str(raw_text_file)])
+    if memory.get('inputs', {}).get('domain'):
+        cmd.extend(['--domain', memory['inputs']['domain']])
     run_cmd(cmd, ROOT)
     enriched = load_json(enriched_path)
     # Use enriched model as the downstream prepared input.
@@ -338,6 +353,29 @@ def enrichment_agent(memory: Dict[str, Any], run_dir: Path) -> AgentResult:
         'enriched_architecture_model_path': str(enriched_path),
         'prepared_input': enriched,
         'enriched_architecture_model': enriched.get('architecture_model', {})
+    })
+
+
+
+def narrative_agent(memory: Dict[str, Any], run_dir: Path) -> AgentResult:
+    prepared_path = Path(memory['working']['prepared_input_path'])
+    narrative_path = run_dir / 'business_narrative.json'
+    raw_text_file = run_dir / 'raw_request.txt'
+    cmd = [
+        sys.executable, 'generate_narrative.py',
+        '--input', str(prepared_path),
+        '--output', str(narrative_path)
+    ]
+    if raw_text_file.exists():
+        cmd.extend(['--raw-text-file', str(raw_text_file)])
+    run_cmd(cmd, ROOT)
+    narrative = load_json(narrative_path)
+    if narrative.get('updated_spec'):
+        save_json(prepared_path, narrative['updated_spec'])
+    return AgentResult('narrative_agent', {
+        'business_narrative_path': str(narrative_path),
+        'business_narrative': narrative.get('business_narrative'),
+        'prepared_input': narrative.get('updated_spec', memory['working'].get('prepared_input'))
     })
 
 
@@ -615,6 +653,8 @@ def render_adapter_agent(memory: Dict[str, Any], run_dir: Path) -> AgentResult:
         cmd.extend(['--config', memory['rendering']['renderer_config']])
     if memory['rendering'].get('renderer_command_template'):
         cmd.extend(['--command-template', memory['rendering']['renderer_command_template']])
+    if memory['rendering'].get('render_mode'):
+        cmd.extend(['--render-mode', memory['rendering'].get('render_mode')])
     if memory['rendering'].get('renderer_dry_run'):
         cmd.append('--dry-run')
     run_cmd(cmd, ROOT)
@@ -642,6 +682,9 @@ def packaging_agent(memory: Dict[str, Any], run_dir: Path) -> AgentResult:
         'architecture_decisions_path': memory['working'].get('architecture_decisions_path'),
         'component_inventory_path': memory['working'].get('component_inventory_path'),
         'capability_map_path': memory['working'].get('capability_map_path'),
+        'business_narrative_path': memory['working'].get('business_narrative_path'),
+        'article_extraction_path': memory['working'].get('article_extraction_path'),
+        'domain': memory['inputs'].get('domain'),
         'expansion_prompts': memory['working'].get('expansion_outputs', []),
         'expected_render_outputs': {
             'variant_01_png': 'outputs/<run_name>/solution_architecture_variant_01.png',
@@ -700,6 +743,10 @@ def main() -> None:
     parser.add_argument('--renderer-command-template', default='', help='Optional renderer command template')
     parser.add_argument('--renderer-dry-run', action='store_true', help='Dry run the renderer adapter without executing the render command')
     parser.add_argument('--variant-count', type=int, default=3, help='Number of top-level PNG/.drawio variants to generate. Default: 3')
+    parser.add_argument('--domain', default='', help='Optional domain vocabulary pack, e.g. financial_services, healthcare, cloud_platform, ai_ml_platform')
+    parser.add_argument('--source-kind', choices=['architecture_request','article'], default='architecture_request', help='Treat text/text-file input as a prose article/blog when set to article')
+    parser.add_argument('--render-mode', choices=['drawio-skill','claude-native','dry-run'], default='drawio-skill', help='Rendering mode for render adapter')
+    parser.add_argument('--auto-correct', action='store_true', help='Enable up to two guardrail correction cycles when validation reports issues')
     parser.add_argument('--debug-json', action='store_true', help='Keep and emphasize internal JSON/debug files. By default user-facing outputs are PNG and .drawio only.')
     args = parser.parse_args()
 
@@ -736,7 +783,9 @@ def main() -> None:
         'inputs': {
             'source_type': source_type,
             'text': raw_text,
-            'json_input': args.json_input or ''
+            'json_input': args.json_input or '',
+            'source_kind': args.source_kind,
+            'domain': args.domain
         },
         'execution': {
             'mode': execution_mode,
@@ -756,7 +805,9 @@ def main() -> None:
             'enabled': bool(args.render),
             'renderer_config': args.renderer_config,
             'renderer_command_template': args.renderer_command_template,
-            'renderer_dry_run': bool(args.renderer_dry_run)
+            'renderer_dry_run': bool(args.renderer_dry_run),
+            'render_mode': args.render_mode,
+            'auto_correct': bool(args.auto_correct)
         }
     }
     checkpoint(memory, run_dir, 'start')
@@ -772,7 +823,7 @@ def main() -> None:
     checkpoint(memory, run_dir, result.name)
 
     # recommendation, semantic placement, and runtime readability guardrails must run before prompt generation
-    for pre_agent in [recommendation_agent, enrichment_agent, view_planning_agent, technology_placement_agent, runtime_guardrail_agent]:
+    for pre_agent in [recommendation_agent, enrichment_agent, narrative_agent, view_planning_agent, technology_placement_agent, runtime_guardrail_agent]:
         result = pre_agent(memory, run_dir)
         merge_agent_results(memory, result)
         checkpoint(memory, run_dir, result.name)
